@@ -95,14 +95,14 @@ def main():
             "Kenya long-term (life) insurance business, consolidated from IRA quarterly statistics.",
             "Figures in KSh thousands, as published by IRA (unaudited). Full-year figures are Q4 year to date.",
             "stream_id ties a company to everything it absorbed or was renamed from: see corporate_events.",
-            f"Built {dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M} UTC from data/raw/manifest.csv."]}).to_excel(xw, "README", index=False)
-        by_stream.to_excel(xw, "annual_by_stream", index=False)
-        by_company.to_excel(xw, "annual_by_company", index=False)
-        quarterly.to_excel(xw, "market_quarterly", index=False)
-        pd.read_csv(os.path.join(VALIDATION, "name_timeline.csv")).to_excel(xw, "name_timeline", index=False)
-        pd.DataFrame(events).to_excel(xw, "corporate_events", index=False)
-        pd.DataFrame(companies.values()).to_excel(xw, "companies", index=False)
-        flags.to_excel(xw, "quality_flags", index=False)
+            f"Built {dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M} UTC from data/raw/manifest.csv."]}).to_excel(xw, sheet_name="README", index=False)
+        by_stream.to_excel(xw, sheet_name="annual_by_stream", index=False)
+        by_company.to_excel(xw, sheet_name="annual_by_company", index=False)
+        quarterly.to_excel(xw, sheet_name="market_quarterly", index=False)
+        pd.read_csv(os.path.join(VALIDATION, "name_timeline.csv")).to_excel(xw, sheet_name="name_timeline", index=False)
+        pd.DataFrame(events).to_excel(xw, sheet_name="corporate_events", index=False)
+        pd.DataFrame(companies.values()).to_excel(xw, sheet_name="companies", index=False)
+        flags.to_excel(xw, sheet_name="quality_flags", index=False)
 
     def clean(v):
         return None if v is None or (isinstance(v, float) and pd.isna(v)) else v
