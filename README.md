@@ -26,7 +26,7 @@ All money is in **KSh thousands, year to date, unaudited**, as IRA publishes it.
 
 ## The explorer
 
-The explorer is published on GitHub Pages at `https://<your-user>.github.io/kenya-life-insurance/`.
+The explorer is published on GitHub Pages at `https://willmanyonga.github.io/kenya-life-insurance/`.
 It has:
 - headline tiles for market premium, growth, number of insurers, top-5 share and market margin;
 - the Deloitte *East Africa Insurance Report 2023* views, updated to any window you choose: premium CAGR against average profit margin, with bubbles sized by premium; and the top life insurers by gross premium for the last two years;
