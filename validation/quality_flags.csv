@@ -1,0 +1,99 @@
+company_id,year,quarter,table_key,flag,detail,treatment
+absa_life,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 4 below previous quarter 25,excluded from single-quarter market totals
+apa_life,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 3 below previous quarter 14,excluded from single-quarter market totals
+apa_life,2024,3,revenue_account,ytd_falls,"YTD gross premium 381,367 below previous quarter 657,634",excluded from single-quarter market totals
+britam_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 13 below previous quarter 22,excluded from single-quarter market totals
+cannon_life,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 7,excluded from single-quarter market totals
+capex_life,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 6,excluded from single-quarter market totals
+capex_life,2020,3,revenue_account,ytd_falls,"YTD gross premium 4,441 below previous quarter 50,476",excluded from single-quarter market totals
+capex_life,2022,2,revenue_account,ytd_falls,"YTD gross premium 2,425 below previous quarter 86,166",excluded from single-quarter market totals
+capex_life,2025,2,revenue_account,ytd_falls,"YTD gross premium 3,557 below previous quarter 7,680",excluded from single-quarter market totals
+capex_life,2019,3,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 82,547 below previous quarter 95,159",excluded from single-quarter market totals
+cic_life,2024,2,gross_premium_by_class,ytd_falls,"YTD gross premium 2,953,108 below previous quarter 5,848,986",excluded from single-quarter market totals
+cic_life,2023,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 7 below previous quarter 9,excluded from single-quarter market totals
+cic_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 5 below previous quarter 12,excluded from single-quarter market totals
+cic_life,2024,2,revenue_account,ytd_falls,"YTD gross premium 0 below previous quarter 339,184",excluded from single-quarter market totals
+cic_life,2024,2,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 2,953,108 below previous quarter 5,848,986",excluded from single-quarter market totals
+continental_re,2022,4,gross_premium_by_class,ytd_falls,"YTD gross premium 16,895 below previous quarter 25,962",excluded from single-quarter market totals
+continental_re,2023,2,gross_premium_by_class,ytd_falls,"YTD gross premium -11,498 below previous quarter 6,987",excluded from single-quarter market totals
+continental_re,2023,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium -0 below previous quarter 1,excluded from single-quarter market totals
+continental_re,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 65,excluded from single-quarter market totals
+continental_re,2019,3,revenue_account,ytd_falls,"YTD gross premium 2,222 below previous quarter 4,401",excluded from single-quarter market totals
+continental_re,2021,3,revenue_account,ytd_falls,"YTD gross premium 5,507 below previous quarter 7,801",excluded from single-quarter market totals
+continental_re,2021,4,revenue_account,ytd_falls,"YTD gross premium 2,469 below previous quarter 5,507",excluded from single-quarter market totals
+continental_re,2022,4,revenue_account,ytd_falls,"YTD gross premium 158 below previous quarter 7,087",excluded from single-quarter market totals
+continental_re,2023,2,revenue_account,ytd_falls,"YTD gross premium -1,162 below previous quarter 970",excluded from single-quarter market totals
+continental_re,2022,4,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 16,895 below previous quarter 25,962",excluded from single-quarter market totals
+continental_re,2023,2,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium -11,498 below previous quarter 6,987",excluded from single-quarter market totals
+continental_re,2022,4,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 16,737 below previous quarter 18,875",excluded from single-quarter market totals
+continental_re,2023,2,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium -10,336 below previous quarter 6,017",excluded from single-quarter market totals
+corporate_insurance,2022,4,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 72,851",excluded from single-quarter market totals
+corporate_insurance,2023,2,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 33,927",excluded from single-quarter market totals
+corporate_insurance,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 4,excluded from single-quarter market totals
+corporate_insurance,2022,4,revenue_account,ytd_falls,"YTD gross premium 0 below previous quarter 72,851",excluded from single-quarter market totals
+corporate_insurance,2023,2,revenue_account,ytd_falls,"YTD gross premium 0 below previous quarter 33,927",excluded from single-quarter market totals
+corporate_insurance,2022,4,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 0 below previous quarter 72,851",excluded from single-quarter market totals
+corporate_insurance,2023,2,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 0 below previous quarter 33,927",excluded from single-quarter market totals
+east_africa_re,2018,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 45 below previous quarter 87,excluded from single-quarter market totals
+east_africa_re,2018,4,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 34 below previous quarter 45,excluded from single-quarter market totals
+east_africa_re,2019,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 45 below previous quarter 61,excluded from single-quarter market totals
+east_africa_re,2019,4,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 34 below previous quarter 42,excluded from single-quarter market totals
+east_africa_re,2020,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 40 below previous quarter 52,excluded from single-quarter market totals
+east_africa_re,2020,4,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 36 below previous quarter 40,excluded from single-quarter market totals
+east_africa_re,2021,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 39 below previous quarter 62,excluded from single-quarter market totals
+east_africa_re,2022,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 35 below previous quarter 50,excluded from single-quarter market totals
+east_africa_re,2022,4,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 28 below previous quarter 34,excluded from single-quarter market totals
+east_africa_re,2023,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 26 below previous quarter 42,excluded from single-quarter market totals
+east_africa_re,2023,4,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 30 below previous quarter 36,excluded from single-quarter market totals
+east_africa_re,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 34 below previous quarter 41,excluded from single-quarter market totals
+east_africa_re,2024,4,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 29 below previous quarter 33,excluded from single-quarter market totals
+east_africa_re,2017,4,revenue_account,ytd_falls,"YTD gross premium 31,867 below previous quarter 39,765",excluded from single-quarter market totals
+east_africa_re,2021,4,revenue_account,ytd_falls,"YTD gross premium 34,387 below previous quarter 47,959",excluded from single-quarter market totals
+east_africa_re,2024,2,revenue_account,ytd_falls,"YTD gross premium 72,398 below previous quarter 456,750",excluded from single-quarter market totals
+east_africa_re,2024,4,revenue_account,ytd_falls,"YTD gross premium 115,416 below previous quarter 1,069,812",excluded from single-quarter market totals
+east_africa_re,2024,3,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 0 below previous quarter 651,585",excluded from single-quarter market totals
+ga_life,2022,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 6 below previous quarter 8,excluded from single-quarter market totals
+ga_life,2025,2,other:appendix_5_summary_of_long_term_insuranc,ytd_falls,YTD gross premium 7 below previous quarter 10,excluded from single-quarter market totals
+geminia_life,2024,2,gross_premium_by_class,ytd_falls,"YTD gross premium 413,157 below previous quarter 716,621",excluded from single-quarter market totals
+geminia_life,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 3,excluded from single-quarter market totals
+geminia_life,2024,3,revenue_account,ytd_falls,"YTD gross premium 14,258 below previous quarter 44,080",excluded from single-quarter market totals
+geminia_life,2025,4,revenue_account#APPENDIX 11,ytd_falls,"YTD gross premium 213,261 below previous quarter 265,472",excluded from single-quarter market totals
+geminia_life,2024,2,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 413,157 below previous quarter 716,621",excluded from single-quarter market totals
+geminia_life,2024,3,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 133,644 below previous quarter 215,644",excluded from single-quarter market totals
+icea_lion_life,2021,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 16 below previous quarter 19,excluded from single-quarter market totals
+icea_lion_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 3 below previous quarter 13,excluded from single-quarter market totals
+jubilee_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 3 below previous quarter 13,excluded from single-quarter market totals
+kenindia,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 3 below previous quarter 4,excluded from single-quarter market totals
+kenya_orient_life,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 2,excluded from single-quarter market totals
+kenya_re,2023,3,gross_premium_by_class,ytd_falls,"YTD gross premium 1,554,645 below previous quarter 1,836,452",excluded from single-quarter market totals
+kenya_re,2023,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 64 below previous quarter 74,excluded from single-quarter market totals
+kenya_re,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 58,excluded from single-quarter market totals
+kenya_re,2021,3,revenue_account,ytd_falls,"YTD gross premium 39,429 below previous quarter 91,939",excluded from single-quarter market totals
+kenya_re,2024,3,revenue_account,ytd_falls,"YTD gross premium 102,530 below previous quarter 111,754",excluded from single-quarter market totals
+kenya_re,2023,3,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 1,554,645 below previous quarter 1,836,452",excluded from single-quarter market totals
+kenya_re,2023,3,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 1,518,756 below previous quarter 1,799,595",excluded from single-quarter market totals
+kuscco_mutual,2022,3,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 1,011,718",excluded from single-quarter market totals
+kuscco_mutual,2025,3,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 1,562,317",excluded from single-quarter market totals
+kuscco_mutual,2022,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 1,excluded from single-quarter market totals
+kuscco_mutual,2024,3,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 2,excluded from single-quarter market totals
+kuscco_mutual,2022,3,revenue_account,ytd_falls,YTD gross premium 0 below previous quarter 803,excluded from single-quarter market totals
+kuscco_mutual,2024,4,revenue_account,ytd_falls,"YTD gross premium 1,479 below previous quarter 4,878",excluded from single-quarter market totals
+kuscco_mutual,2025,3,revenue_account,ytd_falls,"YTD gross premium 0 below previous quarter 8,513",excluded from single-quarter market totals
+kuscco_mutual,2022,3,revenue_account#APPENDIX 13,ytd_falls,"YTD gross premium 0 below previous quarter 1,011,718",excluded from single-quarter market totals
+kuscco_mutual,2020,2,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 2,397 below previous quarter 331,386",excluded from single-quarter market totals
+kuscco_mutual,2021,3,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 0 below previous quarter 9,627",excluded from single-quarter market totals
+kuscco_mutual,2022,3,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 0 below previous quarter 8,588",excluded from single-quarter market totals
+liberty_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 3,excluded from single-quarter market totals
+liberty_life,2024,4,revenue_account,ytd_falls,"YTD gross premium 970,639 below previous quarter 1,176,920",excluded from single-quarter market totals
+madison_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 3,excluded from single-quarter market totals
+madison_life,2025,4,revenue_account,ytd_falls,"YTD gross premium 1,175,155 below previous quarter 1,886,226",excluded from single-quarter market totals
+madison_life,2020,4,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 120,238 below previous quarter 132,690",excluded from single-quarter market totals
+monarch,2025,3,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 18,481",excluded from single-quarter market totals
+monarch,2025,3,revenue_account,ytd_falls,"YTD gross premium 0 below previous quarter 7,580",excluded from single-quarter market totals
+old_mutual_life_kenya,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 1 below previous quarter 3,excluded from single-quarter market totals
+old_mutual_life_kenya,2025,4,revenue_account,ytd_falls,"YTD gross premium 167,000 below previous quarter 779,735",excluded from single-quarter market totals
+pioneer,2018,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 4 below previous quarter 5,excluded from single-quarter market totals
+pioneer,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 2,excluded from single-quarter market totals
+prudential_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 2,excluded from single-quarter market totals
+sanlam_life,2024,2,gross_premium_by_class#APPENDIX 4,ytd_falls,YTD gross premium 0 below previous quarter 3,excluded from single-quarter market totals
+sanlam_life,2018,4,revenue_account#APPENDIX 7,ytd_falls,"YTD gross premium 431,722 below previous quarter 479,585",excluded from single-quarter market totals
