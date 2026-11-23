@@ -83,7 +83,15 @@ report tables is the next step (see `docs/roadmap.md`).
 
 ## Status
 
-The pipeline has been tested end to end on synthetic IRA-style workbooks (`tests/`). It has **not
-yet been run on IRA's real files**: the IRA site was unreachable from the build environment, so the
-first GitHub Actions run does the first real download. Expect that first run to raise an issue with
-a few unmapped names or table titles. That is the intended way to finish the mapping.
+Built from all 36 IRA quarterly workbooks from Q4 2016 to Q2 2026, plus the 2017 annual workbook:
+
+- **Names:** 56 printed company names, all mapped.
+- **Totals:** 15,519 of 15,546 printed totals reconcile. The rest are IRA printing issues, listed in `docs/known_issues.md`.
+- **Classes:** all 1,020 class splits add to the company total.
+
+Insurers' gross premium by year (KSh bn): 2016 73.1 · 2017 82.8 · 2018 87.3 · 2019 97.7 · 2020 102.1 · 2021 123.7 · 2022 140.8 · 2023 170.0 · 2024 191.2 · 2025 235.4.
+
+Still open:
+- 2015–2016 from the annual report PDFs.
+- Confirming the inferred First Assurance → Barclays Life transfer.
+- Filling the 2024–2025 exchange rates.

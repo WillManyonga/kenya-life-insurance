@@ -15,11 +15,10 @@ import pandas as pd
 
 from .common import CONFIG, PROCESSED, REF, SITE, VALIDATION, read_csv
 
-PREMIUM_SOURCES = ["gross_premium_by_class", "revenue_account"]
-PROFIT_LINES = [("profit_loss", "profit_before_tax"), ("revenue_account", "profit_before_tax"),
-                ("revenue_account", "surplus_transfer")]
-CLASSES = ["ordinary_life", "group_life", "group_credit", "deposit_admin_pensions", "annuities",
-           "investment_unit_linked", "health", "micro"]
+PREMIUM_SOURCES = ["gross_premium_by_class", "revenue_combined"]
+PROFIT_LINES = [("profit_loss", "profit_before_tax")]
+CLASSES = ["life_assurance", "annuities", "pensions", "personal_pensions", "deposit_admin", "group_life",
+           "group_credit", "permanent_health", "investments"]
 
 
 def pick(df, key, pairs):
@@ -37,6 +36,7 @@ def annual(df, key):
     gwp = pick(q4, key, [(t, "gross_premium") for t in PREMIUM_SOURCES])
     pbt = pick(q4, key, PROFIT_LINES)
     cls = q4[(q4.table_key == "gross_premium_by_class") & (q4.line_key.isin(CLASSES))]
+    q4 = q4[q4.table_key.isin(PREMIUM_SOURCES + ["profit_loss"])]
     cls = cls.groupby([key, "year", "line_key"])["value"].sum().unstack(fill_value=0)
     rows = []
     for k in sorted(set(gwp) | set(pbt)):
@@ -74,7 +74,8 @@ def main():
         if c["company_id"] == c["stream_id"] or c["stream_id"] not in stream_names:
             stream_names[c["stream_id"]] = c["display_name"]
     by_stream.insert(1, "display_name", by_stream["stream_id"].map(stream_names))
-    by_stream.insert(2, "segment", by_stream["stream_id"].map(lambda s: companies.get(s, {}).get("segment", "")))
+    stream_seg = {c["stream_id"]: c["segment"] for c in companies.values()}
+    by_stream.insert(2, "segment", by_stream["stream_id"].map(stream_seg))
     by_company.insert(1, "display_name", by_company["company_id"].map(lambda c: companies[c]["display_name"]))
     by_stream.to_csv(os.path.join(PROCESSED, "life_annual_by_stream.csv"), index=False)
     by_company.to_csv(os.path.join(PROCESSED, "life_annual_by_company.csv"), index=False)
@@ -94,7 +95,7 @@ def main():
             "Kenya long-term (life) insurance business, consolidated from IRA quarterly statistics.",
             "Figures in KSh thousands, as published by IRA (unaudited). Full-year figures are Q4 year to date.",
             "stream_id ties a company to everything it absorbed or was renamed from: see corporate_events.",
-            f"Built {dt.datetime.utcnow():%Y-%m-%d %H:%M} UTC from data/raw/manifest.csv."]}).to_excel(xw, "README", index=False)
+            f"Built {dt.datetime.now(dt.timezone.utc):%Y-%m-%d %H:%M} UTC from data/raw/manifest.csv."]}).to_excel(xw, "README", index=False)
         by_stream.to_excel(xw, "annual_by_stream", index=False)
         by_company.to_excel(xw, "annual_by_company", index=False)
         quarterly.to_excel(xw, "market_quarterly", index=False)
@@ -107,7 +108,7 @@ def main():
         return None if v is None or (isinstance(v, float) and pd.isna(v)) else v
 
     data = {
-        "built": dt.datetime.utcnow().strftime("%Y-%m-%d"),
+        "built": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d"),
         "units": "KSh thousands",
         "fx": fx,
         "classes": CLASSES,
@@ -116,13 +117,18 @@ def main():
         "events": events,
         "flags": flags.fillna("").to_dict("records"),
     }
+    outliers = set()
+    if not flags.empty:
+        o = flags[flags.flag == "profit_outlier"]
+        outliers = set(zip(o.company_id, o.year.astype(int)))
     for sid, g in by_stream.groupby("stream_id"):
         members = sorted(set(panel.loc[panel.stream_id == sid, "company_id"]))
         data["streams"][sid] = {
             "name": stream_names.get(sid, sid),
-            "segment": companies.get(sid, {}).get("segment", "insurer"),
+            "segment": stream_seg.get(sid, "insurer"),
             "companies": [{"id": c, "name": companies[c]["display_name"], "notes": companies[c]["notes"]} for c in members],
             "years": {int(r["year"]): {"gwp": clean(r["gross_premium_kes000"]), "profit": clean(r["profit_kes000"]),
+                                       "profit_flag": bool(members) and any((c, int(r["year"])) in outliers for c in members),
                                        "classes": {c: clean(r[f"prem_{c}"]) for c in CLASSES}}
                       for _, r in g.iterrows()},
         }

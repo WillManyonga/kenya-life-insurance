@@ -43,7 +43,7 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
     <h2>Top life insurers: premium growth vs profit margin</h2>
     <p class="note" id="bubbleNote"></p>
     <svg id="bubble" viewBox="0 0 640 420" role="img" aria-label="Bubble chart of premium growth against profit margin"></svg>
-    <p class="note">Bubble size is gross premium in the end year. Like the Deloitte East Africa report, profit margin stands in for embedded value, which Kenyan insurers do not publish: profit before tax (or the revenue-account surplus where that is all IRA prints) over gross premium, averaged across the window.</p>
+    <p class="note">Bubble size is gross premium in the end year. Like the Deloitte East Africa report, profit margin stands in for embedded value, which Kenyan insurers do not publish: profit before tax (or the revenue-account surplus where that is all IRA prints) over gross premium, averaged across the window. Years whose printed profit is more than half of premium (a likely filing error, such as Kenindia's 2024 return) are left out of the average and marked *. From 2024 profit is on IFRS 17, so margins before and after are not strictly comparable.</p>
     <details><summary>Table view</summary><div id="bubbleTable"></div></details>
   </div>
   <div class="card">
@@ -55,7 +55,7 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
   <div class="card">
     <h2>Market gross premium by year</h2>
     <svg id="market" viewBox="0 0 640 300" role="img" aria-label="Market gross premium by year"></svg>
-    <p class="note">Insurers only. 2017 comes from IRA's annual statistics because no Q4 2017 workbook was published.</p>
+    <p class="note">Insurers only (life reinsurers excluded). 2017 comes from IRA's annual statistics workbook because no Q4 2017 quarterly workbook was published; it counts gross direct premium only.</p>
   </div>
   <div class="card">
     <h2>One company</h2>
@@ -84,9 +84,9 @@ function stats(){
   const y0=+$('y0').value,y1=+$('y1').value,n=y1-y0;
   return insurers().map(([id,s])=>{
     const a=gwp(s,y0),b=gwp(s,y1);
-    const m=[];for(let y=y0;y<=y1;y++){const g=gwp(s,y),p=s.years[y]?.profit;if(g&&p!=null)m.push(p/g)}
+    const m=[];let skipped=0;for(let y=y0;y<=y1;y++){const g=gwp(s,y),p=s.years[y]?.profit;if(s.years[y]?.profit_flag){skipped++;continue}if(g&&p!=null)m.push(p/g)}
     return {id,name:s.name,g0:a,g1:b,cagr:(a>0&&b>0&&n>0)?Math.pow(b/a,1/n)-1:null,margin:m.length?m.reduce((x,y)=>x+y)/m.length:null,
-            prevG:gwp(s,y1-1)}
+            prevG:gwp(s,y1-1),skipped}
   }).filter(r=>r.g1>0).sort((p,q)=>q.g1-p.g1);
 }
 
@@ -98,10 +98,10 @@ let xScale,yScale;
 function ticks(lo,hi,n=5){const s=(hi-lo)/n,p=Math.pow(10,Math.floor(Math.log10(s))),st=[1,2,2.5,5,10].map(k=>k*p).find(k=>k>=s);const a=Math.floor(lo/st)*st,out=[];let v=a;do{out.push(+v.toFixed(10));v+=st}while(out.at(-1)<hi-1e-9);return out}
 
 function drawBubble(rows){
-  const svg=$('bubble');svg.innerHTML='';const W=640,H=420,L=56,R=20,T=16,B=40;
+  const svg=$('bubble');svg.innerHTML='';const W=640,H=420,L=56,R=24,T=40,B=40;
   const pts=rows.filter(r=>r.cagr!=null&&r.margin!=null);
   if(!pts.length){el('text',{x:W/2,y:H/2,'text-anchor':'middle'},svg).textContent='No company has premium and profit for both years';return}
-  const xt=ticks(Math.min(0,...pts.map(r=>r.cagr)),Math.max(...pts.map(r=>r.cagr))),yt=ticks(Math.min(0,...pts.map(r=>r.margin)),Math.max(...pts.map(r=>r.margin)));
+  const pad=(a,b)=>[a<0?a-(b-a)*.06:a,b+(b-a)*.06];const xr=pad(Math.min(0,...pts.map(r=>r.cagr)),Math.max(...pts.map(r=>r.cagr))),yr=pad(Math.min(0,...pts.map(r=>r.margin)),Math.max(...pts.map(r=>r.margin)));const xt=ticks(...xr),yt=ticks(...yr);
   xScale=v=>L+(v-xt[0])/(xt.at(-1)-xt[0])*(W-L-R);yScale=v=>H-B-(v-yt[0])/(yt.at(-1)-yt[0])*(H-T-B);
   axis(svg,L,W-R,H-B,T,xt,yt,pct,pct);
   el('line',{x1:xScale(0),x2:xScale(0),y1:T,y2:H-B,stroke:css('--text-muted'),'stroke-dasharray':'3 3'},svg);
@@ -110,11 +110,11 @@ function drawBubble(rows){
   const max=Math.max(...pts.map(r=>r.g1));
   [...pts].sort((a,b)=>b.g1-a.g1).forEach(r=>{
     const c=el('circle',{cx:xScale(r.cagr),cy:yScale(r.margin),r:6+28*Math.sqrt(r.g1/max),fill:css('--series-1'),'fill-opacity':.55,stroke:css('--surface-1'),'stroke-width':2},svg);
-    c.onmousemove=e=>tip(e,`<b>${r.name}</b><br>CAGR ${pct(r.cagr)} · margin ${pct(r.margin)}<br>Premium ${$('y1').value}: ${fmt(money(r.g1,+$('y1').value))} ${unit()}`);c.onmouseleave=untip;
+    c.onmousemove=e=>tip(e,`<b>${r.name}</b><br>CAGR ${pct(r.cagr)} · margin ${pct(r.margin)}${r.skipped?`<br><i>${r.skipped} flagged year(s) left out of the margin</i>`:''}<br>Premium ${$('y1').value}: ${fmt(money(r.g1,+$('y1').value))} ${unit()}`);c.onmouseleave=untip;
   });
-  pts.forEach(r=>{el('text',{x:xScale(r.cagr),y:yScale(r.margin)-8-28*Math.sqrt(r.g1/max),'text-anchor':'middle',style:`fill:${css('--text-primary')}`},svg).textContent=r.name.replace(/ (Life )?(Assurance|Insurance).*$/,'')});
+  pts.forEach(r=>{el('text',{x:xScale(r.cagr),y:yScale(r.margin)-8-28*Math.sqrt(r.g1/max),'text-anchor':'middle',style:`fill:${css('--text-primary')}`},svg).textContent=short(r.name)});
   $('bubbleNote').textContent=`${pts.length} companies by ${$('y1').value} premium.`;
-  $('bubbleTable').innerHTML=table(['Company','CAGR','Avg margin',`Premium ${$('y1').value} (${unit()})`],pts.map(r=>[r.name,pct(r.cagr),pct(r.margin),fmt(money(r.g1,+$('y1').value))]));
+  $('bubbleTable').innerHTML=table(['Company','CAGR','Avg margin',`Premium ${$('y1').value} (${unit()})`],pts.map(r=>[r.name+(r.skipped?' *':''),pct(r.cagr),pct(r.margin),fmt(money(r.g1,+$('y1').value))]));
 }
 
 function drawBars(rows){
@@ -161,6 +161,7 @@ function drawCompany(){
     `<p class="note">Premium mix ${last}:</p>`+table(['Class',unit()],D.classes.filter(c=>cl[c]).map(c=>[c.replace(/_/g,' '),fmt(money(cl[c],last))]));
 }
 
+function short(n){return n.replace(/\s*\(.*?\)/g,'').replace(/ (Life )?(Assurance|Insurance).*$/,'').replace(/^First$/,'First Assurance')}
 function table(h,rows){return `<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table>`}
 
 function tiles(){

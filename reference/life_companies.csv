@@ -1,14 +1,14 @@
 company_id,display_name,stream_id,segment,status,notes
 britam_life,Britam Life Assurance,britam_life,insurer,active,Formerly British-American Insurance Company (Kenya)
 icea_lion_life,ICEA Lion Life Assurance,icea_lion_life,insurer,active,ICEA Life renamed ICEA LION Life Assurance in 2021 group reorganisation
-jubilee_life,Jubilee Life Insurance,jubilee_life,insurer,active,Life business of Jubilee Insurance Company of Kenya (composite) carried on by Jubilee Life Insurance after the composite split
+jubilee_life,Jubilee Life Insurance,jubilee_life,insurer,active,Printed as Jubilee Insurance Company (composite) to Q4 2024 and as Jubilee Life Insurance from Q1 2025
 kenindia,Kenindia Assurance,kenindia,insurer,active,Composite insurer; long-term business only
 cic_life,CIC Life Assurance,cic_life,insurer,active,
 sanlam_life,Sanlam Allianz Life Insurance (Kenya),sanlam_life,insurer,active,Pan Africa Life Assurance -> Sanlam Life Insurance -> Sanlam Allianz Life Insurance (Kenya) Oct/Nov 2025
 absa_life,First Assurance Life (formerly Absa Life),absa_life,insurer,active,Barclays Life Assurance Kenya -> Absa Life Assurance Kenya (10 Feb 2020) -> First Assurance Life (Nov 2026)
-old_mutual_life_kenya,Old Mutual Life Assurance Kenya (OMLAK),old_mutual_life,insurer,active,UAP Life Assurance renamed OMLAK May 2022; absorbs OMLAC book
-old_mutual_life_company,Old Mutual Life Assurance Company (OMLAC),old_mutual_life,insurer,closed,Closed fund from 2021; long-term business transferred to OMLAK
-cannon_life,Cannon Life Assurance,cannon_life,insurer,active,Metropolitan Cannon Life Assurance renamed Cannon Life after Momentum Metropolitan exit (July 2022)
+old_mutual_life_kenya,Old Mutual Life Assurance Kenya (OMLAK),old_mutual_life,insurer,active,"Printed as UAP LIFE ASSURANCE to Q1 2022, as OLD MUTUAL LIFE ASSURANCE Q2 2022-Q4 2023, as OLD MUTUAL LIFE ASSURANCE KENYA from Q1 2024"
+old_mutual_life_company,Old Mutual Life Assurance Company (OMLAC),old_mutual_life,insurer,closed,"Printed as OLD MUTUAL LIFE ASSURANCE to Q1 2022, then OLD MUTUAL ASSURANCE (COMPANY) to Q3 2025; book absorbed by OMLAK in Q4 2025"
+cannon_life,Cannon Life Assurance,cannon_life,insurer,active,"Metropolitan Life Kenya and Cannon Assurance printed separately until Q3 2017, as Metropolitan Cannon from Q4 2017, as Cannon Life Assurance (K) from Q1 2023"
 liberty_life,Liberty Life Assurance Kenya,liberty_life,insurer,active,Formerly CfC Life
 madison_life,Madison Life Assurance Kenya,madison_life,insurer,active,Madison Insurance Company Kenya demerged 2018; life business continues as Madison Life Assurance Kenya
 pioneer,Pioneer Assurance,pioneer,insurer,active,
@@ -16,15 +16,15 @@ ga_life,GA Life Assurance,ga_life,insurer,active,
 apa_life,APA Life Assurance,apa_life,insurer,active,Formerly Apollo Life Assurance
 capex_life,Capex Life Assurance,capex_life,insurer,active,
 kenya_orient_life,Kenya Orient Life Assurance,kenya_orient_life,insurer,active,Licensed 2014
-geminia_life,Geminia Life Insurance,geminia_life,insurer,active,
+geminia_life,Geminia Life Insurance,geminia_life,insurer,active,Printed as Geminia Insurance Company (composite) to Q2 2020 and as Geminia Life Insurance from Q3 2020
 prudential_life,Prudential Life Assurance Kenya,prudential_life,insurer,active,Formerly Shield Assurance (acquired by Prudential plc 2014)
 equity_life,Equity Life Assurance (Kenya),equity_life,insurer,active,Licensed January 2022
 kuscco_mutual,KUSCCO Mutual Assurance,kuscco_mutual,insurer,active,
 monarch,The Monarch Insurance,monarch,insurer,active,Composite
 corporate_insurance,Corporate Insurance Company,corporate_insurance,insurer,active,Composite
 amaco,Africa Merchant Assurance,amaco,insurer,active,Composite
-takaful,Takaful Insurance of Africa,takaful,insurer,active,Majority stake acquired by Tamini Insurance (Djibouti) April 2025
-first_assurance,First Assurance Company (composite life book),first_assurance,insurer,check,Only if IRA prints a life row for the composite; confirm on first run
+takaful,Takaful Insurance of Africa,takaful,insurer,active,Life business printed to Q2 2020
+first_assurance,First Assurance (life book),absa_life,insurer,closed,Composite life book printed to Q2 2019; joined to the Barclays/Absa Life line on the inference that it moved there when Barclays owned First Assurance (confirm)
 kenya_re,Kenya Reinsurance Corporation,kenya_re,reinsurer,active,Life reinsurance
 east_africa_re,East Africa Reinsurance,east_africa_re,reinsurer,active,Life reinsurance
 continental_re,Continental Reinsurance,continental_re,reinsurer,active,Life reinsurance
@@ -33,3 +33,8 @@ ghana_re,Ghana Reinsurance (Kenya),ghana_re,reinsurer,active,Life reinsurance
 africa_re,Africa Reinsurance Corporation,africa_re,reinsurer,active,Life reinsurance
 zep_re,ZEP-RE (PTA Reinsurance),zep_re,reinsurer,active,Life reinsurance
 cica_re,CICA Re,cica_re,reinsurer,active,Life reinsurance
+metropolitan_life,Metropolitan Life Kenya,cannon_life,insurer,merged,Merged into Metropolitan Cannon Life; printed separately to Q3 2017
+cannon_assurance_life,Cannon Assurance (life book),cannon_life,insurer,merged,Merged into Metropolitan Cannon Life; printed separately to Q3 2017
+saham_life,Saham Assurance (life book),saham_life,insurer,closed,"Composite (formerly Mercantile); life premium falls to nil from Q3 2021, last printed Q1 2022"
+kenyan_alliance,The Kenyan Alliance Insurance,kenyan_alliance,insurer,active,Composite; long-term business only
+star_discover_life,Star Discover Life Insurance,star_discover_life,insurer,active,First printed Q3 2023

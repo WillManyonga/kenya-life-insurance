@@ -18,8 +18,8 @@ import pandas as pd
 
 from .common import PROCESSED, VALIDATION
 
-CLASS_LINES = {"ordinary_life", "group_life", "group_credit", "deposit_admin_pensions", "annuities",
-               "investment_unit_linked", "health", "micro"}
+CLASS_LINES = {"life_assurance", "annuities", "pensions", "personal_pensions", "deposit_admin", "group_life",
+               "group_credit", "permanent_health", "investments"}
 
 
 def tol(x):
@@ -33,9 +33,17 @@ def check_totals(long, totals):
     for (y, q, t), tt in totals.groupby(["year", "quarter", "table_key"]):
         rows = long[(long.year == y) & (long.quarter == q) & (long.table_key == t)]
         for _, r in tt.iterrows():
+            if "MARKET SHARE" in str(r["line_raw"]).upper():
+                continue
             lab = str(r["total_label"]).upper()
-            scope = rows if any(w in lab for w in ("INDUSTRY", "MARKET", "GRAND")) else rows[rows.segment == r["segment"]]
-            s = scope.loc[scope.k == r["line_raw"], "value"].sum()
+            line = rows[rows.k == r["line_raw"]]
+            seg_sum = line.loc[line.segment == r["segment"], "value"].sum()
+            all_sum = line["value"].sum()
+            # A TOTAL may cover its own segment or, where IRA prints one total line, the whole market.
+            if any(w in lab for w in ("INDUSTRY", "MARKET", "GRAND")):
+                s = all_sum
+            else:
+                s = seg_sum if abs(seg_sum - r["value"]) <= tol(r["value"]) else all_sum
             ok = abs(s - r["value"]) <= tol(r["value"])
             out.append(dict(check="totals", year=y, quarter=q, table_key=t, item=f"{r['total_label']} / {r['line_raw']}",
                             expected=r["value"], actual=round(s, 2), passed=int(ok)))
@@ -75,6 +83,21 @@ def check_ytd(panel):
     return out, flags
 
 
+def check_margins(panel):
+    """Full-year profit before tax above half of gross premium is almost always a filing error."""
+    q4 = panel[panel.quarter == 4]
+    g = q4[(q4.table_key == "gross_premium_by_class") & (q4.line_key == "gross_premium")].groupby(["company_id", "year"]).value.sum()
+    p = q4[(q4.table_key == "profit_loss") & (q4.line_key == "profit_before_tax")].groupby(["company_id", "year"]).value.sum()
+    flags = []
+    for k, v in p.items():
+        gw = g.get(k)
+        if gw and gw > 0 and abs(v) > 0.5 * gw and abs(v) > 500_000:
+            flags.append(dict(company_id=k[0], year=k[1], quarter=4, table_key="profit_loss", flag="profit_outlier",
+                              detail=f"profit before tax {v:,.0f} against gross premium {gw:,.0f} ({v / gw:.0%})",
+                              treatment="kept as printed; left out of average margins in the explorer"))
+    return flags
+
+
 def main(strict=False):
     long = pd.read_csv(os.path.join(PROCESSED, "life_long.csv"))
     totals = pd.read_csv(os.path.join(PROCESSED, "life_printed_totals.csv"))
@@ -87,6 +110,7 @@ def main(strict=False):
     checks += check_totals(long, totals)
     checks += check_classes(panel)
     ytd, flags = check_ytd(panel)
+    flags += check_margins(panel)
     checks += ytd
     ch = pd.DataFrame(checks)
     ch.to_csv(os.path.join(VALIDATION, "checks.csv"), index=False)

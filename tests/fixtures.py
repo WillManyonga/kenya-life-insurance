@@ -32,8 +32,8 @@ def build(raw_dir):
 
         ws = wb.create_sheet("LT3")
         ws.append([f"APPENDIX 3: GROSS PREMIUM INCOME UNDER LONG TERM INSURANCE BUSINESS AS AT {q}Q {y} (KSHS '000)"])
-        ws.append([None, None, "Individual", None, "Group", None])
-        ws.append([None, "Company", "Ordinary Life", "Group Life", "Deposit Administration", "Total"])
+        ws.append([None, None, None, None, None, None])
+        ws.append([None, "Company", "Life Assurances", "Group Life", "Deposit Administration", "Total"])
         ws.append([None, "INSURERS"])
         for n, (a, b, c) in comps.items():
             ws.append([None, n, a, b, c, a + b + c])

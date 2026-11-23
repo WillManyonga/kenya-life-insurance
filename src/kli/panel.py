@@ -20,11 +20,22 @@ from .common import PROCESSED, VALIDATION, load_refs, norm_name, slug, write_csv
 
 
 def map_names(df, companies, names):
+    """Map printed names to ids. A pattern may be limited to a range of quarters (valid_from /
+    valid_to as YYYYQn), because IRA has reused one printed name for two companies."""
     cache = {}
-    for n in df["raw_name"].unique():
-        row = names.match(norm_name(n))
-        cache[n] = row["company_id"] if row else ""
-    df["company_id"] = df["raw_name"].map(cache)
+    for n, y, q in df[["raw_name", "year", "quarter"]].drop_duplicates().itertuples(index=False):
+        period = f"{y}Q{q}"
+        cid = ""
+        for rx, row in names.items:
+            lo, hi = row.get("valid_from") or "0000Q0", row.get("valid_to") or "9999Q9"
+            if lo <= period <= hi and rx.search(norm_name(n)):
+                cid = row["company_id"]
+                break
+        cache[(n, y, q)] = cid
+    df["company_id"] = [cache[k] for k in zip(df["raw_name"], df["year"], df["quarter"])]
+    # Reinsurers are printed among the insurers on some pages: take the segment from the company list.
+    known = df["company_id"].map(lambda c: companies.get(c, {}).get("segment", ""))
+    df["segment"] = known.where(known != "", df["segment"])
     df["stream_id"] = df["company_id"].map(lambda c: companies.get(c, {}).get("stream_id", c))
     df["display_name"] = df["company_id"].map(lambda c: companies.get(c, {}).get("display_name", ""))
     return df

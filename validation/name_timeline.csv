@@ -1,126 +1,58 @@
 raw_name,company_id,segment,first_year,last_year,periods
-Actuarial Contract Liabilities,,insurer,2016,2023,27
-Cash and Cash Balances,,insurer,2016,2026,37
-Commercial Papers,,insurer,2016,2026,37
-Corporate Bonds,,insurer,2016,2026,37
-Current Liabilities,,insurer,2016,2023,27
-Debentures,,insurer,2016,2026,37
-Government Securities,,insurer,2016,2023,27
-Intangible Assets,,insurer,2016,2026,37
-Investment Property,,insurer,2016,2026,37
-Investment in Related Companies,,insurer,2016,2023,27
-Land And Buildings,,insurer,2016,2023,27
-Loans Secured & Unsecured,,insurer,2016,2023,27
-LongTerm Liabilities,,insurer,2016,2023,27
-Mortgages,,insurer,2016,2026,37
-Ordinary Shares Quoted,,insurer,2016,2026,37
-Ordinary Shares Unquoted,,insurer,2016,2026,37
-Other Assets,,insurer,2016,2026,37
-Other Fixed Assets,,insurer,2016,2023,27
-Other Receivables,,insurer,2016,2026,37
-Other Reserves,,insurer,2016,2026,37
-Other Securities,,insurer,2016,2023,27
-Outstanding Premiums,,insurer,2016,2023,27
-Preference Shares Quoted,,insurer,2016,2026,37
-Preference Shares Unquoted,,insurer,2016,2026,37
-Retained Earnings,,insurer,2016,2026,37
-Revaluation Reserves,,insurer,2016,2026,37
-SAHAM ASSURANCE,,insurer,2016,2022,20
-Share Capital,,insurer,2016,2026,37
-Share Premium,,insurer,2016,2026,37
-Statutory Reserves,,insurer,2016,2026,37
-THE KENYAN ALLIANCE INSURANCE,,insurer,2016,2026,37
-Term Deposits,,insurer,2016,2026,37
-Underwriting Provisions,,insurer,2016,2023,27
-AAR INSURANCE KENYA,,insurer,2017,2017,1
-AIG INSURANCE COMPANY,,insurer,2017,2017,1
-DIRECTLINE ASSURANCE COMPANY,,insurer,2017,2017,1
-FIDELITY SHIELD INSURANCE,,insurer,2017,2017,1
-GATEWAY INSURANCE COMPANY,,insurer,2017,2017,1
-HERITAGE INSURANCE COMPANY,,insurer,2017,2017,1
-INTRA-AFRICA ASSURANCE,,insurer,2017,2017,1
-INVESCO ASSURANCE COMPANY,,insurer,2017,2017,1
-MAYFAIR INSURANCE COMPANY,,insurer,2017,2017,1
-MERCANTILE INSURANCE COMPANY,,insurer,2017,2017,1
-OCCIDENTAL INSURANCE COMPANY,,insurer,2017,2017,1
-PACIS INSURANCE COMPANY,,insurer,2017,2017,1
-PHOENIX OF EAST AFRICA,,insurer,2017,2017,1
-REAL INSURANCE COMPANY,,insurer,2017,2017,1
-RESOLUTION HEALTH INSURANCE,,insurer,2017,2017,1
-TAUSI ASSURANCE COMPANY,,insurer,2017,2017,1
-TRIDENT INSURANCE COMPANY,,insurer,2017,2017,1
-XPLICO INSURANCE COMPANY,,insurer,2017,2017,1
-STAR DISCOVER LIFE INSURANCE,,insurer,2022,2026,15
-Fixed Assets,,insurer,2024,2026,10
-Government Securites,,insurer,2024,2026,10
-Insurance Contract Assets,,insurer,2024,2026,10
-Insurance Contract Liabilites,,insurer,2024,2026,10
-Investment Contract Liabilites,,insurer,2024,2026,10
-Investment in Related Parties,,insurer,2024,2026,10
-Land and Buildings,,insurer,2024,2026,10
-Loans Secured and Unsecured,,insurer,2024,2026,10
-Long-Term Liabilites,,insurer,2024,2026,10
-Other Liabilites,,insurer,2024,2026,10
-Other Securites,,insurer,2024,2026,10
-Reinsurance Contract Assets,,insurer,2024,2026,10
-Reinsurance Contract Liabilites,,insurer,2024,2026,10
-Short-Term Liabilites,,insurer,2024,2026,10
-Deferred tax liability,,insurer,2026,2026,2
-Investment in Unit Trust,,insurer,2026,2026,2
 BARCLAYS LIFE,absa_life,insurer,2016,2019,11
-BARCLAYS LIFE ASSURANCE,absa_life,insurer,2018,2018,1
+BARCLAYS LIFE ASSURANCE,absa_life,insurer,2017,2018,2
 ABSA LIFE ASSURANCE,absa_life,insurer,2020,2026,26
-AFRICAN MERCHANT ASSURANCE,amaco,insurer,2017,2017,1
 APA LIFE ASSURANCE COMPANY,apa_life,insurer,2016,2026,37
-APA INSURANCE COMPANY,apa_life,insurer,2017,2017,1
-BRITAM LIFE ASSURANCE,britam_life,insurer,2016,2026,36
+BRITAM LIFE ASSURANCE,britam_life,insurer,2016,2026,37
 BRITAM LIFE,britam_life,insurer,2017,2017,1
-BRITISH AMERICAN INSURANCE,britam_life,insurer,2017,2017,1
-CANNON ASSURANCE COMPANY,cannon_life,insurer,2016,2017,3
-METROPOLITAN INSURANCE,cannon_life,insurer,2016,2017,3
+CANNON ASSURANCE COMPANY,cannon_assurance_life,insurer,2016,2017,3
+METROPOLITAN CANNON ASSURANCE,cannon_life,insurer,2017,2017,1
 METROPOLITAN CANNON INSURANCE,cannon_life,insurer,2017,2022,21
 CANNON LIFE ASSURANCE (K) LIMITED,cannon_life,insurer,2023,2026,14
 CAPEX LIFE ASSURANCE COMPANY,capex_life,insurer,2016,2026,37
 CIC LIFE ASSURANCE COMPANY,cic_life,insurer,2016,2026,37
-CIC GENERAL INSURANCE COMPANY,cic_life,insurer,2017,2017,1
 CONTINENTAL REINSURANCE,continental_re,reinsurer,2016,2026,36
-CONTINENTAL REINSURANCE,continental_re,insurer,2017,2017,1
+CONTINENTAL REINSURANCE PLC,continental_re,reinsurer,2017,2017,1
 CORPORATE INSURANCE COMPANY,corporate_insurance,insurer,2016,2025,35
-EAST AFRICAN REINSURANCE,east_africa_re,reinsurer,2016,2024,29
-EAST AFRICA REINSURANCE,east_africa_re,reinsurer,2017,2026,8
-EAST AFRICAN REINSURANCE,east_africa_re,insurer,2017,2017,1
+EAST AFRICA REINSURANCE,east_africa_re,reinsurer,2016,2026,32
+EAST AFRICAN REINSURANCE,east_africa_re,reinsurer,2016,2024,30
+EAST AFRICA REINSURANCE COMPANY,east_africa_re,reinsurer,2017,2017,1
 EQUITY LIFE ASSURANCE,equity_life,insurer,2022,2026,17
-Other Equity,equity_life,insurer,2024,2026,10
 FIRST ASSURANCE COMPANY,first_assurance,insurer,2016,2019,9
 GA LIFE ASSURANCE COMPANY,ga_life,insurer,2016,2026,37
-GA INSURANCE COMPANY,ga_life,insurer,2017,2017,1
+GA LIFE INSURANCE COMPANY,ga_life,insurer,2016,2023,24
+GA LIFE ASSURANCE LIMITED,ga_life,insurer,2017,2017,1
 GEMINIA INSURANCE COMPANY,geminia_life,insurer,2016,2020,13
 GEMINIA LIFE INSURANCE COMPANY,geminia_life,insurer,2020,2026,24
 ICEA LION LIFE ASSURANCE,icea_lion_life,insurer,2016,2026,37
-ICEA LION GENERAL INSURANCE,icea_lion_life,insurer,2017,2017,1
-JUBILEE INSURANCE COMPANY,jubilee_life,insurer,2016,2024,31
+ICEA LION LIFE ASSURANCE COMPANY,icea_lion_life,insurer,2016,2023,25
+JUBILEE INSURANCE COMPANY,jubilee_life,insurer,2016,2025,34
 JUBILEE LIFE INSURANCE,jubilee_life,insurer,2025,2026,6
 KENINDIA ASSURANCE COMPANY,kenindia,insurer,2016,2026,37
 KENYA ORIENT LIFE ASSURANCE,kenya_orient_life,insurer,2016,2026,37
-KENYA ORIENT INSURANCE,kenya_orient_life,insurer,2017,2017,1
 KENYA REINSURANCE CORPORATION,kenya_re,reinsurer,2016,2026,37
-KENYA REINSURANCE CORPORATION,kenya_re,insurer,2017,2017,1
+THE KENYAN ALLIANCE INSURANCE,kenyan_alliance,insurer,2016,2026,37
 KUSCCO MUTUAL ASSURANCE LIMITED,kuscco_mutual,insurer,2019,2025,27
+LIBERTY LIFE ASSURANCE,liberty_life,insurer,2016,2023,24
 LIBERTY LIFE ASSURANCE COMPANY,liberty_life,insurer,2016,2026,37
-CFC LIFE ASSURANCE COMPANY,liberty_life,insurer,2017,2017,1
+LIBERTY LIFE ASSURANCE KENYA,liberty_life,insurer,2017,2017,1
 MADISON INSURANCE COMPANY,madison_life,insurer,2016,2026,37
+METROPOLITAN INSURANCE,metropolitan_life,insurer,2016,2017,2
+METROPOLITAN LIFE ASSURANCE,metropolitan_life,insurer,2016,2017,2
 THE MONARCH INSURANCE,monarch,insurer,2016,2026,37
-OLD MUTUAL LIFE ASSURANCE,old_mutual_life_company,insurer,2016,2023,27
+THE MONARCH INSURANCE COMPANY,monarch,insurer,2016,2023,25
+OLD MUTUAL ASSURANCE COMPANY,old_mutual_life_company,insurer,2016,2025,33
+OLD MUTUAL LIFE ASSURANCE,old_mutual_life_company,insurer,2016,2022,20
 OLD MUTUAL ASSURANCE,old_mutual_life_company,insurer,2022,2023,7
-OLD MUTUAL ASSURANCE COMPANY,old_mutual_life_company,insurer,2023,2025,8
 UAP LIFE ASSURANCE COMPANY,old_mutual_life_kenya,insurer,2016,2022,20
-UAP INSURANCE COMPANY,old_mutual_life_kenya,insurer,2017,2017,1
+OLD MUTUAL LIFE ASSURANCE,old_mutual_life_kenya,insurer,2022,2023,7
 OLD MUTUAL LIFE ASSURANCE KENYA,old_mutual_life_kenya,insurer,2023,2026,11
 PIONEER ASSURANCE COMPANY,pioneer,insurer,2016,2026,37
 PRUDENTIAL LIFE ASSURANCE,prudential_life,insurer,2016,2026,37
-SHIELD ASSURANCE COMPANY,prudential_life,insurer,2017,2017,1
+SAHAM ASSURANCE,saham_life,insurer,2016,2022,20
+SAHAM INSURANCE COMPANY,saham_life,insurer,2016,2022,20
 SANLAM LIFE ASSURANCE,sanlam_life,insurer,2016,2026,35
-PAN AFRICA INSURANCE COMPANY,sanlam_life,insurer,2017,2017,1
 SANLAM LIFE INSURANCE,sanlam_life,insurer,2017,2017,1
 SANLAM ALLIANZ LIFE INSURANCE,sanlam_life,insurer,2026,2026,1
+STAR DISCOVER LIFE INSURANCE,star_discover_life,insurer,2022,2026,15
 TAKAFUL INSURANCE OF AFRICA,takaful,insurer,2016,2020,13

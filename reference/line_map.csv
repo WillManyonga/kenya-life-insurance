@@ -1,27 +1,47 @@
 order,table_key,line_pattern,line_std,notes
-10,*,^TOTAL$|^TOTAL PREMIUM|GROSS PREMIUM INCOME$|^GROSS PREMIUMS?( WRITTEN)?$|^GROSS DIRECT PREMIUM,gross_premium,Total gross premium for the company
-11,gross_premium_by_class,^TOTAL,gross_premium,
-20,*,ORDINARY LIFE|INDIVIDUAL LIFE,ordinary_life,
-21,*,GROUP CREDIT|CREDIT LIFE,group_credit,
-22,*,GROUP LIFE,group_life,
-23,*,DEPOSIT ADMIN|PENSION|SUPERANNUATION,deposit_admin_pensions,
-24,*,ANNUIT,annuities,
-25,*,INVESTMENT|UNIT LINKED|UNIT-LINKED,investment_unit_linked,
-26,*,PERMANENT HEALTH|MEDICAL|HEALTH,health,
-27,*,MICRO,micro,
-30,revenue_account,REINSURANCE CEDED|OUTWARD|PREMIUMS? CEDED,reinsurance_ceded,
-31,revenue_account,NET PREMIUM,net_premium,
-32,revenue_account,INVESTMENT INCOME,investment_income,
-33,revenue_account,BENEFITS|CLAIMS,benefits_paid,
-34,revenue_account,COMMISSION,commissions,
-35,revenue_account,MANAGEMENT EXP|EXPENSES OF MANAGEMENT|OPERATING EXP,management_expenses,
-36,revenue_account,ACTUARIAL|POLICYHOLDER.*LIAB|INCREASE IN.*FUND|LIFE FUND,change_in_life_fund,
-37,*,PROFIT.*BEFORE TAX|SURPLUS.*BEFORE TAX|RESULT BEFORE TAX,profit_before_tax,
-38,*,PROFIT.*AFTER TAX|SURPLUS.*AFTER TAX,profit_after_tax,
-39,revenue_account,SURPLUS|DEFICIT|TRANSFER TO PROFIT,surplus_transfer,Fallback profit line if no PBT
-40,ifrs17_insurance_result,^INSURANCE REVENUE,insurance_revenue,
-41,ifrs17_insurance_result,INSURANCE SERVICE EXPENSE,insurance_service_expense,
-42,ifrs17_insurance_result,INSURANCE SERVICE RESULT,insurance_service_result,
-50,balance_sheet,TOTAL ASSETS,total_assets,
-51,balance_sheet,TOTAL LIABILITIES,total_liabilities,
-52,balance_sheet,SHAREHOLDERS|TOTAL EQUITY|NET ASSETS,equity,
+10,*_premium_by_class,^TOTAL$,gross_premium,Company total across classes
+11,*_premium_by_class,^LIFE ASSURANCES?$,life_assurance,Individual (ordinary) life
+12,*_premium_by_class,^ANNUITIES$,annuities,
+13,*_premium_by_class,^PERSONAL PENSIONS$,personal_pensions,Printed separately from 2023
+14,*_premium_by_class,^PENSIONS$,pensions,Up to 2022 pensions include deposit administration
+15,*_premium_by_class,^DEPOSIT ADMIN,deposit_admin,Printed separately from 2023
+16,*_premium_by_class,^GROUP LIFE$,group_life,
+17,*_premium_by_class,^GROUP CREDIT$,group_credit,
+18,*_premium_by_class,^PERMANENT HEALTH$,permanent_health,
+19,*_premium_by_class,^INVESTMENTS?$,investments,
+20,*_premium_by_class,MARKET SHARE,market_share_pct,Percent as printed; not money
+30,revenue_*,^LIFE FUND B/?F,life_fund_bf,Opening life fund (a balance)
+31,revenue_*,^GROSS PREMIUM,gross_premium,
+32,revenue_*,^NET PREMIUM,net_premium,
+33,revenue_*,FEE\)? INCOME,fee_income,
+34,revenue_*,^TOTAL BENEFITS,total_benefits,
+35,revenue_*,^CLAIMS$,claims,
+36,revenue_*,^SURRENDERS,surrenders,
+37,revenue_*,^BONUSES,bonuses,
+38,revenue_*,^ANNUITIES PAID,annuities_paid,
+39,revenue_*,^NET COMMISS?IONS?,net_commissions,
+40,revenue_*,^EXPENSES? OF MANAGEMENT|^MANAGEMENT EXPENSES,management_expenses,
+41,revenue_*,^INVESTMENT INCOME,investment_income,
+42,revenue_*,^INVESTMENT EXPENSES,investment_expenses,
+43,revenue_*,TRANSFER TO,transfer_to_pl,Surplus transferred to (from) the P&L
+44,revenue_*,^LIFE FUND C/?F,life_fund_cf,Closing life fund (a balance)
+50,profit_loss,PROFIT TRANSFERRED FROM REVENUE,profit_from_revenue,
+51,profit_loss,LOSS TRANSFERRED FROM REVENUE,loss_from_revenue,
+52,profit_loss,^INVESTMENT INCOME,investment_income,
+53,profit_loss,^OTHER INCOME,other_income,
+54,profit_loss,^TOTAL INCOME,total_income,
+55,profit_loss,^MANAGEMENT EXPENSES,management_expenses,
+56,profit_loss,^TOTAL OUTGO,total_outgo,
+57,profit_loss,PROFIT.*BEFORE (INCOME )?TAX,profit_before_tax,
+58,profit_loss,PROVISION FOR TAXATION|^INCOME TAX EXPENSE,tax,
+59,profit_loss,PROFIT.*AFTER TAX|^PROFIT FOR THE YEAR,profit_after_tax,
+60,profit_loss,^INSURANCE REVENUE,insurance_revenue,IFRS 17
+61,profit_loss,^INSURANCE SERVICE EXPENSE,insurance_service_expense,IFRS 17
+62,profit_loss,^NET EXPENSES FROM REINSURANCE,net_reinsurance_expense,IFRS 17
+63,profit_loss,^INSURANCE SERVICE RESULT,insurance_service_result,IFRS 17
+64,profit_loss,^NET INVESTMENT INCOME,net_investment_income,IFRS 17
+65,profit_loss,^NET FINANCIAL RESULT,net_financial_result,IFRS 17
+66,profit_loss,^OTHER OPERATING EXPENSES,other_operating_expenses,IFRS 17
+70,balance_sheet,^TOTAL ASSETS,total_assets,
+71,balance_sheet,^TOTAL LIABILITIES,total_liabilities,
+72,balance_sheet,^SHAREHOLDERS|^TOTAL EQUITY|^TOTAL SHAREHOLDERS,equity,

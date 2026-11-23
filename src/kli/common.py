@@ -1,5 +1,6 @@
 """Shared paths, reference tables and helpers for the Kenya life-insurance pipeline."""
 import csv
+import fnmatch
 import hashlib
 import os
 import re
@@ -87,7 +88,7 @@ class Ordered:
 
     def match(self, text, **filters):
         for rx, row in self.items:
-            if any(row.get(k) not in ("*", v) for k, v in filters.items()):
+            if any(not fnmatch.fnmatch(v, row.get(k) or "*") for k, v in filters.items()):
                 continue
             if rx.search(text):
                 return row

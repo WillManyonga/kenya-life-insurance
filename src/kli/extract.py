@@ -24,11 +24,14 @@ import openpyxl
 from .common import PROCESSED, RAW, ROOT, VALIDATION, load_refs, norm, norm_name, num, period_end, sha256, slug, write_csv
 
 warnings.filterwarnings("ignore")
-LIFE = re.compile(r"LONG[\s\-]?TERM|\bLIFE\b|ASSURANCE BUSINESS", re.I)
-NOT_LIFE = re.compile(r"GENERAL INSURANCE|GENERAL BUSINESS|NON[\s\-]?LIFE|SHORT[\s\-]?TERM", re.I)
+LIFE = re.compile(r"LONG[\s\-]?TERM|LIFE ASSURANCE|LIFE INSURANCE BUSINESS|GROUP LIFE|ANNUITIES BUSINESS|GROUP CREDIT|"
+                  r"INVESTMENTS BUSINESS|LINKED INVESTMENTS|PERMANENT HEALTH|PENSIONS BUSINESS|DEPOSIT ADMINISTRATION", re.I)
+NOT_LIFE = re.compile(r"GENERAL INSURANCE|GENERAL BUSINESS|NON[\s\-]?LIFE|SHORT[\s\-]?TERM|MICRO", re.I)
+CONTINUED = re.compile(r"^CONTINUE[DS]", re.I)
 COMPANY_HDR = re.compile(r"^(NAME OF (THE )?)?(COMPANY|INSURER|INSURANCE COMPANY|COMPANY NAME)S?$", re.I)
 TOTAL_ROW = re.compile(r"^(GRAND )?TOTALS?\b|^MARKET TOTAL|^INDUSTRY|^SUB.?TOTAL", re.I)
-SEG_ROW = {"INSURERS": "insurer", "INSURER": "insurer", "REINSURERS": "reinsurer", "REINSURER": "reinsurer"}
+SEG_ROW = {"INSURERS": "insurer", "INSURER": "insurer", "REINSURERS": "reinsurer", "REINSURER": "reinsurer",
+           "REINSURES": "reinsurer", "RE-INSURERS": "reinsurer"}
 
 
 def sheet_title(rows):
@@ -62,6 +65,12 @@ def header_labels(rows, h, start, end):
         lab = norm(c) if c not in (None, "") else ""
         p = parents[k]
         labels.append(f"{p} | {lab}" if p and lab and p != lab else (lab or p))
+    seen = {}
+    for k, lab in enumerate(labels):  # IRA sometimes prints a column heading twice
+        if lab:
+            seen[lab] = seen.get(lab, 0) + 1
+            if seen[lab] > 1:
+                labels[k] = f"{lab} #{seen[lab]}"
     return labels
 
 
@@ -110,17 +119,31 @@ def read_columnwise(rows, i, names):
     cols = [(j, norm(c)) for j, c in enumerate(hdr) if isinstance(c, str) and c.strip()]
     label_col = min(j for j, _ in cols)
     company_cols = [(j, n) for j, n in cols if j != label_col]
-    data, totals = [], []
+    data, totals, seg, target_done = [], [], "insurer", False
     for j, n in company_cols:
+        if data and target_done:
+            break
+        if n.upper().rstrip(":") in SEG_ROW:
+            seg = SEG_ROW[n.upper().rstrip(":")]
+            continue
         vals = []
         for k in range(i + 1, len(rows)):
             r = rows[k]
             lab = r[label_col] if label_col < len(r) else None
             if isinstance(lab, str) and lab.strip():
                 vals.append((norm(lab), r[j] if j < len(r) else None))
-        target = totals if TOTAL_ROW.search(n.upper()) else data
-        target.append(("insurer", n, vals, j + 1))
+        if TOTAL_ROW.search(n.upper()):
+            # Columns to the right of IRA's TOTAL are a life/general/industry summary block, not companies.
+            totals.append((seg, n, vals, j + 1))
+            target_done = True
+        else:
+            data.append((seg, n, vals, j + 1))
     return data, totals
+
+
+def appendix_no(sheet):
+    m = re.search(r"(\d+)", sheet)
+    return m.group(1) if m else None
 
 
 def main():
@@ -142,52 +165,63 @@ def main():
         src = os.path.relpath(path, ROOT).replace(os.sep, "/")
         digest = sha256(path)[:12]
         wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
-        seen = {}
+        seen, prev = {}, None  # prev: (appendix number, table) of the last life sheet, for continuation pages
         for sname in wb.sheetnames:
-            ws = wb[sname]
-            rows = [tuple(r) for r in ws.iter_rows(values_only=True)]
-            rows = [r for r in rows] or [()]
+            rows = [tuple(r) for r in wb[sname].iter_rows(values_only=True)] or [()]
             title = sheet_title(rows)
-            probe = f"{title} {sname}"
-            life = bool(LIFE.search(probe)) and not NOT_LIFE.search(title)
-            rec = dict(year=year, quarter=q, source_file=src, sheet=sname, title=title, life=int(life),
+            rec = dict(year=year, quarter=q, source_file=src, sheet=sname, title=title, life=0,
                        table_key="", layout="", rows_read=0)
-            if not life:
-                inv.append(rec)
-                continue
-            t = tables.match(title.upper()) or {"table_key": "other", "kind": "flow"}
-            key = t["table_key"] if t["table_key"] != "other" else f"other:{slug(title, 40)}"
-            if is_micro(sname, title):
-                key += ":micro"
-            # Same table printed twice (e.g. a summary and an appendix): keep the first, log the rest.
-            if key in seen:
-                key = f"{key}#{sname.strip()}"
-            seen[key] = sname
-            hit = find_rowwise(rows)
-            if hit:
-                data, totals = read_rowwise(rows, *hit)
-                layout = "companies_in_rows"
+            if CONTINUED.match(title):
+                if not (prev and prev[0] == appendix_no(sname)):
+                    inv.append(rec)
+                    continue
+                t, key = prev[1], prev[2]
             else:
-                cw = find_columnwise(rows, names)
-                if not cw:
+                life = bool(LIFE.search(title)) and not NOT_LIFE.search(title) and not re.match(r"templ", sname, re.I)
+                prev = None
+                if not life:
+                    inv.append(rec)
+                    continue
+                t = tables.match(title.upper()) or {"table_key": "other", "kind": "flow"}
+                if t["kind"] == "skip":
+                    rec.update(life=1, table_key="skip", layout="skipped")
+                    inv.append(rec)
+                    continue
+                key = t["table_key"] if t["table_key"] != "other" else f"other:{slug(title, 40)}"
+                if key in seen:  # the same table printed twice: keep both, apart
+                    key = f"{key}#{sname.strip()}"
+                seen[key] = sname
+                prev = (appendix_no(sname), t, key)
+            rec["life"] = 1
+            # A sheet printed with companies across the columns has a row of company names;
+            # one printed with companies down the rows never does, so test that first.
+            cw, hit = find_columnwise(rows, names), find_rowwise(rows)
+            if cw and (len(cw[1]) >= 5 or not hit):
+                data, totals = read_columnwise(rows, cw[0], names)
+                layout = "companies_in_columns"
+            else:
+                if not hit:
                     rec.update(table_key=key, layout="not_understood")
                     inv.append(rec)
                     continue
-                data, totals = read_columnwise(rows, cw[0], names)
-                layout = "companies_in_columns"
+                data, totals = read_rowwise(rows, *hit)
+                layout = "companies_in_rows"
             base = dict(year=year, quarter=q, period_end=period_end(year, q), source_file=src,
                         source_sha256_12=digest, source_sheet=sname.strip(), table_key=key,
                         table_kind=t["kind"], table_title=title)
+            tk = key.split(":")[0].split("#")[0]
             for seg, name, vals, where in data:
+                used = set()
                 for lab, v in vals:
                     x = num(v)
                     if x is None:
                         continue
-                    tk = key.split(":")[0].split("#")[0]
                     leaf = lab.split(" | ")[-1].upper()
                     lm = lines.match(leaf, table_key=tk) or lines.match(lab.upper(), table_key=tk)
+                    std = lm["line_std"] if lm and lm["line_std"] not in used else ""
+                    used.add(std)
                     out.append(dict(base, segment=seg, raw_name=name, line_raw=lab,
-                                    line_std=lm["line_std"] if lm else "", value=x, source_ref=where))
+                                    line_std=std, value=x, source_ref=where))
             for seg, name, vals, where in totals:
                 for lab, v in vals:
                     x = num(v)
