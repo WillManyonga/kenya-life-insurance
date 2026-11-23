@@ -57,8 +57,8 @@ def annual(df, key):
 
 
 def main():
-    panel = pd.read_csv(os.path.join(PROCESSED, "life_panel.csv"))
-    streams = pd.read_csv(os.path.join(PROCESSED, "life_streams.csv"))
+    panel = pd.read_csv(os.path.join(PROCESSED, "life_panel.csv.gz"))
+    streams = pd.read_csv(os.path.join(PROCESSED, "life_streams.csv.gz"))
     companies = {r["company_id"]: r for r in read_csv(os.path.join(REF, "life_companies.csv"))}
     events = read_csv(os.path.join(REF, "corporate_events.csv"))
     fx = {int(r["year"]): float(r["kes_per_usd"]) for r in read_csv(os.path.join(CONFIG, "fx_kes_usd.csv")) if r["kes_per_usd"]}

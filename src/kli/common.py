@@ -1,6 +1,7 @@
 """Shared paths, reference tables and helpers for the Kenya life-insurance pipeline."""
 import csv
 import fnmatch
+import gzip
 import hashlib
 import os
 import re
@@ -45,7 +46,8 @@ def read_csv(path):
 def write_csv(path, rows, fields=None):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     fields = fields or (list(rows[0].keys()) if rows else [])
-    with open(path, "w", newline="", encoding="utf-8") as f:
+    opener = gzip.open if path.endswith(".gz") else open
+    with opener(path, "wt", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         w.writeheader()
         w.writerows(rows)

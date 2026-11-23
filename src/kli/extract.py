@@ -2,7 +2,7 @@
 
 Reads data/raw/quarterly/YYYY/IRA_YYYY_QN_Industry_Statistics.xlsx and writes:
 
-  data/processed/life_long.csv        one row per period, table, company and line, as printed
+  data/processed/life_long.csv.gz        one row per period, table, company and line, as printed
   data/processed/life_printed_totals.csv   IRA's own TOTAL / INDUSTRY rows, kept for validation
   validation/sheet_inventory.csv      every sheet seen, whether it was read, its title and layout
 
@@ -232,7 +232,7 @@ def main():
         wb.close()
     fields = ["year", "quarter", "period_end", "source_file", "source_sha256_12", "source_sheet", "table_key",
               "table_kind", "table_title", "segment", "raw_name", "line_raw", "line_std", "value", "source_ref"]
-    write_csv(os.path.join(PROCESSED, "life_long.csv"), out, fields)
+    write_csv(os.path.join(PROCESSED, "life_long.csv.gz"), out, fields)
     write_csv(os.path.join(PROCESSED, "life_printed_totals.csv"), tot,
               ["year", "quarter", "period_end", "source_file", "source_sheet", "table_key", "segment",
                "total_label", "line_raw", "value", "source_ref"])

@@ -38,7 +38,7 @@ def test_runs_clean(built):
 
 def test_general_sheets_ignored(built):
     root, _ = built
-    long = read(root, "data/processed/life_long.csv")
+    long = read(root, "data/processed/life_long.csv.gz")
     assert "SOME GENERAL INSURER" not in set(long.raw_name)
 
 
@@ -53,7 +53,7 @@ def test_renames_join_one_company(built):
 
 def test_single_quarter_across_rename(built):
     root, _ = built
-    p = read(root, "data/processed/life_panel.csv")
+    p = read(root, "data/processed/life_panel.csv.gz")
     r = p[(p.company_id == "old_mutual_life_kenya") & (p.line_key == "gross_premium") & (p.quarter == 4)]
     assert r.q_value.iloc[0] == (420 + 260 + 150) - (300 + 200 + 100)
     assert r.q_flag.iloc[0] == "ytd_difference"

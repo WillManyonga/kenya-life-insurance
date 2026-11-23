@@ -99,9 +99,9 @@ def check_margins(panel):
 
 
 def main(strict=False):
-    long = pd.read_csv(os.path.join(PROCESSED, "life_long.csv"))
+    long = pd.read_csv(os.path.join(PROCESSED, "life_long.csv.gz"))
     totals = pd.read_csv(os.path.join(PROCESSED, "life_printed_totals.csv"))
-    panel = pd.read_csv(os.path.join(PROCESSED, "life_panel.csv"), keep_default_na=False, na_values=[""])
+    panel = pd.read_csv(os.path.join(PROCESSED, "life_panel.csv.gz"), keep_default_na=False, na_values=[""])
     unmapped = pd.read_csv(os.path.join(VALIDATION, "unmapped_names.csv"))
     inv = pd.read_csv(os.path.join(VALIDATION, "sheet_inventory.csv"))
 

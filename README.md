@@ -17,8 +17,8 @@ none of its code is copied here; the pipeline is written fresh for the life tabl
 | `data/processed/life_consolidated.xlsx` | The consolidated file for Excel: full-year figures per company and per continuity stream, market quarterly series, name map, corporate events, quality flags |
 | `data/processed/life_annual_by_stream.csv` | Full-year (Q4 year-to-date) gross premium, profit, premium mix, share and rank per continuity stream |
 | `data/processed/life_annual_by_company.csv` | The same per legal reporting entity |
-| `data/processed/life_panel.csv` | Every life value IRA printed, on stable company ids, with single-quarter figures and how each was derived |
-| `data/processed/life_long.csv` | The raw extraction, exactly as printed, with source file, sheet and row |
+| `data/processed/life_panel.csv.gz` | Every life value IRA printed, on stable company ids, with single-quarter figures and how each was derived |
+| `data/processed/life_long.csv.gz` | The raw extraction, exactly as printed, with source file, sheet and row |
 | `validation/SUMMARY.md` | What was checked, what passed, and which tables were found each quarter |
 | `site/index.html` | The explorer page, published to GitHub Pages |
 

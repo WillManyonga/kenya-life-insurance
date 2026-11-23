@@ -1,8 +1,8 @@
 """Put the extracted life tables on stable company ids and derive single-quarter figures.
 
 Writes:
-  data/processed/life_panel.csv     life_long + company_id, stream_id, single-quarter value and how it was derived
-  data/processed/life_streams.csv   the same, summed to continuity streams (a company plus everything it absorbed)
+  data/processed/life_panel.csv.gz     life_long + company_id, stream_id, single-quarter value and how it was derived
+  data/processed/life_streams.csv.gz   the same, summed to continuity streams (a company plus everything it absorbed)
   validation/name_timeline.csv      every name IRA printed, the id it was mapped to, first and last period seen
   validation/unmapped_names.csv     names no pattern matched (the build fails while this is non-empty)
 
@@ -70,9 +70,9 @@ def single_quarter(df):
 
 def main():
     companies, names, _, _, events = load_refs()
-    df = pd.read_csv(os.path.join(PROCESSED, "life_long.csv"))
+    df = pd.read_csv(os.path.join(PROCESSED, "life_long.csv.gz"))
     if df.empty:
-        print("life_long.csv is empty - run kli.extract first")
+        print("life_long.csv.gz is empty - run kli.extract first")
         return 1
     df = map_names(df, companies, names)
     df["line_key"] = df["line_std"].fillna("")
@@ -98,13 +98,13 @@ def main():
     ev = event_quarters(events)
     hit = panel.apply(lambda r: (r["stream_id"], r["year"], r["quarter"]) in ev, axis=1)
     panel.loc[hit & (panel["q_flag"] == "ytd_difference"), "q_flag"] = "absorption_quarter"
-    panel.to_csv(os.path.join(PROCESSED, "life_panel.csv"), index=False)
+    panel.to_csv(os.path.join(PROCESSED, "life_panel.csv.gz"), index=False)
 
     streams = (panel.groupby(["stream_id", "year", "quarter", "period_end", "table_key", "table_kind", "line_key"])
                      .agg(value=("value", "sum"), q_value=("q_value", lambda s: s.sum(min_count=len(s))),
                           companies=("company_id", lambda s: "+".join(sorted(set(s)))))
                      .reset_index())
-    streams.to_csv(os.path.join(PROCESSED, "life_streams.csv"), index=False)
+    streams.to_csv(os.path.join(PROCESSED, "life_streams.csv.gz"), index=False)
     print(f"{len(panel)} panel rows, {panel['company_id'].nunique()} companies, "
           f"{streams['stream_id'].nunique()} streams; {len(unmapped)} unmapped names")
     return 0
