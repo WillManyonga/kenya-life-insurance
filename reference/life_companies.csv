@@ -1,0 +1,35 @@
+company_id,display_name,stream_id,segment,status,notes
+britam_life,Britam Life Assurance,britam_life,insurer,active,Formerly British-American Insurance Company (Kenya)
+icea_lion_life,ICEA Lion Life Assurance,icea_lion_life,insurer,active,ICEA Life renamed ICEA LION Life Assurance in 2021 group reorganisation
+jubilee_life,Jubilee Life Insurance,jubilee_life,insurer,active,Life business of Jubilee Insurance Company of Kenya (composite) carried on by Jubilee Life Insurance after the composite split
+kenindia,Kenindia Assurance,kenindia,insurer,active,Composite insurer; long-term business only
+cic_life,CIC Life Assurance,cic_life,insurer,active,
+sanlam_life,Sanlam Allianz Life Insurance (Kenya),sanlam_life,insurer,active,Pan Africa Life Assurance -> Sanlam Life Insurance -> Sanlam Allianz Life Insurance (Kenya) Oct/Nov 2025
+absa_life,First Assurance Life (formerly Absa Life),absa_life,insurer,active,Barclays Life Assurance Kenya -> Absa Life Assurance Kenya (10 Feb 2020) -> First Assurance Life (Nov 2026)
+old_mutual_life_kenya,Old Mutual Life Assurance Kenya (OMLAK),old_mutual_life,insurer,active,UAP Life Assurance renamed OMLAK May 2022; absorbs OMLAC book
+old_mutual_life_company,Old Mutual Life Assurance Company (OMLAC),old_mutual_life,insurer,closed,Closed fund from 2021; long-term business transferred to OMLAK
+cannon_life,Cannon Life Assurance,cannon_life,insurer,active,Metropolitan Cannon Life Assurance renamed Cannon Life after Momentum Metropolitan exit (July 2022)
+liberty_life,Liberty Life Assurance Kenya,liberty_life,insurer,active,Formerly CfC Life
+madison_life,Madison Life Assurance Kenya,madison_life,insurer,active,Madison Insurance Company Kenya demerged 2018; life business continues as Madison Life Assurance Kenya
+pioneer,Pioneer Assurance,pioneer,insurer,active,
+ga_life,GA Life Assurance,ga_life,insurer,active,
+apa_life,APA Life Assurance,apa_life,insurer,active,Formerly Apollo Life Assurance
+capex_life,Capex Life Assurance,capex_life,insurer,active,
+kenya_orient_life,Kenya Orient Life Assurance,kenya_orient_life,insurer,active,Licensed 2014
+geminia_life,Geminia Life Insurance,geminia_life,insurer,active,
+prudential_life,Prudential Life Assurance Kenya,prudential_life,insurer,active,Formerly Shield Assurance (acquired by Prudential plc 2014)
+equity_life,Equity Life Assurance (Kenya),equity_life,insurer,active,Licensed January 2022
+kuscco_mutual,KUSCCO Mutual Assurance,kuscco_mutual,insurer,active,
+monarch,The Monarch Insurance,monarch,insurer,active,Composite
+corporate_insurance,Corporate Insurance Company,corporate_insurance,insurer,active,Composite
+amaco,Africa Merchant Assurance,amaco,insurer,active,Composite
+takaful,Takaful Insurance of Africa,takaful,insurer,active,Majority stake acquired by Tamini Insurance (Djibouti) April 2025
+first_assurance,First Assurance Company (composite life book),first_assurance,insurer,check,Only if IRA prints a life row for the composite; confirm on first run
+kenya_re,Kenya Reinsurance Corporation,kenya_re,reinsurer,active,Life reinsurance
+east_africa_re,East Africa Reinsurance,east_africa_re,reinsurer,active,Life reinsurance
+continental_re,Continental Reinsurance,continental_re,reinsurer,active,Life reinsurance
+waica_re,WAICA Reinsurance (Kenya),waica_re,reinsurer,active,Life reinsurance
+ghana_re,Ghana Reinsurance (Kenya),ghana_re,reinsurer,active,Life reinsurance
+africa_re,Africa Reinsurance Corporation,africa_re,reinsurer,active,Life reinsurance
+zep_re,ZEP-RE (PTA Reinsurance),zep_re,reinsurer,active,Life reinsurance
+cica_re,CICA Re,cica_re,reinsurer,active,Life reinsurance

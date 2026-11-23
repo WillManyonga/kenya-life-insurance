@@ -1,0 +1,70 @@
+name: Refresh IRA data
+
+# Runs twice a month: downloads any IRA file not yet in data/raw (and probes for a newly
+# published quarter), rebuilds every table, validates, and commits the result.
+# Run it by hand from the Actions tab after adding a file to config/sources.csv or
+# changing anything in reference/.
+on:
+  schedule:
+    - cron: "17 5 6,21 * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["reference/**", "config/**", "src/**"]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+
+      - name: Download, extract, validate, build
+        id: build
+        run: ./run_all.sh
+
+      - name: Tests
+        run: python -m pytest -q tests
+
+      - name: Commit refreshed data
+        if: always() && steps.build.outcome != 'cancelled'
+        run: |
+          git config user.name "ira-refresh-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/raw data/processed validation site/data config/sources.csv
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Data refresh $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Open an issue when the build needs attention
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "The scheduled refresh stopped. Most often IRA printed a company name the crosswalk does not know"
+            echo "(add a line to reference/name_patterns.csv) or changed a table layout."
+            echo
+            echo "### Unmapped names"
+            cat validation/unmapped_names.csv 2>/dev/null || echo "none"
+            echo
+            echo "### Validation summary"
+            head -60 validation/SUMMARY.md 2>/dev/null || true
+          } > issue.md
+          gh issue create --title "Data refresh needs attention ($(date -u +%Y-%m-%d))" --body-file issue.md

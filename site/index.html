@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kenya Life Insurer Explorer</title>
+<style>
+.viz-root{color-scheme:light;--surface-1:#fcfcfb;--surface-2:#f3f2ef;--border:#e2e1dc;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#8a8984;--series-1:#2a78d6;--series-2:#eb6834;--grid:#ecebe7}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--surface-1:#1a1a19;--surface-2:#232322;--border:#34332f;--text-primary:#f0efec;--text-secondary:#c3c2b7;--text-muted:#8f8e86;--series-1:#3987e5;--series-2:#d95926;--grid:#2c2c2a}}
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.viz-root{background:var(--surface-1);color:var(--text-primary);min-height:100vh;padding:24px clamp(12px,3vw,40px)}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:0 0 2px}.sub{color:var(--text-secondary);margin:0 0 16px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:0 0 18px;padding:12px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2)}
+label{display:flex;flex-direction:column;font-size:12px;color:var(--text-secondary);gap:3px}
+select,button{font:inherit;padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface-1);color:var(--text-primary)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:18px}
+.tile{border:1px solid var(--border);border-radius:8px;padding:10px 12px}.tile b{display:block;font-size:22px}.tile span{color:var(--text-secondary);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(460px,1fr));gap:18px}
+.card{border:1px solid var(--border);border-radius:8px;padding:14px}.note{color:var(--text-muted);font-size:12px;margin:6px 0 0}
+svg{width:100%;height:auto;display:block}svg text{fill:var(--text-secondary);font-size:11px}
+.tip{position:fixed;pointer-events:none;background:var(--surface-1);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12px;box-shadow:0 2px 8px #0002;display:none;z-index:9}
+table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:4px 6px;border-bottom:1px solid var(--border);text-align:right}th:first-child,td:first-child{text-align:left}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--text-secondary);margin:4px 0}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="viz-root">
+<h1>Kenya Life Insurer Explorer</h1>
+<p class="sub">Long-term business of every Kenyan life insurer, rebuilt from IRA's quarterly statistics. Full-year figures are Q4 year to date, unaudited. Renamed and merged companies are joined into one continuous line. <span id="built"></span></p>
+
+<div class="bar">
+  <label>Currency<select id="ccy"><option value="KES">KSh bn</option><option value="USD">US$ m</option></select></label>
+  <label>From year<select id="y0"></select></label>
+  <label>To year<select id="y1"></select></label>
+  <label>Companies shown<select id="topn"><option>10</option><option>15</option><option value="99">All</option></select></label>
+</div>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="grid">
+  <div class="card">
+    <h2>Top life insurers: premium growth vs profit margin</h2>
+    <p class="note" id="bubbleNote"></p>
+    <svg id="bubble" viewBox="0 0 640 420" role="img" aria-label="Bubble chart of premium growth against profit margin"></svg>
+    <p class="note">Bubble size is gross premium in the end year. Like the Deloitte East Africa report, profit margin stands in for embedded value, which Kenyan insurers do not publish: profit before tax (or the revenue-account surplus where that is all IRA prints) over gross premium, averaged across the window.</p>
+    <details><summary>Table view</summary><div id="bubbleTable"></div></details>
+  </div>
+  <div class="card">
+    <h2>Top life insurers by gross premium</h2>
+    <div class="legend" id="barLegend"></div>
+    <svg id="bars" viewBox="0 0 640 420" role="img" aria-label="Gross premium of the top insurers in two years"></svg>
+    <details><summary>Table view</summary><div id="barTable"></div></details>
+  </div>
+  <div class="card">
+    <h2>Market gross premium by year</h2>
+    <svg id="market" viewBox="0 0 640 300" role="img" aria-label="Market gross premium by year"></svg>
+    <p class="note">Insurers only. 2017 comes from IRA's annual statistics because no Q4 2017 workbook was published.</p>
+  </div>
+  <div class="card">
+    <h2>One company</h2>
+    <label style="max-width:340px">Company<select id="co"></select></label>
+    <svg id="coChart" viewBox="0 0 640 260" role="img" aria-label="Selected company's gross premium by year"></svg>
+    <div id="coInfo"></div>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id), NS="http://www.w3.org/2000/svg";
+let D, years=[];
+const css=v=>getComputedStyle(document.querySelector('.viz-root')).getPropertyValue(v).trim();
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e}
+function money(kes000,y){ if(kes000==null)return null; if($('ccy').value==='USD'){const r=D.fx[y]; return r? kes000/1000/r : null} return kes000/1e6 }
+const unit=()=>$('ccy').value==='USD'?'US$ m':'KSh bn';
+const fmt=(v,d=1)=>v==null||!isFinite(v)?'n/a':v.toLocaleString(undefined,{maximumFractionDigits:d,minimumFractionDigits:d});
+const pct=v=>v==null||!isFinite(v)?'n/a':(v*100).toFixed(1)+'%';
+function tip(e,html){const t=$('tip');t.innerHTML=html;t.style.display='block';t.style.left=(e.clientX+12)+'px';t.style.top=(e.clientY+12)+'px'}
+function untip(){$('tip').style.display='none'}
+function insurers(){return Object.entries(D.streams).filter(([,s])=>s.segment!=='reinsurer')}
+function gwp(s,y){return s.years[y]?.gwp ?? null}
+
+function stats(){
+  const y0=+$('y0').value,y1=+$('y1').value,n=y1-y0;
+  return insurers().map(([id,s])=>{
+    const a=gwp(s,y0),b=gwp(s,y1);
+    const m=[];for(let y=y0;y<=y1;y++){const g=gwp(s,y),p=s.years[y]?.profit;if(g&&p!=null)m.push(p/g)}
+    return {id,name:s.name,g0:a,g1:b,cagr:(a>0&&b>0&&n>0)?Math.pow(b/a,1/n)-1:null,margin:m.length?m.reduce((x,y)=>x+y)/m.length:null,
+            prevG:gwp(s,y1-1)}
+  }).filter(r=>r.g1>0).sort((p,q)=>q.g1-p.g1);
+}
+
+function axis(svg,x0,x1,y0,y1,xs,ys,xfmt,yfmt){
+  ys.forEach(v=>{const y=yScale(v);el('line',{x1:x0,x2:x1,y1:y,y2:y,stroke:css('--grid')},svg);el('text',{x:x0-6,y:y+4,'text-anchor':'end'},svg).textContent=yfmt(v)});
+  xs.forEach(v=>{const x=xScale(v);el('text',{x,y:y0+16,'text-anchor':'middle'},svg).textContent=xfmt(v)});
+}
+let xScale,yScale;
+function ticks(lo,hi,n=5){const s=(hi-lo)/n,p=Math.pow(10,Math.floor(Math.log10(s))),st=[1,2,2.5,5,10].map(k=>k*p).find(k=>k>=s);const a=Math.floor(lo/st)*st,out=[];let v=a;do{out.push(+v.toFixed(10));v+=st}while(out.at(-1)<hi-1e-9);return out}
+
+function drawBubble(rows){
+  const svg=$('bubble');svg.innerHTML='';const W=640,H=420,L=56,R=20,T=16,B=40;
+  const pts=rows.filter(r=>r.cagr!=null&&r.margin!=null);
+  if(!pts.length){el('text',{x:W/2,y:H/2,'text-anchor':'middle'},svg).textContent='No company has premium and profit for both years';return}
+  const xt=ticks(Math.min(0,...pts.map(r=>r.cagr)),Math.max(...pts.map(r=>r.cagr))),yt=ticks(Math.min(0,...pts.map(r=>r.margin)),Math.max(...pts.map(r=>r.margin)));
+  xScale=v=>L+(v-xt[0])/(xt.at(-1)-xt[0])*(W-L-R);yScale=v=>H-B-(v-yt[0])/(yt.at(-1)-yt[0])*(H-T-B);
+  axis(svg,L,W-R,H-B,T,xt,yt,pct,pct);
+  el('line',{x1:xScale(0),x2:xScale(0),y1:T,y2:H-B,stroke:css('--text-muted'),'stroke-dasharray':'3 3'},svg);
+  el('text',{x:(L+W-R)/2,y:H-6,'text-anchor':'middle'},svg).textContent=`Gross premium CAGR, ${$('y0').value}–${$('y1').value}`;
+  const t=el('text',{x:14,y:(T+H-B)/2,'text-anchor':'middle',transform:`rotate(-90 14 ${(T+H-B)/2})`},svg);t.textContent='Average profit margin';
+  const max=Math.max(...pts.map(r=>r.g1));
+  [...pts].sort((a,b)=>b.g1-a.g1).forEach(r=>{
+    const c=el('circle',{cx:xScale(r.cagr),cy:yScale(r.margin),r:6+28*Math.sqrt(r.g1/max),fill:css('--series-1'),'fill-opacity':.55,stroke:css('--surface-1'),'stroke-width':2},svg);
+    c.onmousemove=e=>tip(e,`<b>${r.name}</b><br>CAGR ${pct(r.cagr)} · margin ${pct(r.margin)}<br>Premium ${$('y1').value}: ${fmt(money(r.g1,+$('y1').value))} ${unit()}`);c.onmouseleave=untip;
+  });
+  pts.forEach(r=>{el('text',{x:xScale(r.cagr),y:yScale(r.margin)-8-28*Math.sqrt(r.g1/max),'text-anchor':'middle',style:`fill:${css('--text-primary')}`},svg).textContent=r.name.replace(/ (Life )?(Assurance|Insurance).*$/,'')});
+  $('bubbleNote').textContent=`${pts.length} companies by ${$('y1').value} premium.`;
+  $('bubbleTable').innerHTML=table(['Company','CAGR','Avg margin',`Premium ${$('y1').value} (${unit()})`],pts.map(r=>[r.name,pct(r.cagr),pct(r.margin),fmt(money(r.g1,+$('y1').value))]));
+}
+
+function drawBars(rows){
+  const svg=$('bars');svg.innerHTML='';const y1=+$('y1').value,y0=y1-1;const n=rows.length,W=640,L=200,R=50,T=8,rowH=Math.max(26,Math.min(38,400/n)),H=T+n*rowH+24;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const vals=rows.flatMap(r=>[money(r.g1,y1),money(r.prevG,y0)]).filter(v=>v!=null),max=Math.max(...vals,1),xt=ticks(0,max,4);
+  const x=v=>L+v/xt.at(-1)*(W-L-R);
+  xt.forEach(v=>{el('line',{x1:x(v),x2:x(v),y1:T,y2:H-22,stroke:css('--grid')},svg);el('text',{x:x(v),y:H-6,'text-anchor':'middle'},svg).textContent=fmt(v,0)});
+  $('barLegend').innerHTML=`<span><i class="sw" style="background:${css('--series-1')}"></i>${y1}</span><span><i class="sw" style="background:${css('--series-2')}"></i>${y0}</span><span>${unit()}</span>`;
+  rows.forEach((r,i)=>{const yy=T+i*rowH,bh=(rowH-8)/2;
+    el('text',{x:L-8,y:yy+rowH/2+2,'text-anchor':'end',style:`fill:${css('--text-primary')}`},svg).textContent=`${i+1}. ${r.name.length>30?r.name.slice(0,29)+'…':r.name}`;
+    [[money(r.g1,y1),css('--series-1'),0,y1],[money(r.prevG,y0),css('--series-2'),bh+2,y0]].forEach(([v,c,o,yr])=>{if(v==null)return;
+      const b=el('rect',{x:L,y:yy+2+o,width:Math.max(1,x(v)-L),height:bh,rx:2,fill:c},svg);
+      b.onmousemove=e=>tip(e,`<b>${r.name}</b><br>${yr}: ${fmt(v)} ${unit()}`);b.onmouseleave=untip;
+      el('text',{x:x(v)+4,y:yy+2+o+bh-2,style:'font-size:10px'},svg).textContent=fmt(v,v<10?1:0)});
+  });
+  $('barTable').innerHTML=table(['Company',`${y1}`,`${y0}`,'Growth'],rows.map(r=>[r.name,fmt(money(r.g1,y1)),fmt(money(r.prevG,y0)),pct(r.prevG?r.g1/r.prevG-1:null)]));
+}
+
+function drawMarket(){
+  const svg=$('market');svg.innerHTML='';const W=640,H=300,L=56,R=10,T=10,B=28;
+  const pts=years.map(y=>[y,money(insurers().reduce((s,[,x])=>s+(gwp(x,y)||0),0),y)]).filter(p=>p[1]);
+  if(!pts.length)return;const yt=ticks(0,Math.max(...pts.map(p=>p[1])),4),bw=(W-L-R)/pts.length;
+  const y=v=>H-B-v/yt.at(-1)*(H-T-B);
+  yt.forEach(v=>{el('line',{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:css('--grid')},svg);el('text',{x:L-6,y:y(v)+4,'text-anchor':'end'},svg).textContent=fmt(v,0)});
+  pts.forEach(([yr,v],i)=>{const b=el('rect',{x:L+i*bw+bw*.2,y:y(v),width:bw*.6,height:H-B-y(v),rx:3,fill:css('--series-1')},svg);
+    b.onmousemove=e=>tip(e,`<b>${yr}</b><br>${fmt(v)} ${unit()}`);b.onmouseleave=untip;
+    el('text',{x:L+i*bw+bw/2,y:H-10,'text-anchor':'middle'},svg).textContent=yr});
+}
+
+function drawCompany(){
+  const s=D.streams[$('co').value];if(!s)return;const svg=$('coChart');svg.innerHTML='';const W=640,H=260,L=56,R=10,T=10,B=28;
+  const pts=years.map(y=>[y,money(gwp(s,y),y),s.years[y]?.profit]).filter(p=>p[1]!=null);
+  if(pts.length){const yt=ticks(0,Math.max(...pts.map(p=>p[1])),4),bw=(W-L-R)/years.length,y=v=>H-B-v/yt.at(-1)*(H-T-B);
+    yt.forEach(v=>{el('line',{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:css('--grid')},svg);el('text',{x:L-6,y:y(v)+4,'text-anchor':'end'},svg).textContent=fmt(v,1)});
+    pts.forEach(([yr,v,p])=>{const i=years.indexOf(yr);const b=el('rect',{x:L+i*bw+bw*.2,y:y(v),width:bw*.6,height:H-B-y(v),rx:3,fill:css('--series-1')},svg);
+      b.onmousemove=e=>tip(e,`<b>${yr}</b><br>Premium ${fmt(v)} ${unit()}<br>Margin ${pct(p!=null&&s.years[yr].gwp?p/s.years[yr].gwp:null)}`);b.onmouseleave=untip;
+      el('text',{x:L+i*bw+bw/2,y:H-10,'text-anchor':'middle'},svg).textContent=yr});}
+  const ids=new Set(s.companies.map(c=>c.id));
+  const ev=D.events.filter(e=>ids.has(e.to_company_id)||ids.has(e.from_company_id));
+  const last=Math.max(...Object.keys(s.years).map(Number));const cl=s.years[last]?.classes||{};
+  $('coInfo').innerHTML=`<p class="note">Reporting entities in this line: ${s.companies.map(c=>`<b>${c.name}</b>${c.notes?' – '+c.notes:''}`).join('; ')}</p>`+
+    (ev.length?table(['Date','Event','What happened'],ev.map(e=>[e.effective_date||'tbc',e.event_type,`${e.description} <a href="${e.source_url}" target="_blank" rel="noopener">source</a>`])):'')+
+    `<p class="note">Premium mix ${last}:</p>`+table(['Class',unit()],D.classes.filter(c=>cl[c]).map(c=>[c.replace(/_/g,' '),fmt(money(cl[c],last))]));
+}
+
+function table(h,rows){return `<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table>`}
+
+function tiles(){
+  const y1=+$('y1').value,ins=insurers(),tot=y=>ins.reduce((s,[,x])=>s+(gwp(x,y)||0),0),g=tot(y1),gp=tot(y1-1);
+  const prof=ins.reduce((s,[,x])=>s+(x.years[y1]?.profit||0),0);const sorted=ins.map(([,x])=>gwp(x,y1)||0).sort((a,b)=>b-a);
+  const t=[[fmt(money(g,y1))+' '+unit(),`Gross premium ${y1}`],[pct(gp?g/gp-1:null),`Growth on ${y1-1}`],[sorted.filter(v=>v>0).length,'Insurers reporting'],
+    [pct(g?sorted.slice(0,5).reduce((a,b)=>a+b,0)/g:null),'Top-5 share'],[pct(g?prof/g:null),'Profit margin (market)']];
+  $('tiles').innerHTML=t.map(([b,s])=>`<div class="tile"><b>${b}</b><span>${s}</span></div>`).join('');
+}
+
+function render(){const rows=stats().slice(0,+$('topn').value);tiles();drawBubble(rows);drawBars(rows);drawMarket();drawCompany()}
+
+fetch('data/life.json').then(r=>r.json()).then(d=>{D=d;
+  years=[...new Set(Object.values(D.streams).flatMap(s=>Object.keys(s.years).map(Number)))].sort();
+  $('built').textContent=`Data built ${D.built}.`;
+  ['y0','y1'].forEach(id=>$(id).innerHTML=years.map(y=>`<option>${y}</option>`).join(''));
+  $('y0').value=years[0];$('y1').value=years.at(-1);
+  $('co').innerHTML=insurers().sort((a,b)=>(gwp(b[1],years.at(-1))||0)-(gwp(a[1],years.at(-1))||0)).map(([id,s])=>`<option value="${id}">${s.name}</option>`).join('');
+  ['ccy','y0','y1','topn','co'].forEach(id=>$(id).onchange=render);render();
+}).catch(e=>{document.querySelector('.sub').textContent='Could not load data/life.json: '+e});
+</script>
+</body>
+</html>

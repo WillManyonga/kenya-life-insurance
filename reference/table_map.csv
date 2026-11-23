@@ -1,0 +1,11 @@
+order,title_pattern,table_key,kind,notes
+10,REVENUE ACCOUNT,revenue_account,flow,Long-term business revenue account by company
+20,PREMIUM INCOME|GROSS PREMIUM|GROSS DIRECT PREMIUM,gross_premium_by_class,flow,Premium split by class of long-term business
+30,BENEFITS|CLAIMS,benefits_by_class,flow,Benefits / claims by class
+40,COMMISSION,commissions_by_class,flow,
+50,MANAGEMENT EXPENSE|EXPENSES OF MANAGEMENT,expenses_by_class,flow,
+60,PROFIT AND LOSS|INCOME STATEMENT|COMPREHENSIVE INCOME,profit_loss,flow,
+70,INSURANCE REVENUE|INSURANCE SERVICE,ifrs17_insurance_result,flow,IFRS 17 presentation from 2024
+80,FINANCIAL POSITION|BALANCE SHEET|ASSETS AND LIABILITIES,balance_sheet,stock,
+90,NEW BUSINESS|POLICIES|LIVES COVERED,new_business,flow,Counts; check units on first run
+99,.*,other,flow,Anything not matched is kept under other:<slug> for review
