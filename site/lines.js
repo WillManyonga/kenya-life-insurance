@@ -127,6 +127,32 @@
       ], { w: 380, h: 210, fmt: v => v == null || !isFinite(v) ? 'n/a' : v.toFixed(0), r: 64 });
     });
 
+    // lollipop panels: the 12 biggest writers of each line, as in Kwanusu's motor/medical view
+    const LIM = mk === 'cr' ? 80 : 150;
+    let overAll = [];
+    const panels = LINES.filter(l => l.id !== 'total').map(l => {
+      const m = mRatio(l.id, k, mk), writers = ranked(l.id, k).filter(s => (gp(s, l.id, k) || 0) >= MIN);
+      const top = writers.slice(0, 12); if (!top.includes(co) && writers.includes(co)) top.push(co);
+      const vals = top.map(s => sRatio(s, l.id, k, mk) * 100).filter(v => isFinite(v));
+      const max = Math.max(LIM, Math.min(250, Math.ceil(Math.max(0, ...vals) / 50) * 50));
+      const x = v => Math.max(0, Math.min(100, v / max * 100));
+      const rows = top.map(s => {
+        const r = sRatio(s, l.id, k, mk), v = r == null ? null : r * 100, over = v != null && v > 100;
+        if (over) overAll.push(`${short(name(s))} (${l.label.toLowerCase()}, ${v.toFixed(0)})`);
+        const label = v == null ? '' : `<span class="v" style="left:calc(${x(v)}% + ${v > max * .85 ? '-44px' : '9px'});${over ? 'color:var(--bad-ink)' : ''}">${v > max ? '›' : ''}${v.toFixed(1)}</span>`;
+        return `<div class="lrow" title="${name(s)}: ${per100(r)} per KSh 100; premium KSh ${bn(gp(s, l.id, k))}"><span class="nm" style="${s === co ? 'color:var(--series-2)' : ''}">${short(name(s))}</span><span class="wr">${bn(gp(s, l.id, k))}</span>
+          <span class="track"><span class="mk" style="left:${x(m * 100)}%"></span>${mk !== 'cr' ? `<span class="ref" style="left:${x(100)}%"></span>` : ''}${v == null ? '' : `<span class="stem" style="width:${x(v)}%"></span><span class="dot${over && mk !== 'cr' ? ' over' : ''}" style="left:${x(v)}%"></span>${label}`}</span></div>`;
+      }).join('');
+      const ticksH = [0, 50, 100, 150, 200, 250].filter(t => t <= max).map(t => `<span style="left:${x(t)}%">${t}</span>`).join('');
+      return `<div class="lp"><h3>${l.label}</h3><p class="avg">Market ${per100(m)} · ${writers.length} insurers write it</p>
+        <div class="lrow"><span class="nm" style="font-weight:400;color:var(--text-muted)">Insurer</span><span class="wr">Written</span><span class="axis">${ticksH}</span></div>${rows}</div>`;
+    }).join('');
+    const lc = card(g, 'wide', '');
+    const headline = mk === 'cr' ? `Cost to run per KSh 100 of gross premium, ${label(P[k])}` :
+      overAll.length ? `Benefits outran premiums at ${overAll.length} of the biggest writers, ${label(P[k])}` : `No big writer paid out more than its premium, ${label(P[k])}`;
+    lc.innerHTML = `<h2>${headline}</h2><p class="note">${M.label} for the 12 biggest writers of each line by gross premium (plus ${short(name(co))}, in orange, if outside them). ${overAll.length && mk !== 'cr' ? 'Above 100: ' + overAll.slice(0, 6).join('; ') + (overAll.length > 6 ? '…' : '') + '.' : ''}</p>
+      ${legend([[css('--series-7'), 'Ratio per KSh 100'], [css('--series-8'), 'Above 100: more paid out than premium']])}<p class="note" style="margin:0 0 10px">Solid line: 100. Dashed line: the market average for the line. Grey figure: the insurer's gross premium in the line. Insurers writing under KSh 50m in a line are left out.</p><div class="lolli">${panels}</div>`;
+
     // snapshot + cumulative table
     const ly = sameLastYear(k);
     const rows = LINES.map(l => [l.label, bn(sum(l.id, 'gp', k)), per100(mRatio(l.id, k, mk)), ly >= 0 ? per100(mRatio(l.id, ly, mk)) : 'n/a',
