@@ -10,7 +10,7 @@ Company names printed: 56; unmapped: 0
 | totals | 15,519 | 15,546 |
 | ytd | 8,032 | 8,200 |
 
-Quality flags raised: 174 (see quality_flags.csv)
+Quality flags raised: 177 (see quality_flags.csv)
 
 ## Tables found per quarter (rows read)
 

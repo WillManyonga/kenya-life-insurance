@@ -79,6 +79,14 @@ def check_ytd(panel):
                     flags.append(dict(company_id=c, year=y, quarter=r["quarter"], table_key=t, flag="ytd_falls",
                                       detail=f"YTD gross premium {r['value']:,.0f} below previous quarter {prev['value']:,.0f}",
                                       treatment="excluded from single-quarter market totals"))
+                jump = r["value"] > 2.5 * prev["value"] and r["value"] - prev["value"] > 1_000_000
+                # A jump that recurs every year is seasonality (scheme renewals, single premiums), not an error:
+                # flag it only when it is also far above the same quarter a year before and a year after.
+                same_q = p[(p.company_id == c) & (p.table_key == t) & (p.quarter == r["quarter"]) & (p.year.isin([y - 1, y + 1]))]["value"]
+                if jump and t == "gross_premium_by_class" and len(same_q) and (r["value"] > 2 * same_q).all():
+                    flags.append(dict(company_id=c, year=y, quarter=r["quarter"], table_key=t, flag="ytd_jump",
+                                      detail=f"YTD gross premium {r['value']:,.0f} against {prev['value']:,.0f} a quarter earlier",
+                                      treatment="kept as printed; left out of market share and ratio dashboards"))
             prev = r
     return out, flags
 

@@ -35,6 +35,30 @@ It has:
 
 Premium can be shown in KSh or US$. The US$ rates are in `config/fx_kes_usd.csv`, and the 2024 and 2025 rates still need filling in from the Central Bank of Kenya.
 
+## Business-line dashboards
+
+The explorer has five tabs:
+
+| Tab | What it shows |
+|---|---|
+| Overview | Market tiles; the Deloitte views (premium CAGR against margin, top 10 by premium); market premium; one company |
+| Claims by business line | Loss ratio, paid-out ratio or cost ratio for individual life, group life, credit life, annuities, pensions and investments: market and highlighted insurer over time, a snapshot for any quarter (year to date) against the same period a year earlier, cumulative ratios for any window, and a heatmap of the largest insurers against the market |
+| Market share | Share of gross premium and rank by year, the highlighted insurer's share of each business line, and the biggest share movers |
+| Business mix | The market's premium split by business type each year, and each large insurer's mix |
+| Insurer profile | A one-page card for any insurer and quarter: premium, rank, share, growth, ratios against the market, life fund, profit, what it writes by line, and a peer table |
+
+**Definitions:** all figures come from IRA's class revenue accounts (KSh thousands, year to date). Every ratio is a sum over a sum, so a cumulative ratio weights the larger years more. Sanlam Allianz Life is highlighted by default.
+
+| Measure | How it's calculated | Notes |
+|---|---|---|
+| Loss ratio | claims ÷ net premium | IRA's claims appear to be net of reinsurance. For annuities, pensions, investments and the total, the numerator is all benefits paid. |
+| Paid out per KSh 100 | (claims + surrenders + bonuses + annuities) ÷ gross premium | |
+| Cost to run per KSh 100 | (net commissions + management expenses) ÷ gross premium | |
+
+These reproduce Kwanusu's published Q2 2026 life table exactly (for example, Britam: 49.0 paid out, 10.6 cost, KSh 212.1bn fund, +11.7%).
+
+**Excluded returns:** a company's figures are left out where IRA printed a zero (not filed), or an isolated spike that is out of line with the quarter before and with the same quarter a year either side. The Equity Life Q4 2023 return is one example: KSh 14.8bn against KSh 2.1bn at Q3. Both kinds are listed in `validation/quality_flags.csv`.
+
 ## Keeping it up to date
 
 Nothing needs to be done by hand in a normal quarter. `.github/workflows/refresh.yml` runs on the

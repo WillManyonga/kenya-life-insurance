@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kenya Life Insurer Explorer</title>
 <style>
-.viz-root{color-scheme:light;--surface-1:#fcfcfb;--surface-2:#f3f2ef;--border:#e2e1dc;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#8a8984;--series-1:#2a78d6;--series-2:#eb6834;--grid:#ecebe7}
-@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--surface-1:#1a1a19;--surface-2:#232322;--border:#34332f;--text-primary:#f0efec;--text-secondary:#c3c2b7;--text-muted:#8f8e86;--series-1:#3987e5;--series-2:#d95926;--grid:#2c2c2a}}
+.viz-root{color-scheme:light;--surface-1:#fcfcfb;--surface-2:#f3f2ef;--border:#e2e1dc;--text-primary:#0b0b0b;--text-secondary:#52514e;--text-muted:#8a8984;--series-1:#2a78d6;--series-2:#eb6834;--series-3:#1baf7a;--series-4:#eda100;--series-5:#e87ba4;--series-6:#008300;--series-7:#6250d6;--series-8:#e34948;--grid:#ecebe7;--div-mid:#f0efec;--good-ink:#006300;--bad-ink:#b42d2c}
+@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])) .viz-root{color-scheme:dark;--surface-1:#1a1a19;--surface-2:#232322;--border:#34332f;--text-primary:#f0efec;--text-secondary:#c3c2b7;--text-muted:#8f8e86;--series-1:#3987e5;--series-2:#d95926;--series-3:#199e70;--series-4:#c98500;--series-5:#d55181;--series-6:#0ca30c;--series-7:#9085e9;--series-8:#e66767;--grid:#2c2c2a;--div-mid:#383835;--good-ink:#0ca30c;--bad-ink:#e66767}}
 *{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
 .viz-root{background:var(--surface-1);color:var(--text-primary);min-height:100vh;padding:24px clamp(12px,3vw,40px)}
 h1{font-size:22px;margin:0 0 4px}h2{font-size:15px;margin:0 0 2px}.sub{color:var(--text-secondary);margin:0 0 16px}
@@ -21,6 +21,13 @@ svg{width:100%;height:auto;display:block}svg text{fill:var(--text-secondary);fon
 .tip{position:fixed;pointer-events:none;background:var(--surface-1);border:1px solid var(--border);border-radius:6px;padding:6px 8px;font-size:12px;box-shadow:0 2px 8px #0002;display:none;z-index:9}
 table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:4px 6px;border-bottom:1px solid var(--border);text-align:right}th:first-child,td:first-child{text-align:left}
 .legend{display:flex;gap:14px;font-size:12px;color:var(--text-secondary);margin:4px 0}.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+nav.tabs{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 16px;border-bottom:1px solid var(--border)}
+nav.tabs button{border:none;border-bottom:2px solid transparent;border-radius:0;background:none;padding:8px 12px;color:var(--text-secondary);cursor:pointer}
+nav.tabs button[aria-selected=true]{color:var(--text-primary);border-bottom-color:var(--series-1);font-weight:600}
+section[hidden]{display:none}.wide{grid-column:1/-1}
+.heat td{text-align:center;font-variant-numeric:tabular-nums}.heat td:first-child{text-align:left}
+.delta-good{color:var(--good-ink)}.delta-bad{color:var(--bad-ink)}.hl td{font-weight:600;background:var(--surface-2)}
+.mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin-top:8px}
 </style>
 </head>
@@ -29,6 +36,21 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
 <h1>Kenya Life Insurer Explorer</h1>
 <p class="sub">Long-term business of every Kenyan life insurer, rebuilt from IRA's quarterly statistics. Full-year figures are Q4 year to date, unaudited. Renamed and merged companies are joined into one continuous line. <span id="built"></span></p>
 
+<nav class="tabs" role="tablist" id="tabs">
+  <button role="tab" data-tab="overview" aria-selected="true">Overview</button>
+  <button role="tab" data-tab="claims" aria-selected="false">Claims by business line</button>
+  <button role="tab" data-tab="share" aria-selected="false">Market share</button>
+  <button role="tab" data-tab="mix" aria-selected="false">Business mix</button>
+  <button role="tab" data-tab="profile" aria-selected="false">Insurer profile</button>
+</nav>
+<div class="bar" id="lbar" hidden>
+  <label>Snapshot period<select id="lp"></select></label>
+  <label>Cumulative from<select id="ly0"></select></label>
+  <label>to<select id="ly1"></select></label>
+  <label>Highlight insurer<select id="lco"></select></label>
+  <label>Ratio<select id="lm"><option value="lr">Loss ratio: claims ÷ net premium</option><option value="po">Paid out per KSh 100 gross premium</option><option value="cr">Cost to run per KSh 100 gross premium</option></select></label>
+</div>
+<section id="tab-overview">
 <div class="bar">
   <label>Currency<select id="ccy"><option value="KES">KSh bn</option><option value="USD">US$ m</option></select></label>
   <label>From year<select id="y0"></select></label>
@@ -64,6 +86,11 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
     <div id="coInfo"></div>
   </div>
 </div>
+</section>
+<section id="tab-claims" hidden><div class="grid" id="claimsGrid"></div></section>
+<section id="tab-share" hidden><div class="grid" id="shareGrid"></div></section>
+<section id="tab-mix" hidden><div class="grid" id="mixGrid"></div></section>
+<section id="tab-profile" hidden><div id="profileTiles" class="tiles"></div><div class="grid" id="profileGrid"></div></section>
 <div class="tip" id="tip"></div>
 </div>
 <script>
@@ -183,5 +210,6 @@ fetch('data/life.json').then(r=>r.json()).then(d=>{D=d;
   ['ccy','y0','y1','topn','co'].forEach(id=>$(id).onchange=render);render();
 }).catch(e=>{document.querySelector('.sub').textContent='Could not load data/life.json: '+e});
 </script>
+<script src="lines.js"></script>
 </body>
 </html>

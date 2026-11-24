@@ -8,3 +8,4 @@ python -m kli.extract
 python -m kli.panel
 python -m kli.validate
 python -m kli.views
+python -m kli.dashboard

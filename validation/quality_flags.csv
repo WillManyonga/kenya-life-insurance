@@ -54,6 +54,7 @@ east_africa_re,2017,4,revenue_life_assurance,ytd_falls,"YTD gross premium 31,867
 east_africa_re,2021,4,revenue_life_assurance,ytd_falls,"YTD gross premium 34,387 below previous quarter 47,959",excluded from single-quarter market totals
 east_africa_re,2024,2,revenue_life_assurance,ytd_falls,"YTD gross premium 72,398 below previous quarter 456,750",excluded from single-quarter market totals
 east_africa_re,2024,4,revenue_life_assurance,ytd_falls,"YTD gross premium 115,416 below previous quarter 1,069,812",excluded from single-quarter market totals
+equity_life,2023,4,gross_premium_by_class,ytd_jump,"YTD gross premium 14,794,930 against 2,142,168 a quarter earlier",kept as printed; left out of market share and ratio dashboards
 equity_life,2025,3,revenue_deposit_admin,ytd_falls,"YTD gross premium 1,415,694 below previous quarter 2,090,805",excluded from single-quarter market totals
 equity_life,2024,4,revenue_investments,ytd_falls,"YTD gross premium -174,444 below previous quarter 244,273",excluded from single-quarter market totals
 equity_life,2025,3,revenue_investments,ytd_falls,"YTD gross premium 221,493 below previous quarter 239,402",excluded from single-quarter market totals
@@ -107,6 +108,7 @@ kenyan_alliance,2025,2,revenue_pensions,ytd_falls,"YTD gross premium 137,339 bel
 kenyan_alliance,2025,3,revenue_pensions,ytd_falls,"YTD gross premium 0 below previous quarter 137,339",excluded from single-quarter market totals
 kenyan_alliance,2025,3,revenue_personal_pensions,ytd_falls,"YTD gross premium 0 below previous quarter 137,339",excluded from single-quarter market totals
 kuscco_mutual,2022,3,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 1,011,718",excluded from single-quarter market totals
+kuscco_mutual,2025,2,gross_premium_by_class,ytd_jump,"YTD gross premium 1,562,317 against 437,000 a quarter earlier",kept as printed; left out of market share and ratio dashboards
 kuscco_mutual,2025,3,gross_premium_by_class,ytd_falls,"YTD gross premium 0 below previous quarter 1,562,317",excluded from single-quarter market totals
 kuscco_mutual,2025,2,revenue_annuities,ytd_falls,"YTD gross premium 0 below previous quarter 57,011",excluded from single-quarter market totals
 kuscco_mutual,2022,3,revenue_combined,ytd_falls,"YTD gross premium 0 below previous quarter 1,011,718",excluded from single-quarter market totals
@@ -143,6 +145,7 @@ old_mutual_life_kenya,2023,4,revenue_investments_linked,ytd_falls,"YTD gross pre
 old_mutual_life_kenya,2025,4,revenue_life_assurance,ytd_falls,"YTD gross premium 167,000 below previous quarter 779,735",excluded from single-quarter market totals
 old_mutual_life_kenya,2018,2,revenue_pensions,ytd_falls,"YTD gross premium 61,756 below previous quarter 141,784",excluded from single-quarter market totals
 old_mutual_life_kenya,2019,4,revenue_pensions,ytd_falls,"YTD gross premium 495,287 below previous quarter 526,212",excluded from single-quarter market totals
+pioneer,2024,2,gross_premium_by_class,ytd_jump,"YTD gross premium 6,585,107 against 1,070,783 a quarter earlier",kept as printed; left out of market share and ratio dashboards
 pioneer,2022,4,revenue_annuities,ytd_falls,"YTD gross premium 11,690 below previous quarter 15,933",excluded from single-quarter market totals
 pioneer,2022,2,revenue_group_credit,ytd_falls,"YTD gross premium 75,345 below previous quarter 88,820",excluded from single-quarter market totals
 pioneer,2023,4,revenue_investments_linked,ytd_falls,"YTD gross premium 4,665 below previous quarter 35,998",excluded from single-quarter market totals
