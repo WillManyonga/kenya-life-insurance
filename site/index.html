@@ -67,7 +67,7 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
   <label>To year<select id="y1"></select></label>
   <label>Companies shown<select id="topn"><option>10</option><option>15</option><option value="99">All</option></select></label>
   <label>Insurer<select id="oins"><option value="">All insurers (market)</option></select></label>
-  <label>Profit bridge period<select id="obm"><option value="y1">To year only</option><option value="cum">From year to To year, added together</option><option value="latest">Latest quarter, year to date</option></select></label>
+  <label>Period for margins and profit bridges<select id="obm"><option value="y1">To year only</option><option value="cum">From year to To year, added together</option><option value="latest">Latest quarter, year to date</option></select></label>
 </div>
 
 <div class="tiles" id="tiles"></div>
@@ -99,6 +99,7 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
   </div>
 </div>
 
+<div class="grid" id="omargin" style="margin-top:18px"></div>
 <div class="grid" id="obridge" style="margin-top:18px"></div>
 </section>
 <section id="tab-claims" hidden><div class="grid" id="claimsGrid"></div></section>
@@ -225,13 +226,13 @@ function tiles(){
 function render(){const all=stats(),sel=$('oins').value;let rows=all.slice(0,+$('topn').value);
   if(sel&&!rows.some(r=>r.id===sel)){const r=all.find(r=>r.id===sel);if(r)rows=[...rows,r]}
   if(sel)$('co').value=sel;tiles();drawBubble(rows);drawBars(rows);drawMarket();drawCompany();drawBridges()}
-function drawBridges(){const g=$('obridge');g.innerHTML='';if(!window.KLI||!KLI.ready()){g.innerHTML='<p class="note">Loading profit bridges…</p>';return}
+function drawBridges(){const g=$('obridge'),gm=$('omargin');g.innerHTML='';gm.innerHTML='';if(!window.KLI||!KLI.ready()){g.innerHTML='<p class="note">Loading profit bridges…</p>';return}
   const m=$('obm').value,y0=+$('y0').value,y1=+$('y1').value;let ks,lab;
   if(m==='latest'){ks=[KLI.latest()];lab=`${KLI.label(ks[0])}, year to date`}
   else if(m==='cum'){ks=KLI.periodsForYears(y0,y1);lab=`Full years ${Math.max(y0,2016)}–${y1} added together`}
   else{ks=KLI.periodsForYears(y1,y1);lab=`${y1}, full year`}
   if(!ks.length){g.innerHTML='<p class="note">No business-line data for this period (the bridges start in 2016).</p>';return}
-  KLI.bridgeCards(g,$('oins').value||null,ks,lab)}
+  KLI.marginCard(gm,ks,lab,$('oins').value||null,Math.min(+$('topn').value,15));KLI.bridgeCards(g,$('oins').value||null,ks,lab)}
 window.renderOverview=()=>render();
 
 fetch('data/life.json').then(r=>r.json()).then(d=>{D=d;

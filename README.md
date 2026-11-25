@@ -41,7 +41,7 @@ The explorer has five tabs:
 
 | Tab | What it shows |
 |---|---|
-| Overview | Market tiles, or one insurer's when the Insurer filter is set; profit bridges (waterfalls) for the To year, the From–To years added together, or the latest quarter; the Deloitte views (premium CAGR against margin, top 10 by premium); premium by year; one company |
+| Overview | Market tiles, or one insurer's when the Insurer filter is set; an underwriting-margin view (top insurers by premium, loss or profit against 100% combined, with a count of loss-makers, for any business line); profit bridges (waterfalls); both for the To year, the From–To years added together, or the latest quarter; the Deloitte views (premium CAGR against margin, top 10 by premium); premium by year; one company |
 | Claims by business line | Loss ratio, paid-out ratio or cost ratio for individual life, group life, credit life, annuities, pensions and investments: market and highlighted insurer over time, a snapshot for any quarter (year to date) against the same period a year earlier, cumulative ratios for any window, the 12 biggest writers of each line against the line's average and 100 (in the style of Kwanusu's class charts), and a heatmap of the largest insurers against the market |
 | Market share | Share of gross premium and rank by year, the highlighted insurer's share of each business line, and the biggest share movers |
 | Business mix | The market's premium split by business type each year, and each large insurer's mix |
