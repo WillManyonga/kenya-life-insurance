@@ -377,6 +377,7 @@
         <label style="max-width:320px">Period<select id="bmode"><option value="s">Snapshot: ${label(P[k])}${P[k].endsWith('Q4') ? '' : ' (year to date)'}</option><option value="c">Cumulative: ${y0}–${y1} full years</option></select></label>
         <div class="grid" style="margin-top:12px"></div>`);
       w.querySelector('#bmode').value = bmode;
+      queueMicrotask(() => g.appendChild(w)); // bridges go last, after the profile's other charts
       w.querySelector('#bmode').onchange = e => { bmode = e.target.value; drawProfile(); };
       const ks = cum ? fullYears().filter(y => y >= y0 && y <= y1).map(q4) : [k];
       bridgeCards(w.querySelector('.grid'), co, ks, cum ? `Full years ${y0}–${y1} added together` : `${label(P[k])}${P[k].endsWith('Q4') ? ', full year' : ', year to date'}`); }
