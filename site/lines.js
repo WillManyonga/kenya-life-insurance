@@ -148,15 +148,15 @@
     { label: 'Management expenses', v: -b.me }, { label: 'Underwriting result', t: 'sub' }, { label: 'Investment income, net', v: b.inv },
     { label: 'Increase in life fund', v: b.res }, { label: 'Surplus to P&L', t: 'sub', key: true }];
   const plSteps = (b, ifrs) => ifrs ? [
-    { label: 'Insurance revenue', v: b.a, t: 'total' }, { label: 'Insurance service expense', v: -b.b }, { label: 'Net reinsurance expense', v: -b.c },
-    { label: 'Insurance service result', t: 'sub' }, { label: 'Net investment income', v: b.d }, { label: 'Insurance finance expense', v: -b.e },
-    { label: 'Other items', v: b.oth }, { label: 'Profit before tax', t: 'sub', key: true }, { label: 'Tax', v: -b.tax }, { label: 'Profit after tax', t: 'sub' }] : [
-    { label: 'Surplus from revenue account', v: b.a, t: 'total' }, { label: 'Shareholder investment income', v: b.d }, { label: 'Other income', v: b.f },
-    { label: 'Management expenses', v: -b.b }, { label: 'Other items', v: b.oth }, { label: 'Profit before tax', t: 'sub', key: true },
+    { label: 'Insurance revenue', v: b.a, t: 'total' }, { label: 'Service expense', v: -b.b }, { label: 'Reinsurance', v: -b.c },
+    { label: 'Service result', t: 'sub' }, { label: 'Investment income', v: b.d }, { label: 'Finance expense', v: -b.e },
+    { label: 'Other', v: b.oth }, { label: 'Profit before tax', t: 'sub', key: true }, { label: 'Tax', v: -b.tax }, { label: 'Profit after tax', t: 'sub' }] : [
+    { label: 'Revenue account surplus', v: b.a, t: 'total' }, { label: 'Investment income', v: b.d }, { label: 'Other income', v: b.f },
+    { label: 'Expenses', v: -b.b }, { label: 'Other', v: b.oth }, { label: 'Profit before tax', t: 'sub', key: true },
     { label: 'Tax', v: -b.tax }, { label: 'Profit after tax', t: 'sub' }];
 
   function waterfall(svg, steps, base, baseLabel) {
-    svg.innerHTML = ''; const n = steps.length, W = 1100, H = 360, Lm = 10, R = 10, T = 34, B = 78;
+    svg.innerHTML = ''; const n = steps.length, W = 640, H = 280, Lm = 4, R = 4, T = 30, B = 62;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     let run = 0; const bars = steps.map(s => {
       let lo, hi, v;
@@ -178,19 +178,19 @@
       r.onmousemove = e => tip(e, `<b>${b.label}</b><br>KSh ${bns(b.v)}${per}`); r.onmouseleave = untip;
       const txt = (isT ? '' : b.v >= 0 ? '+' : '−') + bn(Math.abs(b.v)).replace('bn', '').replace(/m$/, 'm');
       const below = b.hi <= 0 && b.lo < 0;
-      el('text', { x: x + bw / 2, y: below ? y(b.lo) + 16 : y(b.hi) - 7, 'text-anchor': 'middle', style: `fill:${isT ? css('--text-primary') : col};font-weight:700;font-size:13px` }, svg).textContent = isT && b.v < 0 ? '−' + txt : txt;
+      el('text', { x: x + bw / 2, y: below ? y(b.lo) + 13 : y(b.hi) - 5, 'text-anchor': 'middle', style: `fill:${isT ? css('--text-primary') : col};font-weight:700;font-size:${n > 8 ? 10.5 : 11.5}px` }, svg).textContent = isT && b.v < 0 ? '−' + txt : txt;
       const words = b.label.split(' '), l1 = [], l2 = [];
-      words.forEach(w => ((l1.join(' ') + ' ' + w).length <= 18 && !l2.length ? l1 : l2).push(w));
-      [l1.join(' '), l2.join(' ')].filter(Boolean).forEach((t, j) => el('text', { x: x + bw / 2, y: H - B + 40 + j * 14, 'text-anchor': 'middle', style: `font-size:12px;fill:${b.key || isT ? css('--text-primary') : css('--text-secondary')};${b.key ? 'font-weight:700' : ''}` }, svg).textContent = t);
+      words.forEach(w => ((l1.join(' ') + ' ' + w).length <= (n > 8 ? 11 : 13) && !l2.length ? l1 : l2).push(w));
+      [l1.join(' '), l2.join(' ')].filter(Boolean).forEach((t, j) => el('text', { x: x + bw / 2, y: H - B + 30 + j * 12, 'text-anchor': 'middle', style: `font-size:${n > 8 ? 9.5 : 10.5}px;fill:${b.key || isT ? css('--text-primary') : css('--text-secondary')};${b.key ? 'font-weight:700' : ''}` }, svg).textContent = t);
     });
-    el('text', { x: W - R, y: 12, 'text-anchor': 'end', style: 'font-size:11px' }, svg).textContent = 'KSh bn unless marked m · orange takes away · blue adds · dark = totals';
+    el('text', { x: W - R, y: 11, 'text-anchor': 'end', style: 'font-size:9.5px' }, svg).textContent = 'KSh bn unless marked m · orange takes away · blue adds';
   }
 
   // Builds the two bridge cards into a grid. scope: insurer stream id or null for the market.
   // ks: period indices to add up (one year-to-date return, or several full years).
   function bridgeCards(grid, scope, ks, periodLabel) {
     const who = scope ? name(scope) : 'All insurers';
-    const c1 = card(grid, 'wide', `<h2>Profit bridge, revenue account: ${who}</h2><p class="note">${periodLabel}. From premium to the surplus transferred to profit and loss.</p>
+    const c1 = card(grid, '', `<h2>Profit bridge, revenue account: ${who}</h2><p class="note">${periodLabel}. From premium to the surplus transferred to profit and loss.</p>
       <label style="max-width:260px">Business line<select class="bl">${LINES.map(l => `<option value="${l.id}" ${l.id === 'total' ? 'selected' : ''}>${l.label}</option>`).join('')}</select></label>`);
     const s1 = document.createElementNS(NS, 'svg'); c1.appendChild(s1); const t1 = document.createElement('div'); c1.appendChild(t1);
     const draw1 = () => {
@@ -205,7 +205,7 @@
     };
     c1.querySelector('.bl').onchange = draw1; draw1();
 
-    const c2 = card(grid, 'wide', `<h2>Profit bridge, profit and loss: ${who}</h2><p class="note">${periodLabel}. Company level, all long-term business.</p>`);
+    const c2 = card(grid, '', `<h2>Profit bridge, profit and loss: ${who}</h2><p class="note">${periodLabel}. Company level, all long-term business.</p>`);
     const ifrs = new Set(ks.map(k => yearOf(k) >= 2024));
     if (ifrs.size > 1) { c2.insertAdjacentHTML('beforeend', '<p class="note">IRA changed the profit and loss layout to IFRS 17 in 2024, so a bridge cannot add years on both sides of the change. Choose years up to 2023, or from 2024.</p>'); return; }
     const isI = [...ifrs][0], b = sumBridges(plBridge, scope, ks);
@@ -215,7 +215,7 @@
     waterfall(s2, steps, gpT, 'gross premium');
     const m = scope ? sumBridges(plBridge, null, ks) : null, mg = scope ? sumBridges((s, k) => revBridge(s, 'total', k), null, ks)?.gp : null;
     let run = 0; const rows = steps.map(st => [st.label, st.t === 'total' ? (run = st.v) : st.t === 'sub' ? run : (run += st.v, st.v)]);
-    c2.insertAdjacentHTML('beforeend', `<p class="note">Profit before tax <b>${per100(gpT ? b.pbt / gpT : null)}</b> per KSh 100 of gross premium${m && mg ? ` (market ${per100(m.pbt / mg)})` : ''}. ${isI ? 'IFRS 17 layout: insurance revenue replaces premium, and the finance expense is the interest credited to policyholders.' : 'Pre-2024 layout: the revenue-account surplus is the starting point.'} "Other items" closes the bridge to the printed profit.</p>
+    c2.insertAdjacentHTML('beforeend', `<p class="note">Profit before tax <b>${per100(gpT ? b.pbt / gpT : null)}</b> per KSh 100 of gross premium${m && mg ? ` (market ${per100(m.pbt / mg)})` : ''}. ${isI ? 'IFRS 17 layout: insurance revenue replaces premium, and the finance expense is the interest credited to policyholders.' : 'Pre-2024 layout: the revenue-account surplus is the starting point.'} "Other" closes the bridge to the printed profit.</p>
       <details><summary>Table view</summary>${table(['Step', 'KSh', 'Per KSh 100 gross premium'], rows.map(([l, v]) => [l, bns(v), per100(gpT ? v / gpT : null)]))}</details>`);
   }
   window.KLI = {
