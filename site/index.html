@@ -24,7 +24,7 @@ table{border-collapse:collapse;width:100%;font-size:12px}th,td{padding:4px 6px;b
 nav.tabs{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 16px;border-bottom:1px solid var(--border)}
 nav.tabs button{border:none;border-bottom:2px solid transparent;border-radius:0;background:none;padding:8px 12px;color:var(--text-secondary);cursor:pointer}
 nav.tabs button[aria-selected=true]{color:var(--text-primary);border-bottom-color:var(--series-1);font-weight:600}
-section[hidden]{display:none}.wide{grid-column:1/-1}
+section[hidden],.bar[hidden]{display:none}.wide{grid-column:1/-1}
 .heat td{text-align:center;font-variant-numeric:tabular-nums}.heat td:first-child{text-align:left}
 .delta-good{color:var(--good-ink)}.delta-bad{color:var(--bad-ink)}.hl td{font-weight:600;background:var(--surface-2)}
 .mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
@@ -66,11 +66,14 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
   <label>From year<select id="y0"></select></label>
   <label>To year<select id="y1"></select></label>
   <label>Companies shown<select id="topn"><option>10</option><option>15</option><option value="99">All</option></select></label>
+  <label>Insurer<select id="oins"><option value="">All insurers (market)</option></select></label>
+  <label>Profit bridge period<select id="obm"><option value="y1">To year only</option><option value="cum">From year to To year, added together</option><option value="latest">Latest quarter, year to date</option></select></label>
 </div>
 
 <div class="tiles" id="tiles"></div>
 
-<div class="grid">
+<div class="grid" id="obridge"></div>
+<div class="grid" style="margin-top:18px">
   <div class="card">
     <h2>Top life insurers: premium growth vs profit margin</h2>
     <p class="note" id="bubbleNote"></p>
@@ -85,7 +88,7 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
     <details><summary>Table view</summary><div id="barTable"></div></details>
   </div>
   <div class="card">
-    <h2>Market gross premium by year</h2>
+    <h2 id="marketTitle">Market gross premium by year</h2>
     <svg id="market" viewBox="0 0 640 300" role="img" aria-label="Market gross premium by year"></svg>
     <p class="note">Insurers only (life reinsurers excluded). 2017 comes from IRA's annual statistics workbook because no Q4 2017 quarterly workbook was published; it counts gross direct premium only.</p>
   </div>
@@ -146,10 +149,11 @@ function drawBubble(rows){
   const t=el('text',{x:14,y:(T+H-B)/2,'text-anchor':'middle',transform:`rotate(-90 14 ${(T+H-B)/2})`},svg);t.textContent='Average profit margin';
   const max=Math.max(...pts.map(r=>r.g1));
   [...pts].sort((a,b)=>b.g1-a.g1).forEach(r=>{
-    const c=el('circle',{cx:xScale(r.cagr),cy:yScale(r.margin),r:6+28*Math.sqrt(r.g1/max),fill:css('--series-1'),'fill-opacity':.55,stroke:css('--surface-1'),'stroke-width':2},svg);
+    const sel=$('oins').value,on=!sel||r.id===sel;
+    const c=el('circle',{cx:xScale(r.cagr),cy:yScale(r.margin),r:6+28*Math.sqrt(r.g1/max),fill:sel&&on?css('--series-2'):css('--series-1'),'fill-opacity':on?.6:.12,stroke:css('--surface-1'),'stroke-width':2},svg);
     c.onmousemove=e=>tip(e,`<b>${r.name}</b><br>CAGR ${pct(r.cagr)} · margin ${pct(r.margin)}${r.skipped?`<br><i>${r.skipped} flagged year(s) left out of the margin</i>`:''}<br>Premium ${$('y1').value}: ${fmt(money(r.g1,+$('y1').value))} ${unit()}`);c.onmouseleave=untip;
   });
-  pts.forEach(r=>{el('text',{x:xScale(r.cagr),y:yScale(r.margin)-8-28*Math.sqrt(r.g1/max),'text-anchor':'middle',style:`fill:${css('--text-primary')}`},svg).textContent=short(r.name)});
+  pts.forEach(r=>{const sel=$('oins').value,on=!sel||r.id===sel;el('text',{x:xScale(r.cagr),y:yScale(r.margin)-8-28*Math.sqrt(r.g1/max),'text-anchor':'middle',style:`fill:${css(on?'--text-primary':'--text-muted')};${sel&&on?'font-weight:700':''}`},svg).textContent=short(r.name)});
   $('bubbleNote').textContent=`${pts.length} companies by ${$('y1').value} premium.`;
   $('bubbleTable').innerHTML=table(['Company','CAGR','Avg margin',`Premium ${$('y1').value} (${unit()})`],pts.map(r=>[r.name+(r.skipped?' *':''),pct(r.cagr),pct(r.margin),fmt(money(r.g1,+$('y1').value))]));
 }
@@ -161,10 +165,11 @@ function drawBars(rows){
   const x=v=>L+v/xt.at(-1)*(W-L-R);
   xt.forEach(v=>{el('line',{x1:x(v),x2:x(v),y1:T,y2:H-22,stroke:css('--grid')},svg);el('text',{x:x(v),y:H-6,'text-anchor':'middle'},svg).textContent=fmt(v,0)});
   $('barLegend').innerHTML=`<span><i class="sw" style="background:${css('--series-1')}"></i>${y1}</span><span><i class="sw" style="background:${css('--series-2')}"></i>${y0}</span><span>${unit()}</span>`;
-  rows.forEach((r,i)=>{const yy=T+i*rowH,bh=(rowH-8)/2;
-    el('text',{x:L-8,y:yy+rowH/2+2,'text-anchor':'end',style:`fill:${css('--text-primary')}`},svg).textContent=`${i+1}. ${r.name.length>30?r.name.slice(0,29)+'…':r.name}`;
+  const rank=new Map(stats().map((r,i)=>[r.id,i+1])),sel=$('oins').value;
+  rows.forEach((r,i)=>{const yy=T+i*rowH,bh=(rowH-8)/2,on=!sel||r.id===sel;
+    el('text',{x:L-8,y:yy+rowH/2+2,'text-anchor':'end',style:`fill:${css(on?'--text-primary':'--text-muted')};${sel&&on?'font-weight:700':''}`},svg).textContent=`${rank.get(r.id)}. ${r.name.length>30?r.name.slice(0,29)+'…':r.name}`;
     [[money(r.g1,y1),css('--series-1'),0,y1],[money(r.prevG,y0),css('--series-2'),bh+2,y0]].forEach(([v,c,o,yr])=>{if(v==null)return;
-      const b=el('rect',{x:L,y:yy+2+o,width:Math.max(1,x(v)-L),height:bh,rx:2,fill:c},svg);
+      const b=el('rect',{x:L,y:yy+2+o,width:Math.max(1,x(v)-L),height:bh,rx:2,fill:c,'fill-opacity':on?1:.3},svg);
       b.onmousemove=e=>tip(e,`<b>${r.name}</b><br>${yr}: ${fmt(v)} ${unit()}`);b.onmouseleave=untip;
       el('text',{x:x(v)+4,y:yy+2+o+bh-2,style:'font-size:10px'},svg).textContent=fmt(v,v<10?1:0)});
   });
@@ -173,7 +178,8 @@ function drawBars(rows){
 
 function drawMarket(){
   const svg=$('market');svg.innerHTML='';const W=640,H=300,L=56,R=10,T=10,B=28;
-  const pts=years.map(y=>[y,money(insurers().reduce((s,[,x])=>s+(gwp(x,y)||0),0),y)]).filter(p=>p[1]);
+  const sel=$('oins').value;$('marketTitle').textContent=sel?`${D.streams[sel].name}: gross premium by year`:'Market gross premium by year';
+  const pts=years.map(y=>[y,money(sel?gwp(D.streams[sel],y):insurers().reduce((s,[,x])=>s+(gwp(x,y)||0),0),y)]).filter(p=>p[1]);
   if(!pts.length)return;const yt=ticks(0,Math.max(...pts.map(p=>p[1])),4),bw=(W-L-R)/pts.length;
   const y=v=>H-B-v/yt.at(-1)*(H-T-B);
   yt.forEach(v=>{el('line',{x1:L,x2:W-R,y1:y(v),y2:y(v),stroke:css('--grid')},svg);el('text',{x:L-6,y:y(v)+4,'text-anchor':'end'},svg).textContent=fmt(v,0)});
@@ -202,6 +208,12 @@ function short(n){return n.replace(/\s*\(.*?\)/g,'').replace(/ (Life )?(Assuranc
 function table(h,rows){return `<table><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</table>`}
 
 function tiles(){
+  const sel=$('oins').value;
+  if(sel){const s=D.streams[sel],y1=+$('y1').value,y0=+$('y0').value,g=gwp(s,y1),gp=gwp(s,y1-1),ga=gwp(s,y0),all=insurers(),tot=all.reduce((a,[,x])=>a+(gwp(x,y1)||0),0);
+    const rk=all.map(([id,x])=>[id,gwp(x,y1)||0]).sort((a,b)=>b[1]-a[1]).findIndex(([id])=>id===sel)+1,p=s.years[y1]?.profit,n=y1-y0;
+    const t=[[fmt(money(g,y1))+' '+unit(),`${s.name}: gross premium ${y1}`],[pct(gp?g/gp-1:null),`Growth on ${y1-1}`],[pct(ga>0&&g>0&&n>0?Math.pow(g/ga,1/n)-1:null),`CAGR ${y0}–${y1}`],
+      [rk?`#${rk} · ${pct(tot?g/tot:null)}`:'n/a','Rank and market share'],[pct(g&&p!=null&&!s.years[y1]?.profit_flag?p/g:null),`Profit margin ${y1}`]];
+    $('tiles').innerHTML=t.map(([b,s])=>`<div class="tile"><b>${b}</b><span>${s}</span></div>`).join('');return}
   const y1=+$('y1').value,ins=insurers(),tot=y=>ins.reduce((s,[,x])=>s+(gwp(x,y)||0),0),g=tot(y1),gp=tot(y1-1);
   const prof=ins.reduce((s,[,x])=>s+(x.years[y1]?.profit||0),0);const sorted=ins.map(([,x])=>gwp(x,y1)||0).sort((a,b)=>b-a);
   const t=[[fmt(money(g,y1))+' '+unit(),`Gross premium ${y1}`],[pct(gp?g/gp-1:null),`Growth on ${y1-1}`],[sorted.filter(v=>v>0).length,'Insurers reporting'],
@@ -209,7 +221,17 @@ function tiles(){
   $('tiles').innerHTML=t.map(([b,s])=>`<div class="tile"><b>${b}</b><span>${s}</span></div>`).join('');
 }
 
-function render(){const rows=stats().slice(0,+$('topn').value);tiles();drawBubble(rows);drawBars(rows);drawMarket();drawCompany()}
+function render(){const all=stats(),sel=$('oins').value;let rows=all.slice(0,+$('topn').value);
+  if(sel&&!rows.some(r=>r.id===sel)){const r=all.find(r=>r.id===sel);if(r)rows=[...rows,r]}
+  if(sel)$('co').value=sel;tiles();drawBubble(rows);drawBars(rows);drawMarket();drawCompany();drawBridges()}
+function drawBridges(){const g=$('obridge');g.innerHTML='';if(!window.KLI||!KLI.ready()){g.innerHTML='<p class="note">Loading profit bridges…</p>';return}
+  const m=$('obm').value,y0=+$('y0').value,y1=+$('y1').value;let ks,lab;
+  if(m==='latest'){ks=[KLI.latest()];lab=`${KLI.label(ks[0])}, year to date`}
+  else if(m==='cum'){ks=KLI.periodsForYears(y0,y1);lab=`Full years ${Math.max(y0,2016)}–${y1} added together`}
+  else{ks=KLI.periodsForYears(y1,y1);lab=`${y1}, full year`}
+  if(!ks.length){g.innerHTML='<p class="note">No business-line data for this period (the bridges start in 2016).</p>';return}
+  KLI.bridgeCards(g,$('oins').value||null,ks,lab)}
+window.renderOverview=()=>render();
 
 fetch('data/life.json').then(r=>r.json()).then(d=>{D=d;
   years=[...new Set(Object.values(D.streams).flatMap(s=>Object.keys(s.years).map(Number)))].sort();
@@ -217,7 +239,8 @@ fetch('data/life.json').then(r=>r.json()).then(d=>{D=d;
   ['y0','y1'].forEach(id=>$(id).innerHTML=years.map(y=>`<option>${y}</option>`).join(''));
   $('y0').value=years[0];$('y1').value=years.at(-1);
   $('co').innerHTML=insurers().sort((a,b)=>(gwp(b[1],years.at(-1))||0)-(gwp(a[1],years.at(-1))||0)).map(([id,s])=>`<option value="${id}">${s.name}</option>`).join('');
-  ['ccy','y0','y1','topn','co'].forEach(id=>$(id).onchange=render);render();
+  $('oins').innerHTML='<option value="">All insurers (market)</option>'+$('co').innerHTML;
+  ['ccy','y0','y1','topn','oins','obm'].forEach(id=>$(id).onchange=render);$('co').onchange=drawCompany;render();
 }).catch(e=>{document.querySelector('.sub').textContent='Could not load data/life.json: '+e});
 </script>
 <script src="lines.js"></script>

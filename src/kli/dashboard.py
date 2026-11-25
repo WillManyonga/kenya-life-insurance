@@ -36,7 +36,19 @@ LINES = [
 ]
 METRICS = {"gross_premium": "gp", "net_premium": "np", "claims": "cl", "total_benefits": "tb",
            "surrenders": "su", "net_commissions": "co", "management_expenses": "me",
-           "investment_income": "ii", "life_fund_bf": "fb", "life_fund_cf": "fc"}
+           "investment_income": "ii", "life_fund_bf": "fb", "life_fund_cf": "fc",
+           "fee_income": "fi", "investment_expenses": "ie", "transfer_to_pl": "tp"}
+# Profit and loss account (company level). IRA switched to an IFRS 17 layout from 2024, so the
+# page builds one profit bridge for 2016-2023 and another from 2024. Amounts are as printed:
+# expenses are positive numbers that the page subtracts.
+PL = {"profit_from_revenue": "pfr", "loss_from_revenue": "lfr", "investment_income": "pii",
+      "other_income": "oi", "management_expenses": "pme", "insurance_revenue": "ir",
+      "insurance_service_expense": "ise", "net_reinsurance_expense": "nre",
+      "insurance_service_result": "isr", "net_investment_income": "nii",
+      "raw:finance_expenses_from_insurance_contracts": "fie",
+      "raw:finance_income_from_reinsurance_contracts": "fir", "net_financial_result": "nfr",
+      "other_operating_expenses": "ooe", "profit_before_tax": "pbt", "tax": "tax",
+      "profit_after_tax": "pat"}
 
 
 def main():
@@ -64,6 +76,10 @@ def main():
                   if rev.loc[(rev.line == l[0]) & (rev.m == "gp") & (rev.quarter == 4)].groupby("year").value.sum().max() > 500_000]
 
     pbt = st[(st.table_key == "profit_loss") & (st.line_key == "profit_before_tax")]
+    pl = st[(st.table_key == "profit_loss") & st.line_key.isin(PL)].copy()
+    pl["m"] = pl.line_key.map(PL)
+    pl["i"] = [pidx.get((int(y), int(q))) for y, q in zip(pl.year, pl.quarter)]
+    pl = pl[pl.i.notna()]
 
     flags = pd.read_csv(os.path.join(VALIDATION, "quality_flags.csv"))
     comp_stream = {c: v["stream_id"] for c, v in companies.items()}
@@ -83,12 +99,19 @@ def main():
         for y, q, v in pbt.loc[pbt.stream_id == sid, ["year", "quarter", "value"]].itertuples(index=False):
             if (int(y), int(q)) in pidx:
                 p[pidx[(int(y), int(q))]] = round(float(v))
+        plx = {}
+        for m, h in pl[pl.stream_id == sid].groupby("m"):
+            arr = [None] * n
+            for i, v in zip(h.i.astype(int), h.value):
+                arr[i] = round(float(v))
+            plx[m] = arr
         fl = flags[(flags.flag == "ytd_falls") & (flags.company_id.map(comp_stream) == sid)]
         sj = flags[(flags.flag == "ytd_jump") & (flags.company_id.map(comp_stream) == sid)]
         out["streams"][sid] = {
             "name": names.get(sid, sid),
             "lines": data,
             "pbt": p,
+            "pl": plx,
             # Only a printed zero (a return not filed in time) is excluded; a small year-to-date dip
             # (usually a restatement) stays in and is listed in validation/quality_flags.csv.
             "not_filed": sorted(i for i in {pidx[(int(y), int(q))] for y, q in zip(fl.year, fl.quarter) if (int(y), int(q)) in pidx}

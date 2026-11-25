@@ -2,7 +2,7 @@
 // Reads data/lines.json (built by src/kli/dashboard.py). Every ratio is a sum over a sum,
 // never an average of ratios. Figures are IRA's year-to-date, unaudited, KSh thousands.
 (function () {
-  let L, P = [], LINES = [], INS = [], ready = false;
+  let L, P = [], LINES = [], INS = [], ready = false, bmode = 's';
   const DEFAULT_CO = 'sanlam_life';
   const MEASURE = {
     lr: { label: 'Loss ratio (claims ÷ net premium)', num: ['cl'], den: 'np', lowerIsBetter: true },
@@ -45,6 +45,7 @@
   const name = s => L.streams[s].name;
   const label = p => p.endsWith('Q4') ? p.slice(0, 4) : `${p.slice(0, 4)} ${['', 'Q1', 'H1', '9M', ''][+p.slice(5)]}`;
   const bn = v => v == null ? 'n/a' : v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 1 : 2) + 'bn' : (v / 1e3).toFixed(0) + 'm';
+  const bns = v => v == null ? 'n/a' : (v < 0 ? '−' : '') + bn(Math.abs(v));
   const per100 = v => v == null || !isFinite(v) ? 'n/a' : (v * 100).toFixed(1);
   const pp = v => v == null || !isFinite(v) ? 'n/a' : (v >= 0 ? '+' : '') + (v * 100).toFixed(1) + '%';
 
@@ -104,6 +105,126 @@
   const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
   const card = (grid, cls, html) => { const d = document.createElement('div'); d.className = 'card ' + (cls || ''); d.innerHTML = html; grid.appendChild(d); return d; };
   const legend = items => `<div class="legend">${items.map(([c, t]) => `<span><i class="sw" style="background:${c}"></i>${t}</span>`).join('')}</div>`;
+
+  // ---------- profit bridges (waterfalls) ----------
+  // Revenue-account bridge, any business line: net premium and fees, less benefits, commission
+  // and expenses = underwriting result; plus net investment income; less the increase in the
+  // life fund (the balancing item to the surplus IRA prints as transferred to profit and loss).
+  // Profit bridge, company level: IRA's profit and loss account, in its pre-2024 layout or its
+  // IFRS 17 layout from 2024. Each bridge is built insurer by insurer and then summed, and the
+  // last "other" step is whatever closes the bridge to the printed total.
+  const yearOf = k => +P[k].slice(0, 4);
+  const plv = (s, m, k) => { const a = L.streams[s].pl?.[m]; return a ? a[k] : null; };
+  function revBridge(s, line, k) {
+    if (!filed(s, k)) return null;
+    const g = m => val(s, line, m, k), np = g('np'); if (np == null || (np === 0 && !g('tb'))) return null;
+    const prem = np + (g('fi') || 0), uw = prem - (g('tb') || 0) - (g('co') || 0) - (g('me') || 0), inv = (g('ii') || 0) - (g('ie') || 0);
+    let tp = g('tp'), res;
+    if (tp != null) res = tp - uw - inv; else { res = g('fc') != null && g('fb') != null ? -(g('fc') - g('fb')) : 0; tp = uw + inv + res; }
+    const noinv = !g('ii') && (g('fb') || 0) > 1e6 ? 1 : 0; // a life fund over KSh 1bn earning nothing: IRA printed no investment income
+    return { prem, tb: g('tb') || 0, co: g('co') || 0, me: g('me') || 0, uw, inv, res, tp, gp: g('gp') || 0, noinv };
+  }
+  function plBridge(s, k) {
+    if (!filed(s, k)) return null;
+    const g = m => plv(s, m, k) || 0, pbt = plv(s, 'pbt', k); if (pbt == null) return null;
+    if (yearOf(k) >= 2024) {
+      if (plv(s, 'ir', k) == null) return null;
+      const isr = g('ir') - g('ise') - g('nre'), fin = g('nii') - g('fie') + g('fir');
+      return { a: g('ir'), b: g('ise'), c: g('nre'), sub1: isr, d: g('nii'), e: g('fie') - g('fir'), oth: pbt - isr - fin, pbt, tax: g('tax'), pat: pbt - g('tax') };
+    }
+    const sur = g('pfr') - g('lfr'), known = sur + g('pii') + g('oi') - g('pme');
+    return { a: sur, d: g('pii'), f: g('oi'), b: g('pme'), oth: pbt - known, pbt, tax: g('tax'), pat: pbt - g('tax') };
+  }
+  function sumBridges(fn, scope, ks) {
+    const out = {}; let n = 0;
+    for (const k of ks) for (const s of scope ? [scope] : INS) {
+      const b = fn(s, k); if (!b) continue; n++;
+      for (const key in b) out[key] = (out[key] || 0) + b[key];
+    }
+    return n ? out : null;
+  }
+  const revSteps = b => [
+    { label: 'Net premium and fees', v: b.prem, t: 'total' }, { label: 'Benefits paid', v: -b.tb }, { label: 'Net commission', v: -b.co },
+    { label: 'Management expenses', v: -b.me }, { label: 'Underwriting result', t: 'sub' }, { label: 'Investment income, net', v: b.inv },
+    { label: 'Increase in life fund', v: b.res }, { label: 'Surplus to P&L', t: 'sub', key: true }];
+  const plSteps = (b, ifrs) => ifrs ? [
+    { label: 'Insurance revenue', v: b.a, t: 'total' }, { label: 'Insurance service expense', v: -b.b }, { label: 'Net reinsurance expense', v: -b.c },
+    { label: 'Insurance service result', t: 'sub' }, { label: 'Net investment income', v: b.d }, { label: 'Insurance finance expense', v: -b.e },
+    { label: 'Other items', v: b.oth }, { label: 'Profit before tax', t: 'sub', key: true }, { label: 'Tax', v: -b.tax }, { label: 'Profit after tax', t: 'sub' }] : [
+    { label: 'Surplus from revenue account', v: b.a, t: 'total' }, { label: 'Shareholder investment income', v: b.d }, { label: 'Other income', v: b.f },
+    { label: 'Management expenses', v: -b.b }, { label: 'Other items', v: b.oth }, { label: 'Profit before tax', t: 'sub', key: true },
+    { label: 'Tax', v: -b.tax }, { label: 'Profit after tax', t: 'sub' }];
+
+  function waterfall(svg, steps, base, baseLabel) {
+    svg.innerHTML = ''; const n = steps.length, W = 1100, H = 360, Lm = 10, R = 10, T = 34, B = 78;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    let run = 0; const bars = steps.map(s => {
+      let lo, hi, v;
+      if (s.t === 'total') { v = s.v; lo = Math.min(0, v); hi = Math.max(0, v); run = v; }
+      else if (s.t === 'sub') { v = run; lo = Math.min(0, run); hi = Math.max(0, run); }
+      else { v = s.v || 0; lo = Math.min(run, run + v); hi = Math.max(run, run + v); run += v; }
+      return { ...s, v, lo, hi, end: run };
+    });
+    const ymin = Math.min(0, ...bars.map(b => b.lo)), ymax = Math.max(0, ...bars.map(b => b.hi)) || 1;
+    const y = v => T + (ymax - v) / (ymax - ymin) * (H - T - B), slot = (W - Lm - R) / n, bw = slot * .58;
+    el('line', { x1: Lm, x2: W - R, y1: y(0), y2: y(0), stroke: css('--text-muted') }, svg);
+    const tot = css('--text-primary'), neg = css('--series-2'), pos = css('--series-1');
+    bars.forEach((b, i) => {
+      const x = Lm + i * slot + (slot - bw) / 2, isT = b.t === 'total' || b.t === 'sub', col = isT ? tot : b.v < 0 ? neg : pos;
+      const h = Math.max(2, y(b.lo) - y(b.hi));
+      if (i < n - 1) { const nx = Lm + (i + 1) * slot + (slot - bw) / 2; el('line', { x1: x + bw, x2: nx, y1: y(b.end), y2: y(b.end), stroke: css('--text-muted'), 'stroke-dasharray': '2 3' }, svg); }
+      const r = el('rect', { x, y: y(b.hi), width: bw, height: h, rx: 3, fill: col }, svg);
+      const per = base ? ` · ${(b.v / base * 100).toFixed(1)} per KSh 100 ${baseLabel}` : '';
+      r.onmousemove = e => tip(e, `<b>${b.label}</b><br>KSh ${bns(b.v)}${per}`); r.onmouseleave = untip;
+      const txt = (isT ? '' : b.v >= 0 ? '+' : '−') + bn(Math.abs(b.v)).replace('bn', '').replace(/m$/, 'm');
+      const below = b.hi <= 0 && b.lo < 0;
+      el('text', { x: x + bw / 2, y: below ? y(b.lo) + 16 : y(b.hi) - 7, 'text-anchor': 'middle', style: `fill:${isT ? css('--text-primary') : col};font-weight:700;font-size:13px` }, svg).textContent = isT && b.v < 0 ? '−' + txt : txt;
+      const words = b.label.split(' '), l1 = [], l2 = [];
+      words.forEach(w => ((l1.join(' ') + ' ' + w).length <= 18 && !l2.length ? l1 : l2).push(w));
+      [l1.join(' '), l2.join(' ')].filter(Boolean).forEach((t, j) => el('text', { x: x + bw / 2, y: H - B + 40 + j * 14, 'text-anchor': 'middle', style: `font-size:12px;fill:${b.key || isT ? css('--text-primary') : css('--text-secondary')};${b.key ? 'font-weight:700' : ''}` }, svg).textContent = t);
+    });
+    el('text', { x: W - R, y: 12, 'text-anchor': 'end', style: 'font-size:11px' }, svg).textContent = 'KSh bn unless marked m · orange takes away · blue adds · dark = totals';
+  }
+
+  // Builds the two bridge cards into a grid. scope: insurer stream id or null for the market.
+  // ks: period indices to add up (one year-to-date return, or several full years).
+  function bridgeCards(grid, scope, ks, periodLabel) {
+    const who = scope ? name(scope) : 'All insurers';
+    const c1 = card(grid, 'wide', `<h2>Profit bridge, revenue account: ${who}</h2><p class="note">${periodLabel}. From premium to the surplus transferred to profit and loss.</p>
+      <label style="max-width:260px">Business line<select class="bl">${LINES.map(l => `<option value="${l.id}" ${l.id === 'total' ? 'selected' : ''}>${l.label}</option>`).join('')}</select></label>`);
+    const s1 = document.createElementNS(NS, 'svg'); c1.appendChild(s1); const t1 = document.createElement('div'); c1.appendChild(t1);
+    const draw1 = () => {
+      const line = c1.querySelector('.bl').value, b = sumBridges((s, k) => revBridge(s, line, k), scope, ks);
+      if (!b) { s1.innerHTML = ''; t1.innerHTML = '<p class="note">No revenue account for this line and period.</p>'; return; }
+      const steps = revSteps(b); waterfall(s1, steps, b.prem, 'net premium');
+      const m = scope ? sumBridges((s, k) => revBridge(s, line, k), null, ks) : null;
+      let run = 0; const rows = steps.map(st => { const v = st.t === 'total' ? (run = st.v) : st.t === 'sub' ? run : (run += st.v, st.v); return [st.label, v]; });
+      let mrun = 0; const mrows = m ? revSteps(m).map(st => st.t === 'total' ? (mrun = st.v) : st.t === 'sub' ? mrun : (mrun += st.v, st.v)) : [];
+      t1.innerHTML = `<p class="note">Underwriting margin <b>${per100(b.uw / b.prem)}</b> and surplus margin <b>${per100(b.tp / b.prem)}</b> per KSh 100 of net premium${m ? ` (market ${per100(m.uw / m.prem)} and ${per100(m.tp / m.prem)})` : ''}. The life-fund step also absorbs any difference between IRA's printed surplus and the items above.${b.noinv ? ` <b>Caution:</b> ${scope ? 'IRA printed no investment income for this insurer' : `${b.noinv} return(s) in this total show no investment income on a life fund over KSh 1bn`} in this period, so the life-fund step carries the gap.` : ''}</p>
+        <details><summary>Table view</summary>${table(['Step', 'KSh', 'Per KSh 100 net premium', ...(m ? ['Market per 100'] : [])], rows.map(([l, v], i) => [l, bns(v), per100(v / b.prem), ...(m ? [per100(mrows[i] / m.prem)] : [])]))}</details>`;
+    };
+    c1.querySelector('.bl').onchange = draw1; draw1();
+
+    const c2 = card(grid, 'wide', `<h2>Profit bridge, profit and loss: ${who}</h2><p class="note">${periodLabel}. Company level, all long-term business.</p>`);
+    const ifrs = new Set(ks.map(k => yearOf(k) >= 2024));
+    if (ifrs.size > 1) { c2.insertAdjacentHTML('beforeend', '<p class="note">IRA changed the profit and loss layout to IFRS 17 in 2024, so a bridge cannot add years on both sides of the change. Choose years up to 2023, or from 2024.</p>'); return; }
+    const isI = [...ifrs][0], b = sumBridges(plBridge, scope, ks);
+    if (!b) { c2.insertAdjacentHTML('beforeend', '<p class="note">No profit and loss account for this period.</p>'); return; }
+    const s2 = document.createElementNS(NS, 'svg'); c2.appendChild(s2);
+    const steps = plSteps(b, isI), gpT = sumBridges((s, k) => revBridge(s, 'total', k), scope, ks)?.gp;
+    waterfall(s2, steps, gpT, 'gross premium');
+    const m = scope ? sumBridges(plBridge, null, ks) : null, mg = scope ? sumBridges((s, k) => revBridge(s, 'total', k), null, ks)?.gp : null;
+    let run = 0; const rows = steps.map(st => [st.label, st.t === 'total' ? (run = st.v) : st.t === 'sub' ? run : (run += st.v, st.v)]);
+    c2.insertAdjacentHTML('beforeend', `<p class="note">Profit before tax <b>${per100(gpT ? b.pbt / gpT : null)}</b> per KSh 100 of gross premium${m && mg ? ` (market ${per100(m.pbt / mg)})` : ''}. ${isI ? 'IFRS 17 layout: insurance revenue replaces premium, and the finance expense is the interest credited to policyholders.' : 'Pre-2024 layout: the revenue-account surplus is the starting point.'} "Other items" closes the bridge to the printed profit.</p>
+      <details><summary>Table view</summary>${table(['Step', 'KSh', 'Per KSh 100 gross premium'], rows.map(([l, v]) => [l, bns(v), per100(gpT ? v / gpT : null)]))}</details>`);
+  }
+  window.KLI = {
+    ready: () => ready,
+    periodsForYears: (y0, y1) => fullYears().filter(y => y >= y0 && y <= y1).map(q4),
+    latest: () => P.length - 1, label: k => label(P[k]),
+    streams: () => INS.map(s => [s, name(s)]),
+    bridgeCards: (grid, scope, ks, lab) => bridgeCards(grid, L.streams[scope] ? scope : null, ks, lab),
+  };
 
   // ---------- state ----------
   const st = () => ({ k: +$('lp').value, y0: +$('ly0').value, y1: +$('ly1').value, co: $('lco').value, mk: $('lm').value });
@@ -251,6 +372,15 @@
       [pbt == null ? 'n/a' : `KSh ${bn(pbt)}`, `Profit before tax${+P[k].slice(0, 4) >= 2024 ? ' (IFRS 17)' : ''}`],
     ].map(([b, s]) => `<div class="tile"><b>${b}</b><span>${s}</span></div>`).join('');
 
+    { const { y0, y1 } = st(), cum = bmode === 'c';
+      const w = card(g, 'wide', `<h2>Profit bridges: where ${name(co)}'s premium goes</h2>
+        <label style="max-width:320px">Period<select id="bmode"><option value="s">Snapshot: ${label(P[k])}${P[k].endsWith('Q4') ? '' : ' (year to date)'}</option><option value="c">Cumulative: ${y0}–${y1} full years</option></select></label>
+        <div class="grid" style="margin-top:12px"></div>`);
+      w.querySelector('#bmode').value = bmode;
+      w.querySelector('#bmode').onchange = e => { bmode = e.target.value; drawProfile(); };
+      const ks = cum ? fullYears().filter(y => y >= y0 && y <= y1).map(q4) : [k];
+      bridgeCards(w.querySelector('.grid'), co, ks, cum ? `Full years ${y0}–${y1} added together` : `${label(P[k])}${P[k].endsWith('Q4') ? ', full year' : ', year to date'}`); }
+
     const lines = LINES.filter(l => l.id !== 'total');
     const rows = lines.map(l => {
       const p = gp(co, l.id, k) || 0, pl = ly >= 0 ? gp(co, l.id, ly) : null, rl = ranked(l.id, k), ri = rl.indexOf(co) + 1;
@@ -308,6 +438,7 @@
     if (L.streams[DEFAULT_CO]) $('lco').value = DEFAULT_CO;
     ['lp', 'ly0', 'ly1', 'lco', 'lm'].forEach(id => $(id).addEventListener('change', () => active !== 'overview' && DRAW[active]()));
     ready = true;
+    if (window.renderOverview) window.renderOverview();
     const h = (location.hash || '').slice(1); if (DRAW[h]) show(h);
     window.addEventListener('hashchange', () => { const t = location.hash.slice(1); if (DRAW[t] || t === 'overview') show(t); });
   }).catch(e => { $('claimsGrid').textContent = 'Could not load data/lines.json: ' + e; });

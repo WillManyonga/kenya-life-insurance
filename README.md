@@ -41,11 +41,13 @@ The explorer has five tabs:
 
 | Tab | What it shows |
 |---|---|
-| Overview | Market tiles; the Deloitte views (premium CAGR against margin, top 10 by premium); market premium; one company |
+| Overview | Market tiles, or one insurer's when the Insurer filter is set; profit bridges (waterfalls) for the To year, the From–To years added together, or the latest quarter; the Deloitte views (premium CAGR against margin, top 10 by premium); premium by year; one company |
 | Claims by business line | Loss ratio, paid-out ratio or cost ratio for individual life, group life, credit life, annuities, pensions and investments: market and highlighted insurer over time, a snapshot for any quarter (year to date) against the same period a year earlier, cumulative ratios for any window, the 12 biggest writers of each line against the line's average and 100 (in the style of Kwanusu's class charts), and a heatmap of the largest insurers against the market |
 | Market share | Share of gross premium and rank by year, the highlighted insurer's share of each business line, and the biggest share movers |
 | Business mix | The market's premium split by business type each year, and each large insurer's mix |
-| Insurer profile | A one-page card for any insurer and quarter: premium, rank, share, growth, ratios against the market, life fund, profit, what it writes by line, and a peer table |
+| Insurer profile | A one-page card for any insurer and quarter: premium, rank, share, growth, ratios against the market, life fund, profit, profit bridges for the snapshot quarter or the cumulative years, what it writes by line, and a peer table |
+
+**Profit bridges.** Two waterfalls, built insurer by insurer and then summed. The revenue-account bridge works for any business line: net premium and fees, less benefits, net commission and management expenses, gives the underwriting result; add net investment income; the increase in the life fund is the balancing step to the surplus IRA prints as transferred to profit and loss. The profit-and-loss bridge is company level and follows IRA's layout: before 2024 it starts from the revenue-account surplus; from 2024 it follows IFRS 17 (insurance revenue, service expense, reinsurance, investment income less insurance finance expense). An "other items" step closes each bridge to the printed profit, and years either side of 2024 are not added together. Where IRA printed no investment income on a large life fund (e.g. SanlamAllianz Life, H1 2026), the page says so.
 
 **Definitions:** all figures come from IRA's class revenue accounts (KSh thousands, year to date). Every ratio is a sum over a sum, so a cumulative ratio weights the larger years more. Sanlam Allianz Life is highlighted by default.
 
