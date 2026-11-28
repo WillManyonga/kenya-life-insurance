@@ -221,3 +221,48 @@ year,source,serial,name,type,segment,classes,company_id,stream_id
 2024,"IRA annual report 2024, directory of insurance and reinsurance companies",54,Star Discover Life Insurance Limited,long_term,life,,star_discover_life,star_discover_life
 2024,"IRA annual report 2024, directory of insurance and reinsurance companies",58,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance,kenyan_alliance
 2024,"IRA annual report 2024, directory of insurance and reinsurance companies",59,The Monarch Insurance Company Limited,composite,life,,monarch,monarch
+2025,IRA licence list 2025 (Insurance Act s.184),1,ABSA Life Assurance Kenya Limited,long_term,life,,absa_life,absa_life
+2025,IRA licence list 2025 (Insurance Act s.184),2,APA Life Assurance Limited,long_term,life,,apa_life,apa_life
+2025,IRA licence list 2025 (Insurance Act s.184),3,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life,britam_life
+2025,IRA licence list 2025 (Insurance Act s.184),4,Cannon Life Assurance (K) Limited,long_term,life,,cannon_life,cannon_life
+2025,IRA licence list 2025 (Insurance Act s.184),5,Capex Life Assurance Company Limited,long_term,life,,capex_life,capex_life
+2025,IRA licence list 2025 (Insurance Act s.184),6,CIC Life Assurance Limited,long_term,life,,cic_life,cic_life
+2025,IRA licence list 2025 (Insurance Act s.184),7,Equity Life Assurance (Kenya) Limited,long_term,life,,equity_life,equity_life
+2025,IRA licence list 2025 (Insurance Act s.184),8,GA Life Assurance Limited,long_term,life,,ga_life,ga_life
+2025,IRA licence list 2025 (Insurance Act s.184),9,Geminia Life Insurance Company Limited,long_term,life,,geminia_life,geminia_life
+2025,IRA licence list 2025 (Insurance Act s.184),10,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life,icea_lion_life
+2025,IRA licence list 2025 (Insurance Act s.184),11,Jubilee Life Insurance Limited,long_term,life,,jubilee_life,jubilee_life
+2025,IRA licence list 2025 (Insurance Act s.184),12,Kenindia Assurance Company Limited,composite,life,,kenindia,kenindia
+2025,IRA licence list 2025 (Insurance Act s.184),13,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life,kenya_orient_life
+2025,IRA licence list 2025 (Insurance Act s.184),14,KUSCCO Mutual Assurance Limited,long_term,life,,kuscco_mutual,kuscco_mutual
+2025,IRA licence list 2025 (Insurance Act s.184),15,Liberty Life Assurance Kenya Limited,long_term,life,,liberty_life,liberty_life
+2025,IRA licence list 2025 (Insurance Act s.184),16,Madison Life Assurance Kenya Limited,long_term,life,,madison_life,madison_life
+2025,IRA licence list 2025 (Insurance Act s.184),17,Old Mutual Life Assurance Kenya Limited,long_term,life,,old_mutual_life_kenya,old_mutual_life
+2025,IRA licence list 2025 (Insurance Act s.184),18,Pioneer Assurance Company Limited,long_term,life,,pioneer,pioneer
+2025,IRA licence list 2025 (Insurance Act s.184),19,Prudential Life Assurance Kenya Limited,long_term,life,,prudential_life,prudential_life
+2025,IRA licence list 2025 (Insurance Act s.184),20,Sanlam Life Insurance Limited,long_term,life,,sanlam_life,sanlam_life
+2025,IRA licence list 2025 (Insurance Act s.184),21,Star Discover Life Insurance Limited,long_term,life,,star_discover_life,star_discover_life
+2025,IRA licence list 2025 (Insurance Act s.184),22,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance,kenyan_alliance
+2025,IRA licence list 2025 (Insurance Act s.184),23,The Monarch Insurance Company Limited,composite,life,,monarch,monarch
+2026,IRA licence list 2026 (Insurance Act s.184),1,ABSA Life Assurance Kenya Limited,long_term,life,"31, 34, 35",absa_life,absa_life
+2026,IRA licence list 2026 (Insurance Act s.184),2,APA Life Assurance Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",apa_life,apa_life
+2026,IRA licence list 2026 (Insurance Act s.184),3,Britam Life Assurance Company (K) Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 36, 37a, 37b",britam_life,britam_life
+2026,IRA licence list 2026 (Insurance Act s.184),4,Cannon Life Assurance (K) Limited,long_term,life,"31, 34, 35, 37a, 37b",cannon_life,cannon_life
+2026,IRA licence list 2026 (Insurance Act s.184),5,Capex Life Assurance Company Limited,long_term,life,"31, 32, 33a, 33b, 34, 35",capex_life,capex_life
+2026,IRA licence list 2026 (Insurance Act s.184),6,CIC Life Assurance Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",cic_life,cic_life
+2026,IRA licence list 2026 (Insurance Act s.184),7,Equity Life Assurance (Kenya) Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 36, 37a, 37b",equity_life,equity_life
+2026,IRA licence list 2026 (Insurance Act s.184),8,GA Life Assurance Limited,long_term,life,"31, 32, 33a, 33b, 34, 35",ga_life,ga_life
+2026,IRA licence list 2026 (Insurance Act s.184),9,Geminia Life Insurance Company Limited,long_term,life,"31, 33a, 33b, 34, 35, 37a",geminia_life,geminia_life
+2026,IRA licence list 2026 (Insurance Act s.184),10,ICEA LION Life Assurance Company Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",icea_lion_life,icea_lion_life
+2026,IRA licence list 2026 (Insurance Act s.184),11,Jubilee Life Insurance Limited,long_term,life,"31, 32, 33a, 33b, 34, 35",jubilee_life,jubilee_life
+2026,IRA licence list 2026 (Insurance Act s.184),12,Kenindia Assurance Company Limited,composite,life,"31, 32, 33a, 33b, 34, 35, 37b",kenindia,kenindia
+2026,IRA licence list 2026 (Insurance Act s.184),13,Kenya Orient Life Assurance Limited,long_term,life,"31, 32, 33a, 33b, 34, 35",kenya_orient_life,kenya_orient_life
+2026,IRA licence list 2026 (Insurance Act s.184),14,Liberty Life Assurance Kenya Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",liberty_life,liberty_life
+2026,IRA licence list 2026 (Insurance Act s.184),15,Madison Life Assurance Kenya Limited,long_term,life,"31, 33a, 33b, 34, 35, 37a, 37b",madison_life,madison_life
+2026,IRA licence list 2026 (Insurance Act s.184),16,Old Mutual Life Assurance Kenya Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",old_mutual_life_kenya,old_mutual_life
+2026,IRA licence list 2026 (Insurance Act s.184),17,Pioneer Assurance Company Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",pioneer,pioneer
+2026,IRA licence list 2026 (Insurance Act s.184),18,Prudential Life Assurance Kenya Limited,long_term,life,"31, 33a, 33b, 34, 35, 37a, 37b",prudential_life,prudential_life
+2026,IRA licence list 2026 (Insurance Act s.184),19,Sanlam Allianz Life Insurance (Kenya) Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 36, 37a, 37b",sanlam_life,sanlam_life
+2026,IRA licence list 2026 (Insurance Act s.184),20,Star Discover Life Insurance Limited,long_term,life,"31, 32, 33a, 33b, 34, 35, 37a, 37b",star_discover_life,star_discover_life
+2026,IRA licence list 2026 (Insurance Act s.184),21,The Kenyan Alliance Insurance Company Limited,composite,life,"31, 32, 33a, 33b, 34, 35, 37b",kenyan_alliance,kenyan_alliance
+2026,IRA licence list 2026 (Insurance Act s.184),22,The Monarch Insurance Company Limited,composite,life,"31, 32, 33a, 33b, 34, 35, 37a",monarch,monarch

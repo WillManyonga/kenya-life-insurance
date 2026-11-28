@@ -6,6 +6,7 @@
   const wait = f => (window.KLI && KLI.h ? f() : setTimeout(() => wait(f), 50));
   wait(() => {
     const H = KLI.h, { card, legend, lineChart, stack100, divColor } = H;
+    const fmtK = v => v == null || !isFinite(v) ? 'n/a' : Math.abs(v) >= 1e6 ? (v / 1e6).toFixed(1) + 'm' : Math.abs(v) >= 1e3 ? Math.round(v / 1e3) + 'k' : String(Math.round(v));
     const fmtN = v => v == null || !isFinite(v) ? 'n/a' : Math.round(v).toLocaleString('en-GB');
     const pct = (v, d = 1) => v == null || !isFinite(v) ? 'n/a' : (v * 100).toFixed(d) + '%';
     const kshAmt = v => v == null ? 'n/a' : 'KSh ' + H.bn(v);   // amounts are KSh thousands, as in the accounts
@@ -52,7 +53,7 @@
         ${legend([[H.css('--series-1'), 'Market'], [H.css('--text-muted'), 'Median insurer'], [H.css('--series-2'), nm(co)]])}`);
       const s1 = document.createElementNS(H.NS, 'svg'); c1.appendChild(s1);
       lineChart(s1, xs, [
-        { name: 'Market', values: P.map((_, i) => ratio(mk(b, 'number', 'p', i), mk(b, 'number', 'a', i)) * 100), color: H.css('--series-1'), label: 'Market' },
+        { name: 'Market', values: P.map((_, i) => { const r = ratio(mk(b, 'number', 'p', i), mk(b, 'number', 'a', i)); return r == null ? null : r * 100; }), color: H.css('--series-1'), label: 'Market' },
         { name: 'Median insurer', values: P.map((_, i) => { const m = medianRatio(b, i); return m == null ? null : m * 100; }), color: H.css('--text-muted'), dash: '4 3', label: 'Median' },
         { name: nm(co), values: P.map((_, i) => { const r = ratio(sv(co, b, 'number', 'p', i), sv(co, b, 'number', 'a', i)); return r == null ? null : r * 100; }), color: H.css('--series-2'), label: H.short(nm(co)) },
       ], { w: 1150, h: 260, fmt: v => v == null || !isFinite(v) ? 'n/a' : v.toFixed(0) + '%', r: 120 });
@@ -61,10 +62,10 @@
       // 2. the queue: new claims and claims still open (two charts, one scale each)
       const c2 = card(g, '', `<h2>Claims reported in the quarter</h2>`);
       const s2 = document.createElementNS(H.NS, 'svg'); c2.appendChild(s2);
-      lineChart(s2, xs, [{ name: 'Reported', values: P.map((_, i) => mk(b, 'number', 'i', i)), color: H.css('--series-1'), label: '' }], { h: 200, fmt: fmtN, r: 20 });
+      lineChart(s2, xs, [{ name: 'Reported', values: P.map((_, i) => mk(b, 'number', 'i', i)), color: H.css('--series-1'), label: '' }], { h: 200, fmt: fmtK, r: 20 });
       const c3 = card(g, '', `<h2>Claims still open at the end of the quarter</h2>`);
       const s3 = document.createElementNS(H.NS, 'svg'); c3.appendChild(s3);
-      lineChart(s3, xs, [{ name: 'Open', values: P.map((_, i) => mk(b, 'number', 'cl', i)), color: H.css('--series-2'), label: '' }], { h: 200, fmt: fmtN, r: 20 });
+      lineChart(s3, xs, [{ name: 'Open', values: P.map((_, i) => mk(b, 'number', 'cl', i)), color: H.css('--series-2'), label: '' }], { h: 200, fmt: fmtK, r: 20 });
 
       // 3. delays: the queue in quarters of payments
       const c4 = card(g, '', `<h2>Delays: quarters needed to clear the open claims</h2>${legend([[H.css('--series-1'), 'Market'], [H.css('--series-2'), nm(co)]])}`);
@@ -72,7 +73,7 @@
       lineChart(s4, xs, [
         { name: 'Market', values: P.map((_, i) => { const p = mk(b, 'number', 'p', i); return p ? mk(b, 'number', 'cl', i) / p : null; }), color: H.css('--series-1'), label: 'Market' },
         { name: nm(co), values: P.map((_, i) => { const p = sv(co, b, 'number', 'p', i); return p ? sv(co, b, 'number', 'cl', i) / p : null; }), color: H.css('--series-2'), label: H.short(nm(co)) },
-      ], { h: 200, fmt: v => v == null || !isFinite(v) ? 'n/a' : v.toFixed(1), r: 90 });
+      ], { h: 200, fmt: v => v == null || !isFinite(v) ? 'n/a' : v.toFixed(2), r: 90 });
       c4.insertAdjacentHTML('beforeend', '<p class="note">Claims open at the quarter end ÷ claims paid in the quarter. IRA does not publish how long each claim has been open, so this is the best measure of delay its tables allow.</p>');
 
       // 4. amounts, from Q4 2022
@@ -88,7 +89,7 @@
       } else c5.insertAdjacentHTML('beforeend', '<p class="note">IRA prints claim amounts from Q4 2022 only.</p>');
 
       // 5. every insurer's year, against the median (pooled over the year's quarters)
-      const ks = yearKs(y), all = Object.keys(C.streams).map(s => {
+      const ks = yearKs(y).filter(kk => mk(b, 'number', 'a', kk) != null), all = Object.keys(C.streams).map(s => {
         const open = ks.reduce((a, kk) => a + (sv(s, b, 'number', 'a', kk) || 0), 0);
         return { s, r: pooled(s, b, ks), dec: (() => { let n = 0, d = 0; ks.forEach(kk => { const a = sv(s, b, 'number', 'a', kk); if (a) { n += declinedOf(s, b, kk); d += a; } }); return d ? n / d : null; })(),
           open, avg: open / Math.max(1, ks.filter(kk => sv(s, b, 'number', 'a', kk) != null).length), last: sv(s, b, 'number', 'cl', ks.at(-1)) };
@@ -131,10 +132,11 @@
     function initClaims() {
       const P = C.periods;
       $('cb').innerHTML = C.businesses.map(b => `<option value="${b}">${BUS[b] || b}</option>`).join('');
-      $('cq').innerHTML = P.map((p, i) => `<option value="${i}">${qlab(p)}</option>`).reverse().join('');
-      const yrs = [...new Set(P.map(p => +p.slice(0, 4)))];
+      const pub = new Set(C.published || P);
+      $('cq').innerHTML = P.map((p, i) => pub.has(p) ? `<option value="${i}">${qlab(p)}</option>` : '').reverse().join('');
+      const yrs = [...new Set(P.filter(p => pub.has(p)).map(p => +p.slice(0, 4)))];
       $('cy').innerHTML = yrs.map(y => `<option>${y}</option>`).reverse().join('');
-      const full = yrs.filter(y => yearKs(y).length === 4);
+      const full = yrs.filter(y => yearKs(y).filter(k => pub.has(P[k])).length === 4);
       cState.k = P.length - 1; cState.y = full.length ? full.at(-1) : yrs.at(-1);
       const ins = Object.keys(C.streams).sort((a, b) => nm(a).localeCompare(nm(b)));
       $('cco').innerHTML = ins.map(s => `<option value="${s}">${nm(s)}</option>`).join('');
@@ -145,6 +147,9 @@
 
     // ================================================================ registered insurers
     let R = null, rState = { y: null, t: 'all', q: '' };
+    const CLASS = { '31': 'Life assurance', '32': 'Annuities', '33a': 'Personal pension', '33b': 'Deposit administration', '34': 'Group life', '35': 'Group credit',
+      '36': 'Permanent health', '37a': 'Unit-linked investments', '37b': 'Non-linked investments' };
+    const classes = c => c ? c.split(', ').map(k => `<span title="${CLASS[k] || ''}">${k}</span>`).join(', ') : '';
     const TYPE = { long_term: 'Long-term', composite: 'Composite (long-term and general)', general: 'General', reinsurer: 'Reinsurer', microinsurer: 'Microinsurer', liaison_office: 'Liaison office' };
     function drawRegistry() {
       const g = $('regGrid'), tiles = $('regTiles'); g.innerHTML = ''; tiles.innerHTML = '';
@@ -194,8 +199,8 @@
       const status = r => isNew(r) ? `<span class="delta-good">New since ${prev}</span>` : leaves(r) ? `<span class="delta-bad">Not listed in ${next}</span>` : '';
       const c2 = card(g, 'wide tl', `<h2>Life companies registered in ${y}</h2>` +
         H.table(['Company', 'Type', 'In the explorer as', 'Change', ...(rows.some(r => r.c) ? ['Authorised classes'] : [])],
-          rows.map(r => [r.n, TYPE[r.t] || r.t, r.id ? (R.names[r.id] || r.id) : '<span class="note">not matched</span>', status(r), ...(rows.some(x => x.c) ? [r.c] : [])])));
-      c2.insertAdjacentHTML('beforeend', `<p class="note">Source: ${[...new Set(cur.map(r => r.src))].join('; ')}. A company is matched to the explorer by the same name rules as the accounts, so renamed companies appear under their current name.</p>`);
+          rows.map(r => [r.n, TYPE[r.t] || r.t, r.id ? (R.names[r.id] || r.id) : '<span class="note">not matched</span>', status(r), ...(rows.some(x => x.c) ? [classes(r.c)] : [])])));
+      c2.insertAdjacentHTML('beforeend', `<p class="note">Source: ${[...new Set(cur.map(r => r.src))].join('; ')}. A company is matched to the explorer by the same name rules as the accounts, so renamed companies appear under their current name.${rows.some(x => x.c) ? ' Classes (from the licence lists): ' + Object.entries(CLASS).map(([k, v]) => `${k} ${v.toLowerCase()}`).join(', ') + '.' : ''}</p>`);
 
       // who joined and left, every year
       const ch = [];

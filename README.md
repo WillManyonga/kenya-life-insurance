@@ -19,6 +19,8 @@ none of its code is copied here; the pipeline is written fresh for the life tabl
 | `data/processed/life_annual_by_company.csv` | The same per legal reporting entity |
 | `data/processed/life_panel.csv.gz` | Every life value IRA printed, on stable company ids, with single-quarter figures and how each was derived |
 | `data/processed/life_long.csv.gz` | The raw extraction, exactly as printed, with source file, sheet and row |
+| `data/processed/claims_settlement.csv` | IRA's quarterly claims settlement statistics for long-term business: each insurer's claims open at the start, reported, paid, declined, closed as no claim and still open, in numbers and (from Q4 2022) amounts |
+| `data/processed/registered_insurers.csv` | Every life company IRA registered, by year (2015–2026, no 2019 list), with its type and, from 2026, its authorised classes |
 | `validation/SUMMARY.md` | What was checked, what passed, and which tables were found each quarter |
 | `site/index.html` | The explorer page, published to GitHub Pages |
 
@@ -46,6 +48,13 @@ The explorer has five tabs:
 | Market share | Share of gross premium and rank by year, the highlighted insurer's share of each business line, and the biggest share movers |
 | Business mix | The market's premium split by business type each year, and each large insurer's mix |
 | Insurer profile | A one-page card for any insurer and quarter: premium, rank, share, growth, ratios against the market, life fund, profit, profit bridges for the snapshot quarter or the cumulative years, what it writes by line, and a peer table |
+
+| Claims settlement | IRA's claims settlement statistics: the market's and the median insurer's payment ratio each quarter, claims reported and still open, delays (quarters needed to clear the open claims), average claim paid, every insurer's payment ratio for a chosen year against the median, and where each insurer's open claims went in a chosen quarter |
+| Registered insurers | The life companies IRA registered each year, with a year and type filter and a search; the count by year against IRA's printed count; entries and exits between years; and each company's authorised classes where the licence list gives them |
+
+**Claims settlement.** IRA publishes each insurer's claims movement every quarter in a separate workbook: claims open at the start, plus claims reported and revived, equals claims paid, declined, closed as no claim and still open at the end. The payment ratio is IRA's: claims paid in the quarter ÷ claims open in the quarter. Over a year it is pooled quarter by quarter. Insurers are compared only where they had at least 50 claims open. IRA did not publish claims workbooks for Q1–Q3 2021 or Q1–Q2 2022, so those quarters are gaps. A count far above the same insurer's usual quarters (for example Kenyan Alliance's 774,075 claims paid in Q1 2023, against about 1,100) is kept in the CSV but flagged and left off the site; `validation/claims_checks.csv` lists every flag and check. The reading of IRA's column headings follows Maiden Peter's [ira-kenya-data](https://github.com/maidenpeter/ira-kenya-data).
+
+**Registered insurers.** From the "Directory of insurance and reinsurance companies" appendix in each IRA annual report (2015–2024; there is no 2019 report, and the 2023 directory is printed as a picture, so it was read by eye and is kept in `reference/registry_manual.csv`), and from IRA's section 184 licence lists for 2025 and 2026. IRA's own count of licensed insurers each year is kept as a check (`validation/registry_counts.csv`). Composite insurers (long-term and general) count as life companies.
 
 **Profit bridges.** Two waterfalls, built insurer by insurer and then summed. The revenue-account bridge works for any business line: net premium and fees, less benefits, net commission and management expenses, gives the underwriting result; add net investment income; the increase in the life fund is the balancing step to the surplus IRA prints as transferred to profit and loss. The profit-and-loss bridge is company level and follows IRA's layout: before 2024 it starts from the revenue-account surplus; from 2024 it follows IFRS 17 (insurance revenue, service expense, reinsurance, investment income less insurance finance expense). An "other items" step closes each bridge to the printed profit, and years either side of 2024 are not added together. Where IRA printed no investment income on a large life fund (e.g. SanlamAllianz Life, H1 2026), the page says so.
 
@@ -84,6 +93,14 @@ pip install -r requirements.txt
 python -m pytest -q tests
 ```
 
+## Life only, for now: what `config/scope.csv` controls
+
+Every source is read in full: the claims workbooks' general (liability and non-liability) tables as
+well as long-term, and the register's general insurers, reinsurers and microinsurers as well as
+life companies. What is written to `data/processed/` and the site is limited by `config/scope.csv`,
+which publishes the `life` segment only. To add general business or reinsurers later, set `publish`
+to `yes` on that row; the extractors, checks and file layout already carry a `segment` column.
+
 ## Following a company through its name changes
 
 `reference/name_patterns.csv` maps every spelling IRA prints to a company id.
@@ -116,6 +133,10 @@ Built from all 36 IRA quarterly workbooks from Q4 2016 to Q2 2026, plus the 2017
 - **Classes:** all 1,020 class splits add to the company total.
 
 Insurers' gross premium by year (KSh bn): 2016 73.1 · 2017 82.8 · 2018 87.3 · 2019 97.7 · 2020 102.1 · 2021 123.7 · 2022 140.8 · 2023 170.0 · 2024 191.2 · 2025 235.4.
+
+Claims settlement: 33 IRA workbooks, Q1 2017 to Q2 2026 (none were published for Q1–Q3 2021 or Q1–Q2 2022). Long-term tables: 47 of 48 printed industry totals reconcile; 772 of 822 insurer movements balance (the rest are kept as printed and listed); every printed name is mapped.
+
+Register: 2015–2026 except 2019. Life companies found against IRA's printed count of long-term insurers: equal in 2016, 2021–2024; within one elsewhere.
 
 Still open:
 - 2015–2016 from the annual report PDFs.

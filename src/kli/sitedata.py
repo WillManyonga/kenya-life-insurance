@@ -32,10 +32,15 @@ def claims():
     df = pd.read_csv(p)
     if df.empty:
         return None
-    periods = sorted(df.period.unique(), key=lambda s: (int(s[:4]), int(s[5])))
+    if "suspect" in df:
+        df = df[df.suspect.fillna("") == ""]   # flagged spikes stay in the CSV, not on the site
+    have = sorted(df.period.unique(), key=lambda s: (int(s[:4]), int(s[5])))
+    # every quarter from the first to the last, so the quarters IRA did not publish show as gaps
+    y0, q0, y1, q1 = int(have[0][:4]), int(have[0][5]), int(have[-1][:4]), int(have[-1][5])
+    periods = [f"{y}Q{q}" for y in range(y0, y1 + 1) for q in range(1, 5) if (y, q) >= (y0, q0) and (y, q) <= (y1, q1)]
     pidx = {p: i for i, p in enumerate(periods)}
     n = len(periods)
-    out = {"periods": periods, "businesses": sorted(df.business.unique()), "market": {}, "streams": {}, "names": names()}
+    out = {"periods": periods, "published": have, "businesses": sorted(df.business.unique()), "market": {}, "streams": {}, "names": names()}
     for (b, u), g in df.groupby(["business", "unit"]):
         m = g.groupby("period")[list(CODES)].sum(min_count=1)
         out["market"].setdefault(b, {})[u] = {CODES[f]: [None if pd.isna(m[f].get(p)) else round(float(m[f].get(p)))

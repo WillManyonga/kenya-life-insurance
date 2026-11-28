@@ -45,4 +45,12 @@ year,type,found,printed,check
 2024,long_term,20,20,pass
 2024,microinsurer,,5,
 2024,reinsurer,5,5,pass
-2026,general,16,,
+2025,composite,3,,
+2025,general,36,,
+2025,long_term,20,,
+2025,reinsurer,5,,
+2026,composite,3,,
+2026,general,35,,
+2026,long_term,19,,
+2026,microinsurer,4,,
+2026,reinsurer,5,,

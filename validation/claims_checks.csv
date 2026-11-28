@@ -3471,3 +3471,124 @@ period,business,unit,check,result,detail
 2026Q2,long_term,number,total_closing,pass,rows 40974 vs printed 40974
 2026Q2,long_term,amount,total_paid,pass,rows 34572480 vs printed 34572480
 2026Q2,long_term,amount,total_closing,pass,rows 11466836 vs printed 11466836
+2026Q2,long_term,number,spike,flagged,GA LIFE ASSURANCE LIMITED: paid 13032 against a usual 1118
+2026Q2,long_term,number,spike,flagged,GA LIFE ASSURANCE LIMITED: intimated 13029 against a usual 1118
+2023Q1,long_term,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: paid 774075 against a usual 1136
+2023Q1,long_term,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: intimated 774123 against a usual 1138
+2025Q4,long_term,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-LIFE: paid 47636 against a usual 62
+2025Q4,long_term,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-LIFE: intimated 48063 against a usual 60
+2017Q4,long_term,number,spike,flagged,PRUDENTIAL LIFE ASSURANCE: closing 3850 against a usual 456
+2018Q3,long_term,number,spike,flagged,METROPOLITAN CANNON INSURANCE: paid 2246 against a usual 204
+2018Q3,long_term,number,spike,flagged,METROPOLITAN CANNON INSURANCE: intimated 2645 against a usual 330
+2025Q4,long_term,number,spike,flagged,APA LIFE ASSURANCE LIMITED: paid 21274 against a usual 1043
+2025Q4,long_term,number,spike,flagged,APA LIFE ASSURANCE LIMITED: intimated 20331 against a usual 1073
+2025Q4,long_term,number,spike,flagged,GEMINIA LIFE INSURANCE COMPANY LIMITED: paid 9917 against a usual 62
+2025Q4,long_term,number,spike,flagged,GEMINIA LIFE INSURANCE COMPANY LIMITED: intimated 9991 against a usual 52
+2017Q3,general_liability,number,spike,flagged,UAP INSURANCE COMPANY LIMITED: paid 3932 against a usual 278
+2017Q3,general_liability,number,spike,flagged,UAP INSURANCE COMPANY LIMITED: intimated 2240 against a usual 234
+2020Q2,general_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: intimated 2452 against a usual 284
+2023Q2,general_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: intimated 5896 against a usual 284
+2025Q2,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: paid 1267563 against a usual 126238
+2025Q3,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: paid 1824105 against a usual 126238
+2025Q4,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: paid 1640217 against a usual 126238
+2026Q1,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: paid 1269765 against a usual 126238
+2026Q2,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: paid 2263606 against a usual 126238
+2025Q1,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: intimated 1671117 against a usual 130604
+2025Q2,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: intimated 1686469 against a usual 130604
+2025Q3,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: intimated 1813217 against a usual 130604
+2025Q4,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: intimated 1549188 against a usual 130604
+2026Q1,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: intimated 1682000 against a usual 130604
+2026Q2,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: intimated 2146690 against a usual 130604
+2025Q1,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: closing 1083479 against a usual 38478
+2025Q2,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: closing 1501915 against a usual 38478
+2025Q3,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: closing 1490681 against a usual 38478
+2025Q4,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: closing 1399120 against a usual 38478
+2026Q1,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: closing 1810942 against a usual 38478
+2026Q2,general_non_liability,number,spike,flagged,AAR INSURANCE KENYA LIMITED: closing 1693539 against a usual 38478
+2021Q4,general_non_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: closing 65974 against a usual 4034
+2022Q3,general_non_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: closing 76988 against a usual 4034
+2022Q4,general_non_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: closing 60715 against a usual 4034
+2023Q1,general_non_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: closing 61264 against a usual 4034
+2023Q2,general_non_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE: closing 62134 against a usual 4034
+2017Q2,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: paid 59662 against a usual 2991
+2017Q3,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: paid 78403 against a usual 2991
+2017Q4,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: paid 72392 against a usual 2991
+2017Q2,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: intimated 57590 against a usual 2928
+2017Q3,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: intimated 76406 against a usual 2928
+2017Q4,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: intimated 95202 against a usual 2928
+2017Q2,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: closing 33009 against a usual 3932
+2017Q4,general_non_liability,number,spike,flagged,APA INSURANCE COMPANY LIMITED: closing 53822 against a usual 3932
+2019Q2,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: closing 8196 against a usual 716
+2019Q3,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: closing 8470 against a usual 716
+2019Q4,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: closing 8951 against a usual 716
+2020Q1,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: closing 9219 against a usual 716
+2020Q2,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: closing 6020 against a usual 716
+2020Q3,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY: closing 5950 against a usual 716
+2020Q2,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: paid 7229 against a usual 171
+2020Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: paid 2413 against a usual 171
+2021Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: paid 3626 against a usual 171
+2022Q3,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: paid 7850 against a usual 171
+2020Q1,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: intimated 5904 against a usual 220
+2020Q2,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: intimated 3973 against a usual 220
+2021Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: intimated 4161 against a usual 220
+2020Q1,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: closing 12796 against a usual 450
+2020Q2,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: closing 9540 against a usual 450
+2020Q3,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: closing 9602 against a usual 450
+2020Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: closing 8686 against a usual 450
+2021Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA: closing 11605 against a usual 450
+2021Q4,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: paid 34512 against a usual 364
+2022Q3,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: paid 34928 against a usual 364
+2022Q4,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: paid 25128 against a usual 364
+2023Q1,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: paid 12931 against a usual 364
+2023Q2,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: paid 14035 against a usual 364
+2021Q4,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: intimated 29819 against a usual 480
+2022Q3,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: intimated 36693 against a usual 480
+2022Q4,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: intimated 32378 against a usual 480
+2023Q1,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: intimated 15045 against a usual 480
+2023Q2,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: intimated 14994 against a usual 480
+2021Q4,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: closing 8126 against a usual 870
+2022Q3,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: closing 7921 against a usual 870
+2022Q4,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: closing 10264 against a usual 870
+2023Q1,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: closing 10782 against a usual 870
+2023Q2,general_non_liability,number,spike,flagged,MUA INSURANCE COMPANY: closing 10072 against a usual 870
+2023Q2,general_liability,number,spike,flagged,XPLICO INSURANCE COMPANY*: closing 4795 against a usual 0
+2023Q2,general_non_liability,number,spike,flagged,XPLICO INSURANCE COMPANY*: closing 2582 against a usual 0
+2026Q1,general_liability,number,spike,flagged,BRITAM GENERAL INSURANCE COMPANY (K) LTD: intimated 8070 against a usual 581
+2023Q3,general_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE COMPANY LIMITED-GENERAL: intimated 6480 against a usual 22
+2025Q4,general_liability,number,spike,flagged,THE KENYAN ALLIANCE INSURANCE COMPANY LIMITED-GENERAL: intimated 3124 against a usual 22
+2025Q2,general_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: paid 3036 against a usual 100
+2026Q2,general_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: paid 3201 against a usual 100
+2025Q4,general_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: paid 7296 against a usual 0
+2025Q4,general_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: intimated 7413 against a usual 0
+2025Q4,general_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: closing 3162 against a usual 0
+2026Q2,general_non_liability,number,spike,flagged,FIDELITY SHIELD INSURANCE COMPANY LIMITED: paid 78700 against a usual 3494
+2026Q2,general_non_liability,number,spike,flagged,FIDELITY SHIELD INSURANCE COMPANY LIMITED: intimated 84275 against a usual 5492
+2023Q4,general_non_liability,number,spike,flagged,STAR DISCOVER MICRO INSURANCE LIMITED: paid 24689 against a usual 1064
+2024Q2,general_non_liability,number,spike,flagged,STAR DISCOVER MICRO INSURANCE LIMITED: paid 24251 against a usual 1064
+2023Q4,general_non_liability,number,spike,flagged,STAR DISCOVER MICRO INSURANCE LIMITED: intimated 25045 against a usual 1014
+2024Q2,general_non_liability,number,spike,flagged,STAR DISCOVER MICRO INSURANCE LIMITED: intimated 24434 against a usual 1014
+2025Q2,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: paid 9642 against a usual 351
+2025Q4,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: paid 32431 against a usual 351
+2026Q2,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: paid 5422 against a usual 351
+2025Q2,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: intimated 9625 against a usual 1008
+2025Q4,general_non_liability,number,spike,flagged,THE MONARCH INSURANCE COMPANY LIMITED-GENERAL: intimated 9600 against a usual 1008
+2024Q3,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: paid 17158 against a usual 0
+2024Q4,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: paid 47297 against a usual 0
+2025Q1,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: paid 29766 against a usual 0
+2025Q4,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: paid 18003 against a usual 0
+2024Q3,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: intimated 38971 against a usual 0
+2024Q4,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: intimated 33179 against a usual 0
+2025Q1,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: intimated 34329 against a usual 0
+2025Q4,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: intimated 18181 against a usual 0
+2024Q3,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: closing 59855 against a usual 0
+2024Q4,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: closing 29466 against a usual 0
+2025Q1,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: closing 24469 against a usual 0
+2025Q4,general_non_liability,number,spike,flagged,TRIDENT INSURANCE COMPANY LIMITED: closing 6935 against a usual 0
+2025Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA LIMITED: paid 53323 against a usual 569
+2025Q4,general_non_liability,number,spike,flagged,TAKAFUL INSURANCE OF AFRICA LIMITED: intimated 47092 against a usual 383
+2026Q1,general_non_liability,number,spike,flagged,EQUITY HEALTH INSURANCE KENYA LIMITED: paid 14884 against a usual 212
+2026Q2,general_non_liability,number,spike,flagged,EQUITY HEALTH INSURANCE KENYA LIMITED: paid 37232 against a usual 212
+2026Q1,general_non_liability,number,spike,flagged,EQUITY HEALTH INSURANCE KENYA LIMITED: intimated 25085 against a usual 292
+2026Q2,general_non_liability,number,spike,flagged,EQUITY HEALTH INSURANCE KENYA LIMITED: intimated 33688 against a usual 292
+2026Q1,general_non_liability,number,spike,flagged,EQUITY HEALTH INSURANCE KENYA LIMITED: closing 10231 against a usual 80
+2026Q2,general_non_liability,number,spike,flagged,EQUITY HEALTH INSURANCE KENYA LIMITED: closing 6406 against a usual 80

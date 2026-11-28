@@ -29,7 +29,7 @@ from .common import CONFIG, PROCESSED, RAW, REF as REFERENCE, VALIDATION, load_r
 
 TYPES = [  # printed type -> standard type; the first match wins
     (r"liai?son", "liaison_office"), (r"re-?\s*insur", "reinsurer"), (r"micro", "microinsurer"),
-    (r"composite", "composite"), (r"long\s*-?\s*term|^life", "long_term"), (r"general", "general")]
+    (r"composite", "composite"), (r"long[\s_-]*term|^life", "long_term"), (r"general", "general")]
 SEGMENT = {"long_term": "life", "composite": "life", "general": "general", "microinsurer": "general",
            "reinsurer": "reinsurer", "liaison_office": "reinsurer"}
 TYPE_WORD = re.compile(r"^\(?(general|long|longterm|long-term|term|composite|reinsurance|re-insurance|reinsurer|micro|"
@@ -201,39 +201,110 @@ def printed_counts():
 
 
 # ---------------------------------------------------------------- section 184 licence lists
-SECTION = [(r"\bre-?insurers?\b", "reinsurer"), (r"micro\s*-?\s*insurers?", "microinsurer"),
-           (r"general insurers?", "general"), (r"long[\s-]*term insurers?|life insurers?", "long_term"),
-           (r"composite insurers?", "composite")]
-STOP = re.compile(r"insurance brokers|investigators|motor assessors|loss adjusters|medical insurance providers|risk managers|"
-                  r"surveyors|claims settling|bancassurance|^key\b|classes of insurance business key", re.I)
+SECTION = [(r"\bre-?insur(ers?|ance companies)\b", "reinsurer"), (r"micro\s*-?\s*insur", "microinsurer"),
+           (r"general insur", "general"), (r"long[\s-]*term|life\)? insur", "long_term"),
+           (r"composite insur", "composite")]
+STOP = re.compile(r"brokers|investigators|assessors|adjusters|medical insurance providers|risk managers|"
+                  r"surveyors|claims settling|bancassurance|agents", re.I)
+
+
+COMPANY = re.compile(r"\b(limited|ltd|company|insurance|assurance|reinsurance|microinsurance|mutual|corporation|plc)\b", re.I)
+INTERMEDIARY = re.compile(r"brokers?|agenc|assessors?|adjusters?|investigat|surveyors?|consultants?|risk manag|bancassurance", re.I)
+HEAD_WORD = re.compile(r"^(serial|no\.?|authori[sz]ed|classes?|of|insurance|business|companies|insurers?)$", re.I)
+CLASS_TOKEN = re.compile(r"^(\d{2}[a-z]?[,&]?)+$|^[\d,&\-–]+$")
+
+
+def licence_page(words):
+    """One page of a licence list, which IRA sets in two columns of tables. Returns
+    [(column x, top, kind, payload)] in reading order: kind 'head' (a table heading) or 'row'."""
+    lines = {}
+    for w in words:
+        lines.setdefault(round(w["top"] / 2.5), []).append(w)
+    serials = []
+    for ws in lines.values():
+        ws.sort(key=lambda w: w["x0"])
+        for i, w in enumerate(ws[:-1]):
+            nxt = ws[i + 1]
+            if re.fullmatch(r"\d{1,2}\.?", w["text"]) and nxt["x0"] - w["x1"] < 60 and re.match(r"[A-Z(]", nxt["text"]) \
+                    and not CLASS_TOKEN.match(nxt["text"]):
+                serials.append(w)
+    if not serials:
+        return []
+    xs = sorted(round(w["x0"]) for w in serials)
+    groups = [[xs[0]]]
+    for x in xs[1:]:
+        if x - groups[-1][-1] > 40:
+            groups.append([x])
+        else:
+            groups[-1].append(x)
+    cols = [g[0] for g in groups if len(g) >= 3]   # a real column has several serial numbers
+    if not cols:
+        return []
+    serials = [w for w in serials if any(abs(round(w["x0"]) - c) <= 40 for c in cols)]
+    bounds = [(c - 8, (cols[i + 1] - 8) if i + 1 < len(cols) else 1e9) for i, c in enumerate(cols)]
+    out = []
+    for lo, hi in bounds:
+        cw = [w for w in words if lo <= w["x0"] < hi]
+        key = min([w["top"] for w in cw if re.fullmatch(r"KEY:?", w["text"])] or [1e9])
+        cw = [w for w in cw if w["top"] < key - 1]
+        heads = []
+        for t in sorted({round(w["top"] / 2.5) for w in cw}):
+            ln = [w for w in cw if round(w["top"] / 2.5) == t]
+            txt = " ".join(w["text"] for w in sorted(ln, key=lambda w: w["x0"]))
+            caps = " ".join(w["text"] for w in sorted(ln, key=lambda w: w["x0"]) if w["text"].upper() == w["text"] and re.search(r"[A-Z]{3}", w["text"]))
+            kind = "stop" if STOP.search(caps) else next((k for rx, k in SECTION if re.search(rx, caps, re.I)), None)
+            if kind and not re.search(r"\d{2},", txt):
+                heads.append((min(w["top"] for w in ln), kind))
+        ss = sorted([w for w in serials if lo <= w["x0"] < hi and w["top"] < key - 1], key=lambda w: w["top"])
+        stops = sorted([h[0] for h in heads] + [key])
+        for h in heads:
+            out.append((lo, h[0], "head", h[1]))
+        for i, sw in enumerate(ss):
+            nxt = ss[i + 1]["top"] - 1 if i + 1 < len(ss) else 1e9
+            nxt = min([nxt] + [t - 1 for t in stops if t > sw["top"] + 1])
+            band = [w for w in cw if sw["top"] - 3 <= w["top"] < nxt and w["x0"] > sw["x1"] + 1]
+            name = [w for w in band if not CLASS_TOKEN.match(w["text"]) and not (w["top"] < sw["top"] - 1)]
+            cls = [w for w in band if CLASS_TOKEN.match(w["text"])]
+            if cls:   # the classes column starts at the first class number on the serial's line
+                cx = min(w["x0"] for w in cls)
+                name = [w for w in name if w["x0"] < cx - 2]
+            order = lambda ws: " ".join(w["text"] for w in sorted(ws, key=lambda w: (round(w["top"] / 2.5), w["x0"])))
+            nm = re.sub(r"\s+", " ", order(name)).strip()
+            if nm:
+                out.append((lo, sw["top"], "row", dict(serial=int(sw["text"].rstrip(".")), name=nm,
+                                                       classes=re.sub(r"\s+", " ", order(cls)).strip(" ,"))))
+    return sorted(out, key=lambda r: (r[0], r[1], r[2] != "head"))
 
 
 def licence_lists():
     out = []
     for path in sorted(glob.glob(os.path.join(RAW, "registry", "*.pdf"))):
         year = int(re.search(r"(20\d\d)", os.path.basename(path)).group(1))
+        texts = page_texts(path)
+        npages = len(texts)
         section, seen = "", set()
-        for line in "\n".join(page_texts(path)).splitlines():
-            s = line.strip()
-            if not s:
-                continue
-            if not re.match(r"\d", s):
-                hit = next((k for rx, k in SECTION if re.search(rx, s, re.I)), None)
-                if hit and len(s) < 120:
-                    section = hit
+        for p in range(1, npages + 1):
+            for _, _, kind, payload in licence_page(page_words(path, p)):
+                if kind == "head":
+                    section = "" if payload == "stop" else payload
                     continue
-                if STOP.search(s):
-                    section = ""
+                if not section or not COMPANY.search(payload["name"]) or INTERMEDIARY.search(payload["name"]):
                     continue
-            m = re.match(r"^(\d{1,3})\.?\s+(.+?)(?:\s{2,}|\s+(?=\d{2}\b))(\d{2}\b[\d\s,&\-–to]*)?$", s)
-            if section and m and re.search(r"[A-Za-z]{3}", m.group(2)):
-                key = (section, int(m.group(1)))
-                if key in seen:
+                k = (section, payload["serial"], payload["name"])
+                if k in seen:
                     continue
-                seen.add(key)
-                out.append(dict(year=year, source=f"IRA licence list {year} (Insurance Act s.184)", serial=int(m.group(1)),
-                                name=re.sub(r"\s+", " ", m.group(2)).strip(" ,"), type_raw=section,
-                                classes=re.sub(r"\s+", " ", (m.group(3) or "")).strip()))
+                seen.add(k)
+                out.append(dict(year=year, source=f"IRA licence list {year} (Insurance Act s.184)", type_raw=section, **payload))
+            # the insurers' tables end with the key to the classes of business; intermediaries follow
+            if re.search(r"\bKEY\b", texts[p - 1]):
+                break
+    # a company licensed for both general and long-term business is a composite
+    both = collections.defaultdict(set)
+    for r in out:
+        both[(r["year"], norm_name(r["name"]))].add(r["type_raw"])
+    for r in out:
+        if r["type_raw"] == "long_term" and "general" in both[(r["year"], norm_name(r["name"]))]:
+            r["type_raw"] = "composite (long term and general)"
     return out
 
 
@@ -270,7 +341,7 @@ def main():
                     break
         r["company_id"] = cid
         r["stream_id"] = companies.get(cid, {}).get("stream_id", cid) if cid else ""
-        r.setdefault("classes", "")
+        r["classes"] = ", ".join(c for c in re.split(r"[,&\s]+", r.get("classes") or "") if c)
     keep = scope("registry")
     cols = ["year", "source", "serial", "name", "type", "segment", "classes", "company_id", "stream_id"]
     pub = sorted([r for r in rows if r["segment"] in keep], key=lambda r: (r["year"], r["name"].lower()))

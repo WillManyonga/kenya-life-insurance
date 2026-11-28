@@ -59,11 +59,13 @@
     const yp = v => H - B - (v - yt[0]) / (yt.at(-1) - yt[0]) * (H - T - B);
     yt.forEach(v => { el('line', { x1: Lm, x2: W - R, y1: yp(v), y2: yp(v), stroke: css('--grid') }, svg); el('text', { x: Lm - 6, y: yp(v) + 4, 'text-anchor': 'end' }, svg).textContent = opt.fmt ? opt.fmt(v) : v; });
     const every = Math.ceil(xs.length / 10);
-    xs.forEach((x, i) => { if (i % every === 0 || i === xs.length - 1) el('text', { x: xp(i), y: H - 8, 'text-anchor': 'middle' }, svg).textContent = x; });
+    xs.forEach((x, i) => { if ((i % every === 0 && xs.length - 1 - i >= every * 0.6) || i === xs.length - 1) el('text', { x: xp(i), y: H - 8, 'text-anchor': 'middle' }, svg).textContent = x; });
     series.forEach(s => {
       let d = '', pen = false;
       s.values.forEach((v, i) => { if (v == null || !isFinite(v)) { pen = false; return; } d += (pen ? 'L' : 'M') + xp(i) + ' ' + yp(v); pen = true; });
       el('path', { d, fill: 'none', stroke: s.color, 'stroke-width': s.width || 2, 'stroke-dasharray': s.dash || '', 'stroke-linejoin': 'round' }, svg);
+      const ok = v => v != null && isFinite(v);   // a value with no neighbour draws no line: mark it with a dot
+      s.values.forEach((v, i) => { if (ok(v) && !ok(s.values[i - 1]) && !ok(s.values[i + 1])) el('circle', { cx: xp(i), cy: yp(v), r: 2.5, fill: s.color }, svg); });
     });
     // end labels, nudged apart so they never overlap
     const ends = series.map(s => { const last = s.values.reduce((a, v, i) => v != null && isFinite(v) ? i : a, -1); return last < 0 || !s.label ? null : { s, x: xp(last) + 6, y: yp(s.values[last]) + 4 }; })

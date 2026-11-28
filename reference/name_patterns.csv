@@ -27,7 +27,7 @@ order,pattern,company_id,valid_from,valid_to,note
 47,^EQUITY LIFE|^EQUITY\b.*ASSURANCE,equity_life,,,
 48,KUSCCO,kuscco_mutual,,,
 49,MONARCH,monarch,,,
-50,CORPORATE INSURANCE,corporate_insurance,,,
+50,CORPORATE INSURANCE|^CORPORATE$,corporate_insurance,,,
 51,AFRICAN? MERCHANT|AMACO,amaco,,,
 52,TAKAFUL,takaful,,,
 53,SAHAM|MERCANTILE,saham_life,,,

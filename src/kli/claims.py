@@ -196,11 +196,35 @@ def main():
             ok = abs(s - t[f]) <= max(1, 0.001 * abs(t[f]))
             checks.append(dict(period=t["period"], business=t["business"], unit=t["unit"], check=f"total_{f}", result="pass" if ok else "differs",
                                detail=f"rows {s:.0f} vs printed {t[f]:.0f}"))
+    # Isolated spikes: a count far above the same insurer's usual quarters (Kenyan Alliance printed
+    # 774,075 claims paid in Q1 2023 against about 1,300 in the quarters around it; Monarch 47,636 in
+    # Q4 2025 against under 100). Such a return is kept in the file, flagged, and left out of the site.
+    import statistics
+    groups = {}
+    for r in rows:
+        groups.setdefault((r["stream_id"] or r["raw_name"].upper(), r["business"], r["unit"]), []).append(r)
+    for (who, b, u), g in groups.items():
+        for f in ("paid", "intimated", "closing"):
+            vals = [r[f] for r in g if r[f] is not None]
+            for r in g:
+                v, others = r[f], [x for x in vals if x is not r[f]]
+                if v is None or len(others) < 3:
+                    continue
+                med = statistics.median(others)
+                if u == "number" and v > 8 * max(med, 1) and v - med > 2000:
+                    r["suspect"] = f"{f} {v:.0f} against a usual {med:.0f}"
+                    checks.append(dict(period=r["period"], business=b, unit=u, check="spike", result="flagged", detail=f"{r['raw_name']}: {r['suspect']}"))
+    for r in rows:   # the amount row of a flagged quarter goes with it
+        r.setdefault("suspect", "")
+    flagged = {(r["stream_id"] or r["raw_name"].upper(), r["business"], r["period"]) for r in rows if r["suspect"]}
+    for r in rows:
+        if not r["suspect"] and (r["stream_id"] or r["raw_name"].upper(), r["business"], r["period"]) in flagged:
+            r["suspect"] = "count flagged in the same quarter"
     unm = sorted({(r["raw_name"], r["period"]) for r in rows if r["business"] == "long_term" and not r["company_id"]})
     write_csv(os.path.join(VALIDATION, "claims_unmapped_names.csv"), [dict(raw_name=n, period=p) for n, p in unm], ["raw_name", "period"])
     write_csv(os.path.join(VALIDATION, "claims_checks.csv"), checks, ["period", "business", "unit", "check", "result", "detail"])
     keep = scope("claims")
-    cols = ["period", "year", "quarter", "business", "segment", "unit", "raw_name", "company_id", "stream_id"] + FIELDS + ["actionable", "printed_ratio", "sheet"]
+    cols = ["period", "year", "quarter", "business", "segment", "unit", "raw_name", "company_id", "stream_id"] + FIELDS + ["actionable", "printed_ratio", "suspect", "sheet"]
     pub = [r for r in rows if r["segment"] in keep]
     write_csv(os.path.join(PROCESSED, "claims_settlement.csv"), pub, cols)
     write_csv(os.path.join(VALIDATION, "claims_printed_totals.csv"), [t for t in totals if BUSINESS_SEGMENT[t["business"]] in keep],
