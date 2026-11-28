@@ -23,7 +23,7 @@ year,type,found,printed,check
 2019,reinsurer,,5,
 2020,composite,5,4,differs
 2020,general,32,33,differs
-2020,long_term,18,19,differs
+2020,long_term,19,19,pass
 2020,reinsurer,5,5,pass
 2021,composite,4,4,pass
 2021,general,33,33,pass

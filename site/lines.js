@@ -89,7 +89,7 @@
       keys.forEach((k, j) => {
         const f = Math.max(0, r.parts[k] || 0) / tot; if (!f) return;
         const b = el('rect', { x: x(acc) + 1, y: y + 3, width: Math.max(0, x(acc + f) - x(acc) - 2), height: rowH - 8, fill: colors[j], rx: 2 }, svg);
-        b.onmousemove = e => tip(e, `<b>${r.label}</b><br>${opt.names[j]}: ${(f * 100).toFixed(1)}% (KSh ${bn(r.parts[k])})`); b.onmouseleave = untip;
+        b.onmousemove = e => tip(e, `<b>${r.label}</b><br>${opt.names[j]}: ${(f * 100).toFixed(1)}% (${opt.fmt ? opt.fmt(r.parts[k]) : 'KSh ' + bn(r.parts[k])})`); b.onmouseleave = untip;
         if (f > .07) el('text', { x: x(acc + f / 2), y: y + 15.5, 'text-anchor': 'middle', style: `fill:${j === 3 ? '#0b0b0b' : '#fff'};font-size:10px` }, svg).textContent = Math.round(f * 100) + '%';
         acc += f;
       });
@@ -281,7 +281,11 @@
     };
     c.querySelector('.ml').onchange = draw; draw();
   }
+  const EXTRA = {};
   window.KLI = {
+    // for site/extra.js: shared helpers, and a way to add a tab with its own filter bar
+    h: { card, legend, lineChart, stack100, table, bn, bns, pp, divColor, el, css, tip, untip, short, NS, ticks },
+    addTab: (id, fn) => { EXTRA[id] = fn; if (active === id || (location.hash || '').slice(1) === id) show(id); },
     ready: () => ready,
     periodsForYears: (y0, y1) => fullYears().filter(y => y >= y0 && y <= y1).map(q4),
     latest: () => P.length - 1, label: k => label(P[k]),
@@ -486,9 +490,10 @@
     document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
     document.querySelectorAll('section[id^=tab-]').forEach(s => s.hidden = s.id !== 'tab-' + tab);
     document.querySelector('.bar:not(#lbar)').hidden = tab !== 'overview';
-    $('lbar').hidden = tab === 'overview';
+    $('lbar').hidden = tab === 'overview' || !!EXTRA[tab];
     $('lm').parentElement.hidden = tab === 'share' || tab === 'mix';
-    if (tab !== 'overview') { if (ready) DRAW[tab](); }
+    if (EXTRA[tab]) { EXTRA[tab](); }
+    else if (tab !== 'overview') { if (ready) DRAW[tab](); }
     try { history.replaceState(null, '', '#' + tab); } catch (e) {}
   }
   document.querySelectorAll('#tabs button').forEach(b => b.onclick = () => show(b.dataset.tab));
@@ -501,10 +506,10 @@
     const k = P.length - 1;
     $('lco').innerHTML = ranked('total', k).map(s => `<option value="${s}">${name(s)}</option>`).join('');
     if (L.streams[DEFAULT_CO]) $('lco').value = DEFAULT_CO;
-    ['lp', 'ly0', 'ly1', 'lco', 'lm'].forEach(id => $(id).addEventListener('change', () => active !== 'overview' && DRAW[active]()));
+    ['lp', 'ly0', 'ly1', 'lco', 'lm'].forEach(id => $(id).addEventListener('change', () => DRAW[active] && DRAW[active]()));
     ready = true;
     if (window.renderOverview) window.renderOverview();
-    const h = (location.hash || '').slice(1); if (DRAW[h]) show(h);
-    window.addEventListener('hashchange', () => { const t = location.hash.slice(1); if (DRAW[t] || t === 'overview') show(t); });
+    const h = (location.hash || '').slice(1); if (DRAW[h] || EXTRA[h]) show(h);
+    window.addEventListener('hashchange', () => { const t = location.hash.slice(1); if (DRAW[t] || EXTRA[t] || t === 'overview') show(t); });
   }).catch(e => { $('claimsGrid').textContent = 'Could not load data/lines.json: ' + e; });
 })();

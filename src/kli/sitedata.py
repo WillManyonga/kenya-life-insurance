@@ -65,7 +65,7 @@ def registry():
         for r in read_csv(pc):
             printed.setdefault(r["year"], {})[r["type"]] = int(r["companies"])
     return {"years": sorted({int(y) for y in df.year}), "names": names(), "printed": printed,
-            "rows": [dict(y=int(r.year), n=r.name, t=r.type, s=r.segment, c=r.classes, id=r.company_id, src=r.source)
+            "rows": [dict(y=int(r.year), n=r.name, t=r.type, s=r.segment, c=r.classes, id=r.stream_id or r.company_id, src=r.source)
                      for r in df.itertuples()]}
 
 

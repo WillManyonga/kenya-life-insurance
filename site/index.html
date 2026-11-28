@@ -38,6 +38,7 @@ section[hidden],.bar[hidden]{display:none}.wide{grid-column:1/-1}
 .track .dot.over{background:var(--series-8)}.track .v{position:absolute;top:4px;font-weight:700;font-size:11px;white-space:nowrap;background:var(--surface-1);padding:0 3px;border-radius:3px;z-index:1}
 .track .ref{position:absolute;top:0;bottom:0;width:0;border-left:2px solid var(--text-primary)}.track .mk{position:absolute;top:0;bottom:0;width:0;border-left:1.5px dashed var(--text-muted)}
 .axis{position:relative;height:16px;font-size:10px;color:var(--text-muted)}.axis span{position:absolute;transform:translateX(-50%)}
+  .tl td:first-child,.tl th:first-child,.tl td,.tl th{text-align:left}
 details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin-top:8px}
 </style>
 </head>
@@ -52,6 +53,8 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
   <button role="tab" data-tab="share" aria-selected="false">Market share</button>
   <button role="tab" data-tab="mix" aria-selected="false">Business mix</button>
   <button role="tab" data-tab="profile" aria-selected="false">Insurer profile</button>
+  <button role="tab" data-tab="settlement" aria-selected="false">Claims settlement</button>
+  <button role="tab" data-tab="registry" aria-selected="false">Registered insurers</button>
 </nav>
 <div class="bar" id="lbar" hidden>
   <label>Snapshot period<select id="lp"></select></label>
@@ -105,6 +108,22 @@ details summary{cursor:pointer;color:var(--text-secondary);font-size:12px;margin
 <section id="tab-claims" hidden><div class="grid" id="claimsGrid"></div></section>
 <section id="tab-share" hidden><div class="grid" id="shareGrid"></div></section>
 <section id="tab-mix" hidden><div class="grid" id="mixGrid"></div></section>
+<section id="tab-settlement" hidden>
+<div class="bar">
+  <label>Business<select id="cb"></select></label>
+  <label>Quarter<select id="cq"></select></label>
+  <label>Year for the insurer comparison<select id="cy"></select></label>
+  <label>Highlight insurer<select id="cco"></select></label>
+</div>
+<p class="note" style="margin:-8px 0 14px">IRA's quarterly claims settlement statistics: each insurer's claims reported, paid, declined, closed and still open. Counts are claims; amounts are printed from Q4 2022. Unaudited returns.</p>
+<div id="settleTiles" class="tiles"></div><div class="grid" id="settleGrid"></div></section>
+<section id="tab-registry" hidden>
+<div class="bar">
+  <label>Year<select id="ry"></select></label>
+  <label>Type<select id="rt"><option value="all">All life companies</option><option value="long_term">Long-term insurers</option><option value="composite">Composite insurers</option></select></label>
+  <label>Search<input id="rq" type="search" placeholder="Company name" style="font:inherit;padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface-1);color:var(--text-primary)"></label>
+</div>
+<div id="regTiles" class="tiles"></div><div class="grid" id="regGrid"></div></section>
 <section id="tab-profile" hidden><div id="profileTiles" class="tiles"></div><div class="grid" id="profileGrid"></div></section>
 <div class="tip" id="tip"></div>
 </div>
@@ -246,5 +265,6 @@ fetch('data/life.json').then(r=>r.json()).then(d=>{D=d;
 }).catch(e=>{document.querySelector('.sub').textContent='Could not load data/life.json: '+e});
 </script>
 <script src="lines.js"></script>
+<script src="extra.js"></script>
 </body>
 </html>

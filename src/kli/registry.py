@@ -155,9 +155,9 @@ def annual_directories():
             if not is_directory(t):
                 continue
             for r in parse_words(page_words(path, i + 1)):
-                if r["serial"] in seen:
+                if (r["serial"], r["name"]) in seen:   # IRA sometimes prints a serial twice (51 in 2020)
                     continue
-                seen.add(r["serial"])
+                seen.add((r["serial"], r["name"]))
                 out.append(dict(year=year, source=f"IRA annual report {year}, directory of insurance and reinsurance companies", **r))
     return out
 
@@ -261,16 +261,18 @@ def main():
             r["type"] = "reinsurer" if "reinsurance" in n else "microinsurer" if "micro" in n else by_name.get(norm_name(r["name"]), "")
             r["type_raw"] = (r.get("type_raw") or "") + " (type inferred)"
         r["segment"] = SEGMENT.get(r["type"], "")
-        cid = ""
-        if r["segment"] == "life":   # life companies get the same ids as the rest of the repo
+        cid, per = "", f"{r['year']}Q4"
+        if r["segment"] == "life":   # life companies get the same ids as the rest of the repo, by the same dated rules
             for rx, row in names.items:
-                if rx.search(norm_name(r["name"])):
+                lo, hi = row.get("valid_from") or "0000Q0", row.get("valid_to") or "9999Q9"
+                if lo <= per <= hi and rx.search(norm_name(r["name"])):
                     cid = row["company_id"]
                     break
         r["company_id"] = cid
+        r["stream_id"] = companies.get(cid, {}).get("stream_id", cid) if cid else ""
         r.setdefault("classes", "")
     keep = scope("registry")
-    cols = ["year", "source", "serial", "name", "type", "segment", "classes", "company_id"]
+    cols = ["year", "source", "serial", "name", "type", "segment", "classes", "company_id", "stream_id"]
     pub = sorted([r for r in rows if r["segment"] in keep], key=lambda r: (r["year"], r["name"].lower()))
     write_csv(os.path.join(PROCESSED, "registered_insurers.csv"), [{c: r.get(c, "") for c in cols} for r in pub])
     found = collections.Counter((r["year"], r["type"] or "unknown") for r in rows)

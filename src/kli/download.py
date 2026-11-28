@@ -31,22 +31,29 @@ CLAIM_SLUGS = ["quarter-{q}-{y}-claims-settlement-statistics", "q{q}{y}-claims-s
 MAGIC = {"xlsx": b"PK", "xlsm": b"PK", "xls": b"\xd0\xcf", "pdf": b"%PDF"}
 
 
+LAST = {}   # url -> what came back, for validation/download_failures.csv
+
+
 def fetch(url, timeout=120):
     for attempt in range(3):
         try:
             r = requests.get(url, headers=UA, timeout=timeout)
+            LAST[url] = f"HTTP {r.status_code}, {r.headers.get('content-type', '')}, {len(r.content)} bytes, starts {r.content[:40]!r}"
             if r.status_code == 200:
                 return r.content
             if r.status_code == 404:
                 return None
-        except requests.RequestException:
-            pass
+        except requests.RequestException as e:
+            LAST[url] = f"error {type(e).__name__}: {str(e)[:120]}"
         time.sleep(3 * (attempt + 1))
     return None
 
 
 def looks_like(content, ext):
     return bool(content) and content.startswith(MAGIC.get(ext, b""))
+
+
+FAIL = []
 
 
 def download_listed(sources):
@@ -58,6 +65,7 @@ def download_listed(sources):
         content = fetch(s["url"])
         if not looks_like(content, s["ext"]):
             failed.append(s["save_as"])
+            FAIL.append(dict(file=s["save_as"], url=s["url"], got=LAST.get(s["url"], "")))
             continue
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "wb") as f:
@@ -161,6 +169,7 @@ def main(argv=None):
         else:
             print("no new quarter published yet")
     write_manifest(sources)
+    write_csv(os.path.join(os.path.dirname(RAW), "..", "validation", "download_failures.csv"), FAIL, ["file", "url", "got"])
     # Missing files are reported, not fatal: IRA links break and some periods were never published.
     return 0
 
