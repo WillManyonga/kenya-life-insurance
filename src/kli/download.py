@@ -9,6 +9,7 @@ data/raw/manifest.csv records the SHA-256 of every file used, so any rebuild can
 traced to the exact bytes.
 """
 import argparse
+import re
 import datetime as dt
 import os
 import sys
@@ -34,7 +35,29 @@ MAGIC = {"xlsx": b"PK", "xlsm": b"PK", "xls": b"\xd0\xcf", "pdf": b"%PDF"}
 LAST = {}   # url -> what came back, for validation/download_failures.csv
 
 
-def fetch(url, timeout=120):
+FILE_LINK = re.compile(r"""(?:href|src|content|location(?:\.href)?\s*=)\s*=?\s*["']?(?:\d+;\s*url=)?([^"'\s>]+?\.(?:xlsx|xlsm|xls|pdf))""", re.I)
+
+
+def fetch(url, timeout=120, follow=True):
+    """Get a file. IRA's lib.html sometimes answers with a small HTML page that links to the file
+    under /assets/file/: then the first such link is followed once."""
+    content = _get(url, timeout)
+    if follow and content and content.lstrip()[:15].lower().startswith((b"<!doctype", b"<html")):
+        html = content.decode("utf-8", "ignore")
+        links = [m.group(1) for m in FILE_LINK.finditer(html)]
+        HTML_SEEN[url] = (links[:3], re.sub(r"\s+", " ", html)[:600])
+        for link in links:
+            nxt = requests.compat.urljoin(url, link.replace("&amp;", "&"))
+            got = _get(nxt, timeout)
+            if got and not got.lstrip()[:15].lower().startswith((b"<!doctype", b"<html")):
+                return got
+    return content
+
+
+HTML_SEEN = {}
+
+
+def _get(url, timeout=120):
     for attempt in range(3):
         try:
             r = requests.get(url, headers=UA, timeout=timeout)
@@ -65,7 +88,8 @@ def download_listed(sources):
         content = fetch(s["url"])
         if not looks_like(content, s["ext"]):
             failed.append(s["save_as"])
-            FAIL.append(dict(file=s["save_as"], url=s["url"], got=LAST.get(s["url"], "")))
+            links, head = HTML_SEEN.get(s["url"], ([], ""))
+            FAIL.append(dict(file=s["save_as"], url=s["url"], got=LAST.get(s["url"], ""), links=" ".join(links), page=head))
             continue
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "wb") as f:
@@ -169,7 +193,7 @@ def main(argv=None):
         else:
             print("no new quarter published yet")
     write_manifest(sources)
-    write_csv(os.path.join(os.path.dirname(RAW), "..", "validation", "download_failures.csv"), FAIL, ["file", "url", "got"])
+    write_csv(os.path.join(os.path.dirname(RAW), "..", "validation", "download_failures.csv"), FAIL, ["file", "url", "got", "links", "page"])
     # Missing files are reported, not fatal: IRA links break and some periods were never published.
     return 0
 
