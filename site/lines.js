@@ -231,9 +231,11 @@
     if (!any || o.prem < minPrem) return null; o.uw = o.prem - o.ben - o.co - o.me; return o;
   }
   function marginCard(grid, ks, periodLabel, sel, topn) {
-    const c = card(grid, 'wide', `<h2 class="mh"></h2><p class="note">${periodLabel}. Margin = 100% − net combined ratio, where combined = (claims + net commission + management expenses) ÷ net premium; for savings lines and the total, all benefits replace claims. Insurers with under KSh 50m of net premium are left out.</p>
-      <label style="max-width:260px">Business line<select class="ml">${LINES.map(l => `<option value="${l.id}">${l.label}</option>`).join('')}</select></label>
-      <div class="mg" style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;align-items:stretch;margin-top:10px"></div><div class="mt"></div>`);
+    const c = card(grid, 'wide', `<h2 class="mh"></h2>
+      <label style="max-width:240px">Business line<select class="ml">${LINES.map(l => `<option value="${l.id}">${l.label}</option>`).join('')}</select></label>
+      <div class="legend lg"></div>
+      <div class="mg" style="display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;align-items:start"></div>
+      <p class="note">${periodLabel}. Margin = 100% − net combined ratio, where combined = (claims + net commission + management expenses) ÷ net premium; for savings lines and the total, all benefits replace claims. Insurers with under KSh 50m of net premium are left out.</p><div class="mt"></div>`);
     c.querySelector('.ml').value = mline;
     const draw = () => {
       const line = mline = c.querySelector('.ml').value;
@@ -242,31 +244,39 @@
       let rows = all.slice(0, topn);
       if (sel && !rows.some(r => r.s === sel)) { const r = all.find(r => r.s === sel); if (r) rows = [...rows, r]; }
       const mg = r => r.b.uw / r.b.prem, losers = rows.filter(r => mg(r) < 0).length, allLose = all.filter(r => mg(r) < 0).length;
-      const mkt = INS.map(x => uwOf(x, line, ks, 0)).filter(Boolean).reduce((a, b) => ({ prem: a.prem + b.prem, uw: a.uw + b.uw }), { prem: 0, uw: 0 }), lineLab = LINES.find(l => l.id === line).label.toLowerCase();
+      const mkt = INS.map(z => uwOf(z, line, ks, 0)).filter(Boolean).reduce((a, b) => ({ prem: a.prem + b.prem, uw: a.uw + b.uw }), { prem: 0, uw: 0 }), lineLab = LINES.find(l => l.id === line).label.toLowerCase();
       c.querySelector('.mh').textContent = rows.length ? `${losers} of the top ${Math.min(topn, all.length)}${rows.length > topn ? ' (plus your selection)' : ''} lose money on underwriting` : 'Underwriting margin';
       const box = c.querySelector('.mg'); box.innerHTML = ''; c.querySelector('.mt').innerHTML = '';
       if (!rows.length) { box.innerHTML = '<p class="note">No revenue accounts for this line and period.</p>'; return; }
-      const svg = document.createElementNS(NS, 'svg'); box.appendChild(svg);
-      const rowH = 30, T = 28, W = 720, H = T + rows.length * rowH + 6, Lw = 230, Rw = 90, mid = Lw + (W - Lw - Rw) / 2;
+      // Drawn like the other bar charts: 640-wide viewBox, 11px secondary text, light grid, axis below.
+      const svg = document.createElementNS(NS, 'svg'), n = rows.length, W = 940, Lw = 200, Rw = 64, T = 22;
+      const rowH = Math.max(24, Math.min(30, 360 / n)), H = T + n * rowH + 24; box.appendChild(svg);
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-      const lim = Math.max(.05, ...rows.map(r => Math.min(1.5, Math.abs(mg(r))))), half = (W - Lw - Rw) / 2 - 6, sx = v => mid + Math.max(-1.5, Math.min(1.5, v)) / lim * half;
-      el('text', { x: 0, y: 14, style: `fill:${css('--text-secondary')}` }, svg).textContent = `Top ${Math.min(topn, all.length)} by ${lineLab} premium`;
-      el('text', { x: mid - 8, y: 14, 'text-anchor': 'end', style: `fill:${css('--series-2')};font-weight:700` }, svg).textContent = '← Loss';
-      el('text', { x: mid + 8, y: 14, style: `fill:${css('--series-1')};font-weight:700` }, svg).textContent = 'Profit →';
-      el('text', { x: W, y: 14, 'text-anchor': 'end', style: `fill:${css('--text-secondary')}` }, svg).textContent = 'Combined';
+      const ms = rows.map(mg), span = Math.max(.1, Math.min(1, Math.max(...ms)) - Math.max(-1, Math.min(0, ...ms)));
+      const step = span > 1 ? .25 : span > .4 ? .1 : .05, lo = Math.min(-step, Math.floor(Math.max(-1, Math.min(...ms)) / step) * step), hi = Math.max(step, Math.ceil(Math.min(1, Math.max(...ms)) / step) * step);
+      const x = v => Lw + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (W - Lw - Rw), mid = x(0), top = Math.max(-lo, hi);
+      for (let v = lo; v <= hi + 1e-9; v += step) {
+        el('line', { x1: x(v), x2: x(v), y1: T, y2: H - 22, stroke: css('--grid') }, svg);
+        el('text', { x: x(v), y: H - 6, 'text-anchor': 'middle' }, svg).textContent = `${v > 1e-9 ? '+' : ''}${Math.round(v * 100)}%`;
+      }
+      el('text', { x: mid - 8, y: 12, 'text-anchor': 'end' }, svg).textContent = '← Loss';
+      el('text', { x: mid + 8, y: 12 }, svg).textContent = 'Profit →';
+      el('text', { x: W, y: 12, 'text-anchor': 'end' }, svg).textContent = 'Combined ratio';
       rows.forEach((r, i) => {
         const y = T + i * rowH, m = mg(r), on = !sel || r.s === sel, col = m < 0 ? css('--series-2') : css('--series-1');
-        el('text', { x: 0, y: y + rowH / 2 + 4, style: `fill:${css('--text-primary')};${sel && on ? 'font-weight:700' : ''};opacity:${on ? 1 : .55}` }, svg).textContent = short(name(r.s));
-        const x0 = Math.min(mid, sx(m)), bar = el('rect', { x: x0, y: y + 6, width: Math.max(2, Math.abs(sx(m) - mid)), height: rowH - 12, rx: 2, fill: col, 'fill-opacity': on ? 1 : .35 }, svg);
-        bar.onmousemove = e => tip(e, `<b>${name(r.s)}</b><br>Net combined ratio ${((1 - m) * 100).toFixed(1)}%<br>Underwriting result KSh ${bns(r.b.uw)} on net premium KSh ${bn(r.b.prem)}${Math.abs(m) > 1.5 ? '<br>Bar cut off at ±150%' : ''}`); bar.onmouseleave = untip;
-        el('text', { x: W, y: y + rowH / 2 + 4, 'text-anchor': 'end', style: `fill:${col};font-weight:700;opacity:${on ? 1 : .55}` }, svg).textContent = `${((1 - m) * 100).toFixed(1)}%`;
+        el('text', { x: Lw - 8, y: y + rowH / 2 + 4, 'text-anchor': 'end', style: `${on ? `fill:${css('--text-primary')}` : ''};${sel && on ? 'font-weight:600' : ''}` }, svg).textContent = `${i + 1 <= topn ? i + 1 + '. ' : ''}${short(name(r.s))}`;
+        const bh = Math.min(14, rowH - 10), bar = el('rect', { x: Math.min(mid, x(m)), y: y + (rowH - bh) / 2, width: Math.max(1.5, Math.abs(x(m) - mid)), height: bh, rx: 2, fill: col, 'fill-opacity': on ? .85 : .3 }, svg);
+        bar.onmousemove = e => tip(e, `<b>${name(r.s)}</b><br>Net combined ratio ${((1 - m) * 100).toFixed(1)}%<br>Underwriting result KSh ${bns(r.b.uw)} on net premium KSh ${bn(r.b.prem)}${(m < lo || m > hi) ? '<br>Bar cut off at the axis limit' : ''}`); bar.onmouseleave = untip;
+        el('text', { x: W, y: y + rowH / 2 + 4, 'text-anchor': 'end', style: `${on ? `fill:${css('--text-primary')}` : ''};${sel && on ? 'font-weight:600' : ''}` }, svg).textContent = `${((1 - m) * 100).toFixed(1)}%`;
       });
-      el('line', { x1: mid, x2: mid, y1: T - 4, y2: H - 2, stroke: css('--text-primary'), 'stroke-width': 1.5 }, svg);
+      el('line', { x1: mid, x2: mid, y1: T, y2: H - 22, stroke: css('--text-muted') }, svg);
       const lossTot = all.filter(r => mg(r) < 0).reduce((a, r) => a + r.b.uw, 0);
-      box.insertAdjacentHTML('beforeend', `<div style="background:#0f1b2d;color:#e8edf5;border-radius:12px;padding:22px;display:flex;flex-direction:column;justify-content:center">
-        <div style="font-size:52px;line-height:1;font-weight:700;color:#f2a93b">${allLose} of ${all.length}</div>
-        <div style="font-size:17px;margin:12px 0 10px;color:#fff">insurers made an underwriting loss on ${lineLab} in ${periodLabel.replace(/, (full year|year to date)$/, '')}.</div>
-        <div style="font-size:13px;color:#b9c4d6">Combined ratio above 100% means claims, commission and expenses exceed net premium. Market combined ratio, all insurers, ${mkt.prem ? ((1 - mkt.uw / mkt.prem) * 100).toFixed(1) + '%' : 'n/a'}; underwriting losses of the loss-makers: KSh ${bn(Math.abs(lossTot))}.${SAVINGS.has(line) ? ' For savings business, benefits include maturities and surrenders, so the margin before investment income is naturally negative.' : ''}</div></div>`);
+      box.insertAdjacentHTML('beforeend', `<div style="display:flex;flex-direction:column;gap:10px">
+        <div class="tile"><b>${allLose} of ${all.length}</b><span>insurers with an underwriting loss on ${lineLab}</span></div>
+        <div class="tile"><b>${mkt.prem ? ((1 - mkt.uw / mkt.prem) * 100).toFixed(1) + '%' : 'n/a'}</b><span>market net combined ratio, all insurers</span></div>
+        <div class="tile"><b>KSh ${bn(Math.abs(lossTot))}</b><span>underwriting losses of the loss-makers</span></div>
+        <p class="note" style="margin:0">Left of the line: claims, commission and expenses exceed net premium.${SAVINGS.has(line) ? ' For savings business, benefits include maturities and surrenders, so the margin before investment income is naturally negative.' : ''}</p></div>`);
+      const lg = c.querySelector('.lg'); lg.innerHTML = `<span><i class="sw" style="background:${css('--series-2')};opacity:.85"></i>Underwriting loss</span><span><i class="sw" style="background:${css('--series-1')};opacity:.85"></i>Underwriting profit</span><span>Top ${Math.min(topn, all.length)} by ${lineLab} premium</span>`;
       c.querySelector('.mt').innerHTML = `<details><summary>Table view</summary>${table(['Insurer', 'Net premium KSh', 'Underwriting result KSh', 'Net combined ratio', 'Margin'], rows.map(r => [name(r.s), bn(r.b.prem), bns(r.b.uw), ((1 - mg(r)) * 100).toFixed(1) + '%', (mg(r) * 100).toFixed(1) + '%']))}</details>`;
     };
     c.querySelector('.ml').onchange = draw; draw();
