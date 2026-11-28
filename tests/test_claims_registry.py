@@ -1,5 +1,9 @@
 """Small checks on the claims settlement and register readers."""
-from kli import claims, registry
+import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+from kli import claims, registry  # noqa: E402
 
 
 def test_claims_tables_are_classified_by_title():
