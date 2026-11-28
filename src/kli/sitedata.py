@@ -56,6 +56,19 @@ def claims():
                 if any(x is not None for x in a):
                     arr[CODES[f]] = a
             out["streams"].setdefault(sid, {}).setdefault(b, {})[u] = arr
+    rp = os.path.join(PROCESSED, "claims_declined_reasons.csv")
+    if os.path.exists(rp):
+        r = pd.read_csv(rp)
+        r = r[r.business == "long_term"]
+        keys = ["not_covered", "lapsed", "unpaid_premium", "non_disclosure", "time_barred", "documents", "other", "total"]
+        rs = {"periods": sorted(r.period.unique()), "keys": keys, "market": {}, "streams": {}}
+        for per, g in r.groupby("period"):
+            rs["market"][per] = {k: [int(g[f"{k}_n"].fillna(0).sum()), round(float(g[f"{k}_a"].fillna(0).sum()))] for k in keys}
+            for sid, h in g[g.stream_id.notna()].groupby("stream_id"):
+                v = {k: [int(h[f"{k}_n"].fillna(0).sum()), round(float(h[f"{k}_a"].fillna(0).sum()))] for k in keys}
+                if v["total"][0] or any(x[0] for x in v.values()):
+                    rs["streams"].setdefault(sid, {})[per] = v
+        out["reasons"] = rs
     return out
 
 

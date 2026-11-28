@@ -127,6 +127,93 @@
         { label: 'All insurers', bold: true, parts: { p: part(null, 'p'), d: (part(null, 'd') || 0) + (part(null, 'dc') || 0), c: part(null, 'c'), cl: part(null, 'cl') } }],
         keys, cols, { names, left: 290, fmt: v => fmtN(v) + ' claims' });
       c7.insertAdjacentHTML('beforeend', '<p class="note">The 15 insurers with the most claims open in the quarter. In 2017 IRA printed declined and closed claims as one figure; it is shown as declined.</p>');
+      drawDeclined(g, b, k, y, co);
+    }
+
+    // ---------------------------------------------------------------- declined claims
+    let dScope = 'market', dUnit = 'n';
+    const RLAB = { not_covered: 'Loss not covered by the policy', lapsed: 'Lapsed policy', unpaid_premium: 'Unpaid premiums', non_disclosure: 'Non-disclosure',
+      time_barred: 'Time barred', documents: 'Missing documents', other: 'Other' };
+    function drawDeclined(g, b, k, y, co) {
+      const P = C.periods, xs = P.map(qlab), dec = (s, kk, u = 'number') => { const f = x => s ? sv(s, b, u, x, kk) : mk(b, u, x, kk); const a = f('d'), c2 = f('dc'); return a == null && c2 == null ? null : (a || 0) + (c2 || 0); };
+      g.insertAdjacentHTML('beforeend', `<div class="wide" style="grid-column:1/-1;margin:18px 0 -4px"><h2 style="font-size:17px;margin:0">Declined claims</h2>
+        <p class="note" style="margin:4px 0 0">Claims an insurer refused to pay, as IRA prints them each quarter. Few claims are declined, so a handful of insurers move the market figure.</p></div>`);
+
+      // 1. declines each quarter: the highlighted insurer against the rest of the market
+      const c1 = card(g, '', `<h2>Claims declined each quarter</h2>${legend([[H.css('--series-2'), nm(co)], [H.css('--series-1'), 'Rest of the market']])}`);
+      const s1 = document.createElementNS(H.NS, 'svg'); c1.appendChild(s1);
+      { const W = 600, Hh = 230, L = 44, R = 8, T = 10, B = 24, tot = P.map((_, i) => dec(null, i)), mine = P.map((_, i) => dec(co, i) || 0);
+        const yt = H.ticks(0, Math.max(...tot.filter(v => v != null), 1), 4), ymax = yt.at(-1), slot = (W - L - R) / P.length, bw = Math.max(3, slot * .62), yp = v => Hh - B - v / ymax * (Hh - T - B);
+        s1.setAttribute('viewBox', `0 0 ${W} ${Hh}`);
+        yt.forEach(v => { H.el('line', { x1: L, x2: W - R, y1: yp(v), y2: yp(v), stroke: H.css('--grid') }, s1); H.el('text', { x: L - 6, y: yp(v) + 4, 'text-anchor': 'end' }, s1).textContent = fmtK(v); });
+        P.forEach((p, i) => {
+          const x = L + i * slot + (slot - bw) / 2;
+          if (p.endsWith('Q1') && (+p.slice(0, 4)) % 2 === 1) H.el('text', { x: x + bw / 2, y: Hh - 6, 'text-anchor': 'middle' }, s1).textContent = p.slice(0, 4);
+          if (tot[i] == null) return;
+          const rest = Math.max(0, tot[i] - mine[i]);
+          const r1 = H.el('rect', { x, y: yp(rest), width: bw, height: Math.max(0, yp(0) - yp(rest)), fill: H.css('--series-1'), 'fill-opacity': .85 }, s1);
+          const r2 = H.el('rect', { x, y: yp(tot[i]), width: bw, height: Math.max(0, yp(rest) - yp(tot[i]) - (mine[i] && rest ? 1 : 0)), fill: H.css('--series-2') }, s1);
+          [r1, r2].forEach(r => { r.onmousemove = e => H.tip(e, `<b>${qlab(p)}</b><br>${fmtN(tot[i])} claims declined<br>${nm(co)}: ${fmtN(mine[i])} (${pct(tot[i] ? mine[i] / tot[i] : null, 0)})`); r.onmouseleave = H.untip; });
+        });
+      }
+
+      // 2. decline rate
+      const c2 = card(g, '', `<h2>Share of open claims declined</h2>${legend([[H.css('--series-1'), 'Market'], [H.css('--series-2'), nm(co)]])}`);
+      const s2 = document.createElementNS(H.NS, 'svg'); c2.appendChild(s2);
+      lineChart(s2, xs, [
+        { name: 'Market', values: P.map((_, i) => { const a = mk(b, 'number', 'a', i), d = dec(null, i); return a && d != null ? d / a * 100 : null; }), color: H.css('--series-1'), label: 'Market' },
+        { name: nm(co), values: P.map((_, i) => { const a = sv(co, b, 'number', 'a', i), d = dec(co, i); return a && d != null ? d / a * 100 : null; }), color: H.css('--series-2'), label: H.short(nm(co)) },
+      ], { h: 200, fmt: v => v == null || !isFinite(v) ? 'n/a' : v.toFixed(v < 1 ? 2 : 1) + '%', r: 90 });
+
+      // 3. who declines most in the chosen year
+      const ks = yearKs(y).filter(kk => mk(b, 'number', 'a', kk) != null);
+      const mTot = ks.reduce((a, kk) => a + (dec(null, kk) || 0), 0), mOpen = ks.reduce((a, kk) => a + (mk(b, 'number', 'a', kk) || 0), 0);
+      const mAmt = ks.reduce((a, kk) => a + (dec(null, kk, 'amount') || 0), 0), hasAmt = ks.some(kk => dec(null, kk, 'amount') != null);
+      const rows = Object.keys(C.streams).map(s => {
+        const d = ks.reduce((a, kk) => a + (dec(s, kk) || 0), 0), open = ks.reduce((a, kk) => a + (sv(s, b, 'number', 'a', kk) || 0), 0), amt = ks.reduce((a, kk) => a + (dec(s, kk, 'amount') || 0), 0);
+        return { s, d, open, amt };
+      }).filter(r => r.d > 0).sort((a, b2) => b2.d - a.d);
+      const c3 = card(g, 'wide tl', `<h2>Who declines most, ${y}</h2>` + H.table(['Insurer', 'Claims declined', 'Share of the market\'s declines', 'Share of its open claims declined', ...(hasAmt ? ['Amount declined'] : [])],
+        [...rows.map(r => [r.s === co ? `<b>${nm(r.s)}</b>` : nm(r.s), fmtN(r.d), pct(mTot ? r.d / mTot : null), pct(r.open ? r.d / r.open : null, 2), ...(hasAmt ? [kshAmt(r.amt)] : [])]),
+         ['<b>All insurers</b>', `<b>${fmtN(mTot)}</b>`, '100%', pct(mOpen ? mTot / mOpen : null, 2), ...(hasAmt ? [kshAmt(mAmt)] : [])]]));
+      c3.insertAdjacentHTML('beforeend', `<p class="note">${y}${ks.length < 4 ? ` (${ks.length} published quarter${ks.length > 1 ? 's' : ''})` : ''}. Insurers that declined no claims are not listed. Amounts are printed from Q4 2022. Change the year with the filter above.</p>`);
+
+      // 4. why claims are declined
+      const RS = C.reasons;
+      const c4 = card(g, 'wide', `<h2>Why claims are declined</h2>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin:4px 0 8px">
+          <label style="max-width:240px">Show<select class="ds"><option value="market">All insurers</option><option value="co">${nm(co)}</option></select></label>
+          <label style="max-width:200px">Measure<select class="du"><option value="n">Number of claims</option><option value="a">Amount (KSh)</option></select></label></div>
+        <div class="dl"></div>`);
+      c4.querySelector('.ds').value = dScope; c4.querySelector('.du').value = dUnit;
+      const s4 = document.createElementNS(H.NS, 'svg'); c4.appendChild(s4); const nt = document.createElement('div'); c4.appendChild(nt);
+      const drawR = () => {
+        s4.innerHTML = ''; nt.innerHTML = '';
+        if (!RS || !RS.periods.length) { nt.innerHTML = '<p class="note">IRA has not published reasons for declined long-term claims.</p>'; return; }
+        const src = dScope === 'market' ? RS.market : (RS.streams[co] || {}), pers = RS.periods.filter(p => src[p] && src[p].total && src[p].total[0] > 0);
+        const ui = dUnit === 'n' ? 0 : 1, cols = [H.css('--series-1'), H.css('--series-2'), H.css('--series-3'), H.css('--series-4')];
+        c4.querySelector('.dl').innerHTML = pers.length ? legend(pers.map((p, i) => [cols[i % 4], `${qlab(p)}: ${dUnit === 'n' ? fmtN(src[p].total[0]) + ' claims' : 'KSh ' + H.bn(src[p].total[1] / 1000)}`])) : '';
+        if (!pers.length) { nt.innerHTML = `<p class="note">${dScope === 'market' ? 'No reasons published.' : `IRA's reasons tables show no declined claims for ${nm(co)} in the quarters it published (Q1 2022 and Q2 2023).`}</p>`; return; }
+        const keys = RS.keys.filter(x => x !== 'total'), W = 1150, L = 230, R = 60, T = 6, grp = 16 * pers.length + 12, Hh = T + keys.length * grp + 24;
+        s4.setAttribute('viewBox', `0 0 ${W} ${Hh}`);
+        const sh = (p, x) => { const t = src[p].total[ui]; return t ? (src[p][x] ? src[p][x][ui] : 0) / t : 0; };
+        const mx = Math.max(.1, ...pers.flatMap(p => keys.map(x => sh(p, x)))), top = Math.min(1, Math.ceil(mx * 5) / 5 || .2), xp = v => L + v / top * (W - L - R);
+        for (let v = 0; v <= top + 1e-9; v += top / 4) { H.el('line', { x1: xp(v), x2: xp(v), y1: T, y2: Hh - 22, stroke: H.css('--grid') }, s4); H.el('text', { x: xp(v), y: Hh - 6, 'text-anchor': 'middle' }, s4).textContent = Math.round(v * 100) + '%'; }
+        keys.forEach((x, i) => {
+          const y0 = T + i * grp;
+          H.el('text', { x: L - 10, y: y0 + grp / 2 + 2, 'text-anchor': 'end', style: `fill:${H.css('--text-primary')}` }, s4).textContent = RLAB[x];
+          pers.forEach((p, j) => {
+            const v = sh(p, x), yy = y0 + 6 + j * 16, raw = src[p][x] ? src[p][x][ui] : 0;
+            const r = H.el('rect', { x: L, y: yy, width: Math.max(1, xp(v) - L), height: 12, rx: 2, fill: cols[j % 4], 'fill-opacity': .9 }, s4);
+            r.onmousemove = e => H.tip(e, `<b>${RLAB[x]}</b>, ${qlab(p)}<br>${pct(v, 0)} of claims declined${dUnit === 'n' ? ` · ${fmtN(raw)} claims` : ` · KSh ${H.bn(raw / 1000)}`}`); r.onmouseleave = H.untip;
+            H.el('text', { x: xp(v) + 6, y: yy + 10 }, s4).textContent = pct(v, 0);
+          });
+        });
+        nt.innerHTML = `<p class="note">Share of declined claims by the reason the insurer gave. IRA published reasons for long-term claims only for Q1 2022 (reprinted unchanged in its Q3 2022 to Q1 2023 workbooks) and Q2 2023; from Q3 2023 the table is an empty template. New quarters appear here automatically if IRA fills it in again. The reasons cover fewer claims than the declines in IRA's movement table (145 against 181 in Q2 2023), and in Q2 2023 Equity Life accounts for 85 of the 113 "not covered".</p>`;
+      };
+      c4.querySelector('.ds').onchange = e => { dScope = e.target.value; drawR(); };
+      c4.querySelector('.du').onchange = e => { dUnit = e.target.value; drawR(); };
+      drawR();
     }
 
     function initClaims() {

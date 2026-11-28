@@ -17,6 +17,7 @@ Every business is extracted. What is written to the repository is limited by con
 also publish the general business tables.
 
 Writes:
+  data/processed/claims_declined_reasons.csv  IRA's reasons for declined claims, by insurer, number and amount (KSh)
   data/processed/claims_settlement.csv  period, business, unit, printed name, company and stream ids, the movement
   validation/claims_checks.csv          each table against IRA's printed industry line, and each row's movement
   validation/claims_unmapped_names.csv  long-term names no pattern matched (reported, not fatal)
@@ -52,7 +53,7 @@ HEADERS = [  # heading text -> field; the first match wins
     (r"outstanding at (the )?end", "closing"),
     (r"(settlement|payment) ratio", "printed_ratio"),
 ]
-BUSINESS_SEGMENT = {"long_term": "life", "general_liability": "general", "general_non_liability": "general"}
+BUSINESS_SEGMENT = {"long_term": "life", "general_liability": "general", "general_non_liability": "general", "general": "general"}
 
 
 def classify(title):
@@ -146,11 +147,73 @@ def read(path):
     return out, totals
 
 
+# ---------------------------------------------------------------- reasons for declined claims
+REASONS = ["documents", "unpaid_premium", "not_covered", "non_disclosure", "time_barred", "lapsed", "other", "total"]
+REASON_HEAD = [(r"document", "documents"), (r"unpaid premium", "unpaid_premium"), (r"not covered", "not_covered"),
+               (r"non[\s-]*disclosure", "non_disclosure"), (r"time[\s-]*barred", "time_barred"), (r"lapsed", "lapsed"),
+               (r"^others?$", "other"), (r"^total$", "total")]
+MONTH_Q = {"march": 1, "june": 2, "september": 3, "december": 4}
+
+
+def read_reasons(path):
+    """IRA's table of reasons for declined claims (long-term and general). Its title names the quarter;
+    IRA reprinted the Q1 2022 long-term table unchanged in later workbooks, and from Q3 2023 has
+    published the table as an empty template. Returns one row per insurer with a number and an
+    amount (KSh, as printed) for each reason, and a note per table for the validation file."""
+    year, q = map(int, re.search(r"IRA_(\d{4})_Q(\d)", path).groups())
+    wb = openpyxl.load_workbook(path, data_only=True, read_only=True)
+    out, notes = [], []
+    for ws in wb.worksheets:
+        rows = list(ws.iter_rows(values_only=True))
+        title = next((norm(v) for r in rows[:8] for v in r if isinstance(v, str) and "reasons for declined" in v.lower()), None)
+        if not title:
+            continue
+        business = "long_term" if re.search(r"long[\s-]*term", title, re.I) else "general"
+        m = re.search(r"(March|June|September|December),?\s+(\d{4})", title, re.I)
+        period = f"{m.group(2)}Q{MONTH_Q[m.group(1).lower()]}" if m else f"{year}Q{q}"
+        h = next((i for i, r in enumerate(rows[:15]) if any(isinstance(v, str) and re.search(r"name of insurer", v, re.I) for v in r)), None)
+        if h is None:
+            continue
+        head = rows[h]
+        cname = next(j for j, v in enumerate(head) if isinstance(v, str) and re.search(r"name of insurer", v, re.I))
+        cols = {}
+        for j, v in enumerate(head):
+            if isinstance(v, str):
+                k = next((f for rx, f in REASON_HEAD if re.search(rx, norm(v).lower())), None)
+                if k and k not in cols:
+                    cols[k] = j   # each reason spans two columns: number, then amount
+        if "total" not in cols:
+            continue
+        n_rows, filled = 0, 0
+        for r in rows[h + 2:]:
+            nm = r[cname] if cname < len(r) else None
+            if not isinstance(nm, str) or not nm.strip() or re.match(r"\s*(total|source|note)", nm, re.I):
+                continue
+            n_rows += 1
+            rec = dict(period=period, business=business, raw_name=norm(nm), workbook=f"{year}Q{q}")
+            for k, j in cols.items():
+                rec[f"{k}_n"] = num(r[j]) if j < len(r) else None
+                rec[f"{k}_a"] = num(r[j + 1]) if j + 1 < len(r) else None
+            if any(rec.get(f"{k}_n") not in (None, 0) for k in REASONS):
+                filled += 1
+            out.append(rec)
+        notes.append(dict(period=f"{year}Q{q}", business=business, unit="", check=f"reasons_table",
+                          result="pass" if filled else "empty",
+                          detail=f"title quarter {period}; {filled} of {n_rows} insurers with figures"))
+    return out, notes
+
+
 def main():
     companies, names, _, _, _ = load_refs()
     files = sorted(glob.glob(os.path.join(RAW, "claims", "*", "IRA_*_Q*_Claims_Statistics.xls*")))
-    rows, totals, checks = [], [], []
+    rows, totals, checks, reasons = [], [], [], []
     for f in files:
+        try:
+            rr, notes = read_reasons(f)
+            reasons += rr
+            checks += notes
+        except Exception as e:
+            checks.append(dict(period=os.path.basename(f), business="", unit="", check="reasons_read", result="fail", detail=str(e)[:200]))
         try:
             r, t = read(f)
         except Exception as e:   # one bad workbook is reported, not fatal
@@ -223,7 +286,26 @@ def main():
     unm = sorted({(r["raw_name"], r["period"]) for r in rows if r["business"] == "long_term" and not r["company_id"]})
     write_csv(os.path.join(VALIDATION, "claims_unmapped_names.csv"), [dict(raw_name=n, period=p) for n, p in unm], ["raw_name", "period"])
     write_csv(os.path.join(VALIDATION, "claims_checks.csv"), checks, ["period", "business", "unit", "check", "result", "detail"])
+    # reasons: keep each quarter once (the first workbook that printed figures for it), drop empty templates
+    first = {}
+    for r in reasons:
+        if any(r.get(f"{k}_n") not in (None, 0) for k in REASONS):
+            first.setdefault((r["period"], r["business"]), r["workbook"])
+    reasons = [r for r in reasons if first.get((r["period"], r["business"])) == r["workbook"]]
+    for r in reasons:
+        cid = ""
+        if r["business"] == "long_term":
+            for rx, row in names.items:
+                lo, hi = row.get("valid_from") or "0000Q0", row.get("valid_to") or "9999Q9"
+                if lo <= r["period"] <= hi and rx.search(norm_name(r["raw_name"])):
+                    cid = row["company_id"]
+                    break
+        r["company_id"] = cid
+        r["stream_id"] = companies.get(cid, {}).get("stream_id", cid) if cid else ""
+        r["segment"] = BUSINESS_SEGMENT.get(r["business"], "general")
     keep = scope("claims")
+    rcols = ["period", "business", "segment", "workbook", "raw_name", "company_id", "stream_id"] + [f"{k}_{u}" for k in REASONS for u in "na"]
+    write_csv(os.path.join(PROCESSED, "claims_declined_reasons.csv"), [r for r in reasons if r["segment"] in keep], rcols)
     cols = ["period", "year", "quarter", "business", "segment", "unit", "raw_name", "company_id", "stream_id"] + FIELDS + ["actionable", "printed_ratio", "suspect", "sheet"]
     pub = [r for r in rows if r["segment"] in keep]
     write_csv(os.path.join(PROCESSED, "claims_settlement.csv"), pub, cols)

@@ -1,4 +1,36 @@
 period,business,unit,check,result,detail
+2022Q3,general,,reasons_table,pass,title quarter 2022Q1; 33 of 37 insurers with figures
+2022Q3,long_term,,reasons_table,pass,title quarter 2022Q1; 16 of 23 insurers with figures
+2022Q4,general,,reasons_table,pass,title quarter 2022Q1; 33 of 37 insurers with figures
+2022Q4,long_term,,reasons_table,pass,title quarter 2022Q1; 16 of 23 insurers with figures
+2023Q1,general,,reasons_table,pass,title quarter 2022Q1; 33 of 37 insurers with figures
+2023Q1,long_term,,reasons_table,pass,title quarter 2022Q1; 16 of 23 insurers with figures
+2023Q2,general,,reasons_table,pass,title quarter 2023Q2; 24 of 36 insurers with figures
+2023Q2,long_term,,reasons_table,pass,title quarter 2023Q2; 9 of 25 insurers with figures
+2023Q3,general,,reasons_table,empty,title quarter 2023Q3; 0 of 36 insurers with figures
+2023Q3,long_term,,reasons_table,empty,title quarter 2023Q3; 0 of 25 insurers with figures
+2023Q4,general,,reasons_table,empty,title quarter 2023Q4; 0 of 36 insurers with figures
+2023Q4,long_term,,reasons_table,empty,title quarter 2023Q4; 0 of 25 insurers with figures
+2024Q1,general,,reasons_table,empty,title quarter 2024Q1; 0 of 36 insurers with figures
+2024Q1,long_term,,reasons_table,empty,title quarter 2024Q1; 0 of 25 insurers with figures
+2024Q2,general,,reasons_table,empty,title quarter 2024Q2; 0 of 36 insurers with figures
+2024Q2,long_term,,reasons_table,empty,title quarter 2024Q2; 0 of 25 insurers with figures
+2024Q3,general,,reasons_table,empty,title quarter 2024Q3; 0 of 36 insurers with figures
+2024Q3,long_term,,reasons_table,empty,title quarter 2024Q3; 0 of 25 insurers with figures
+2024Q4,general,,reasons_table,empty,title quarter 2024Q4; 0 of 36 insurers with figures
+2024Q4,long_term,,reasons_table,empty,title quarter 2024Q4; 0 of 25 insurers with figures
+2025Q1,general,,reasons_table,empty,title quarter 2025Q1; 0 of 36 insurers with figures
+2025Q1,long_term,,reasons_table,empty,title quarter 2025Q1; 0 of 25 insurers with figures
+2025Q2,general,,reasons_table,empty,title quarter 2025Q2; 0 of 36 insurers with figures
+2025Q2,long_term,,reasons_table,empty,title quarter 2025Q2; 0 of 25 insurers with figures
+2025Q3,general,,reasons_table,empty,title quarter 2025Q3; 0 of 36 insurers with figures
+2025Q3,long_term,,reasons_table,empty,title quarter 2025Q3; 0 of 25 insurers with figures
+2025Q4,general,,reasons_table,empty,title quarter 2025Q4; 0 of 36 insurers with figures
+2025Q4,long_term,,reasons_table,empty,title quarter 2025Q4; 0 of 25 insurers with figures
+2026Q1,general,,reasons_table,empty,title quarter 2026Q1; 0 of 36 insurers with figures
+2026Q1,long_term,,reasons_table,empty,title quarter 2026Q1; 0 of 25 insurers with figures
+2026Q2,general,,reasons_table,empty,title quarter 2026Q2; 0 of 36 insurers with figures
+2026Q2,long_term,,reasons_table,empty,title quarter 2026Q2; 0 of 25 insurers with figures
 2017Q1,general_liability,number,movement,pass,Madison: in 1235 vs out 1235
 2017Q1,general_liability,number,movement,pass,Intra Africa: in 1426 vs out 1426
 2017Q1,general_liability,number,movement,pass,Invesco: in 7890 vs out 7890

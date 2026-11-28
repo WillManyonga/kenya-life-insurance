@@ -1,0 +1,49 @@
+period,business,segment,workbook,raw_name,company_id,stream_id,documents_n,documents_a,unpaid_premium_n,unpaid_premium_a,not_covered_n,not_covered_a,non_disclosure_n,non_disclosure_a,time_barred_n,time_barred_a,lapsed_n,lapsed_a,other_n,other_a,total_n,total_a
+2022Q1,long_term,life,2022Q3,ABSA LIFE ASSURANCE,absa_life,absa_life,0.0,0.0,0.0,0.0,9.0,784210.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,9.0,784210.0
+2022Q1,long_term,life,2022Q3,APA LIFE ASSURANCE COMPANY,apa_life,apa_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,BRITAM LIFE INSURANCE COMPANY,britam_life,britam_life,0.0,0.0,3.0,2328922.65,1.0,303650.64,2.0,806030.79,2.0,12926554.0,0.0,0.0,0.0,0.0,8.0,16365158.08
+2022Q1,long_term,life,2022Q3,CAPEX LIFE ASSURANCE COMPANY,capex_life,capex_life,0.0,0.0,0.0,0.0,2.0,20000.0,0.0,0.0,1.0,100000.0,0.0,0.0,0.0,0.0,3.0,120000.0
+2022Q1,long_term,life,2022Q3,CIC LIFE ASSURANCE COMPANY,cic_life,cic_life,0.0,0.0,0.0,0.0,149.0,28106560.0,0.0,0.0,21.0,2989138.0,3.0,260867.0,0.0,0.0,173.0,31356565.0
+2022Q1,long_term,life,2022Q3,CORPORATE INSURANCE COMPANY,corporate_insurance,corporate_insurance,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,60.0,3700000.0,0.0,0.0,60.0,3700000.0
+2022Q1,long_term,life,2022Q3,GA LIFE ASSURANCE LIMITED,ga_life,ga_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,GEMINIA INSURANCE COMPANY,geminia_life,geminia_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,ICEA LION LIFE ASSURANCE,icea_lion_life,icea_lion_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,JUBILEE INSURANCE COMPANY,jubilee_life,jubilee_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,KENINDIA ASSURANCE COMPANY,kenindia,kenindia,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1675655.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,1675655.0
+2022Q1,long_term,life,2022Q3,KENYA ORIENT LIFE ASSURANCE,kenya_orient_life,kenya_orient_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,KUSCCO MUTUAL ASSURANCE,kuscco_mutual,kuscco_mutual,0.0,0.0,0.0,0.0,0.0,0.0,28.0,3250746.0,0.0,0.0,0.0,0.0,0.0,0.0,28.0,3250746.0
+2022Q1,long_term,life,2022Q3,LIBERTY LIFE ASSURANCE KENYA,liberty_life,liberty_life,0.0,0.0,0.0,0.0,0.0,0.0,3.0,311679.0,13.0,1619914.3599999999,0.0,0.0,0.0,0.0,16.0,1931593.3599999999
+2022Q1,long_term,life,2022Q3,MADISON INSURANCE COMPANY,madison_life,madison_life,1.0,100000.0,0.0,0.0,2.0,172000.0,0.0,0.0,0.0,0.0,2.0,325643.0,0.0,0.0,5.0,597643.0
+2022Q1,long_term,life,2022Q3,METROPOLITAN CANNON INSURANCE,cannon_life,cannon_life,0.0,0.0,7.0,1679271.0,1.0,3482460.0,0.0,0.0,0.0,0.0,0.0,0.0,20.0,726440.0,28.0,5888171.0
+2022Q1,long_term,life,2022Q3,OLD MUTUAL ASSURANCE COMPANY,old_mutual_life_company,old_mutual_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2022Q1,long_term,life,2022Q3,PIONEER ASSURANCE COMPANY,pioneer,pioneer,0.0,0.0,4.0,21200.0,1.0,14000.0,3.0,139000.0,0.0,0.0,0.0,0.0,0.0,0.0,8.0,174200.0
+2022Q1,long_term,life,2022Q3,PRUDENTIAL LIFE ASSURANCE,prudential_life,prudential_life,0.0,0.0,0.0,0.0,2.0,300000.0,2.0,450000.0,3.0,249910.0,0.0,0.0,0.0,0.0,7.0,999910.0
+2022Q1,long_term,life,2022Q3,SANLAM LIFE INSURANCE LIMITED,sanlam_life,sanlam_life,0.0,0.0,5.0,755168.0,13.0,20727452.37,2.0,327273.0,0.0,0.0,13.0,17416342.15,0.0,0.0,33.0,39226235.519999996
+2022Q1,long_term,life,2022Q3,THE KENYAN ALLIANCE INSURANCE,kenyan_alliance,kenyan_alliance,0.0,0.0,0.0,0.0,2.0,3535600.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,3535600.0
+2022Q1,long_term,life,2022Q3,THE MONARCH INSURANCE COMPANY,monarch,monarch,0.0,0.0,5.0,11557044.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,11557044.0
+2022Q1,long_term,life,2022Q3,UAP LIFE ASSURANCE COMPANY,old_mutual_life_kenya,old_mutual_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,15000000.0,0.0,0.0,0.0,0.0,1.0,15000000.0
+2023Q2,long_term,life,2023Q2,ABSA Life Insurance Company,absa_life,absa_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,APA Life Assurance Company,apa_life,apa_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Britam Life Assurance,britam_life,britam_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Cannon Life,cannon_life,cannon_life,0.0,0.0,0.0,0.0,3.0,11131200.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,3.0,11131200.0
+2023Q2,long_term,life,2023Q2,Capex Life Assurance Company,capex_life,capex_life,0.0,0.0,0.0,0.0,3.0,522000.0,2.0,232695.0,0.0,0.0,0.0,0.0,0.0,0.0,5.0,754695.0
+2023Q2,long_term,life,2023Q2,CIC Life Assurance Company,cic_life,cic_life,0.0,0.0,0.0,0.0,13.0,2992386.0,0.0,0.0,1.0,22135.0,1.0,199500.0,0.0,0.0,15.0,3214021.0
+2023Q2,long_term,life,2023Q2,Corporate Insurance Company,corporate_insurance,corporate_insurance,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Equity Life Assurance,equity_life,equity_life,0.0,0.0,0.0,0.0,85.0,54802292.0,0.0,0.0,0.0,0.0,1.0,28000.0,0.0,0.0,86.0,54830292.0
+2023Q2,long_term,life,2023Q2,GA Life Assurance Company,ga_life,ga_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Geminia Life Insurance Company,geminia_life,geminia_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Icea Lion Life Assurance,icea_lion_life,icea_lion_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Jubilee Insurance Company,jubilee_life,jubilee_life,0.0,0.0,0.0,0.0,0.0,0.0,4.0,4038427.0,0.0,0.0,0.0,0.0,0.0,0.0,4.0,4038427.0
+2023Q2,long_term,life,2023Q2,Kenindia Assurance Company,kenindia,kenindia,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Kenya Orient Life Assurance,kenya_orient_life,kenya_orient_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,KUSCCO Mutual Assurance Limited,kuscco_mutual,kuscco_mutual,0.0,0.0,0.0,0.0,1.0,3513.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,3513.0
+2023Q2,long_term,life,2023Q2,Liberty Life Assurance Company,liberty_life,liberty_life,0.0,0.0,0.0,0.0,2.0,2219808.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,2.0,2219808.0
+2023Q2,long_term,life,2023Q2,Madison Insurance Company,madison_life,madison_life,0.0,0.0,0.0,0.0,1.0,129000.0,0.0,0.0,1.0,1965106.0,1.0,83426.0,0.0,0.0,3.0,2177532.0
+2023Q2,long_term,life,2023Q2,Old Mutual Assurance,old_mutual_life_company,old_mutual_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Old Mutual Life Assurance,old_mutual_life_kenya,old_mutual_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Pioneer Assurance Company,pioneer,pioneer,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Prudential Life Assurance,prudential_life,prudential_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,Sanlam Life Assurance,sanlam_life,sanlam_life,2.0,191385.0,7.0,494780.0,5.0,14041479.0,5.0,949289.0,0.0,0.0,7.0,5973188.0,0.0,0.0,26.0,21650121.0
+2023Q2,long_term,life,2023Q2,Star Discover Life,star_discover_life,star_discover_life,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,The Kenyan Alliance Insurance,kenyan_alliance,kenyan_alliance,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+2023Q2,long_term,life,2023Q2,The Monarch Insurance,monarch,monarch,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
