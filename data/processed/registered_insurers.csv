@@ -1,0 +1,222 @@
+year,source,serial,name,type,segment,classes,company_id
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",6,APA Life Assurance Company Limited,long_term,life,,apa_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",7,Barclays Life Assurance Kenya Limited,long_term,life,,absa_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",9,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",10,Cannon Assurance Limited,composite,life,,cannon_assurance_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",11,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",13,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",16,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",20,First Assurance Company Limited,composite,life,,first_assurance
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",22,GA Life Assurance Limited,long_term,life,,ga_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",24,Geminia Insurance Co. Ltd,composite,life,,geminia_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",27,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",30,Kenindia Assurance Company Limited,composite,life,,kenindia
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",32,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",34,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",35,Madison Insurance Company Kenya Limited,composite,life,,madison_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",37,Metropolitan Cannon Life Assurance Limited,long_term,life,,cannon_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",39,Old Mutual Assurance Company Limited,long_term,life,,old_mutual_life_company
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",41,Pan Africa Life Assurance Company Limited,long_term,life,,sanlam_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",43,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",44,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",46,Saham Assurance Company Kenya Limited,composite,life,,saham_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",48,Takaful Insurance of Africa Ltd,composite,life,,takaful
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",51,The Jubilee Insurance Company of Kenya Limited,composite,life,,jubilee_life
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",52,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",53,The Monarch Insurance Company Limited,composite,life,,monarch
+2015,"IRA annual report 2015, directory of insurance and reinsurance companies",56,UAP Life Assurance Company Limited,long_term,life,,old_mutual_life_kenya
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",6,APA Life Assurance Company Limited,long_term,life,,apa_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",7,Barclays Life Assurance Kenya Limited,long_term,life,,absa_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",9,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",10,Cannon Assurance Limited,composite,life,,cannon_assurance_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",11,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",13,CIC Life Assurance Company Limited,long_term,life,,cic_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",15,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",19,First Assurance Company Limited,composite,life,,first_assurance
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",21,GA Life Assurance Limited,long_term,life,,ga_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",22,Geminia Insurance Co. Limited,composite,life,,geminia_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",25,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",28,Kenindia Assurance Company Limited,composite,life,,kenindia
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",30,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",32,Liberty Life Assurance Kenya Limited,long_term,life,,liberty_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",33,Madison Insurance Company Kenya Limited,composite,life,,madison_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",35,Metropolitan Cannon Life Assurance Limited,long_term,life,,cannon_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",37,Old Mutual Assurance Company Limited,long_term,life,,old_mutual_life_company
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",40,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",42,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",44,Saham Assurance Company Kenya Limited,composite,life,,saham_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",45,Sanlam Life Insurance Limited,long_term,life,,sanlam_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",47,Takaful Insurance of Africa Limited,composite,life,,takaful
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",50,The Jubilee Insurance Company of Kenya Limited,composite,life,,jubilee_life
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",51,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",52,The Monarch Insurance Company Limited,composite,life,,monarch
+2016,"IRA annual report 2016, directory of insurance and reinsurance companies",55,UAP Life Assurance Company Limited,long_term,life,,old_mutual_life_kenya
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",6,APA Life Assurance Company Limited,long_term,life,,apa_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",7,Barclays Life Assurance Kenya Limited,long_term,life,,absa_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",9,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",11,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",13,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",15,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",19,First Assurance Company Limited,composite,life,,first_assurance
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",21,GA Life Assurance Limited,long_term,life,,ga_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",23,Geminia Insurance Co. Ltd,composite,life,,geminia_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",26,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",29,Kenindia Assurance Company Limited,composite,life,,kenindia
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",31,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",33,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",34,Madison Life Insurance Company Kenya Limited,long_term,life,,madison_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",36,Metropolitan Cannon Life Assurance Limited,long_term,life,,cannon_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",38,Old Mutual Assurance Company Limited,long_term,life,,old_mutual_life_company
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",42,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",43,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",45,Saham Assurance Company Kenya Limited,composite,life,,saham_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",40,Sanlam Life Assurance Company Limited,long_term,life,,sanlam_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",46,Takaful Insurance of Africa Ltd,composite,life,,takaful
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",49,The Jubilee Insurance Company of Kenya Limited,composite,life,,jubilee_life
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",50,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",51,The Monarch Insurance Company Limited,composite,life,,monarch
+2017,"IRA annual report 2017, directory of insurance and reinsurance companies",54,UAP Life Assurance Company Limited,long_term,life,,old_mutual_life_kenya
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",6,APA Life Assurance Company,long_term,life,,apa_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",7,Barclays Life Assurance Kenya,long_term,life,,absa_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",9,Britam Life Assurance Company Limited,long_term,life,,britam_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",11,Capex Life Assurance Company,long_term,life,,capex_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",13,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",15,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",19,First Assurance Company Limited,composite,life,,first_assurance
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",21,GA Life Assurance Limited,long_term,life,,ga_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",23,Geminia Insurance Co. Ltd,composite,life,,geminia_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",26,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",29,Kenindia Assurance Company Limited,composite,life,,kenindia
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",31,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",58,KUSCCO Mutual Assurance Limited,long_term,life,,kuscco_mutual
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",33,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",35,Madison Life Insurance Company Kenya Limited,long_term,life,,madison_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",37,Metropolitan Cannon Life Assurance Limited,long_term,life,,cannon_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",39,Old Mutual Assurance Company Limited,long_term,life,,old_mutual_life_company
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",44,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",45,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",47,Saham Assurance Company Kenya Limited,composite,life,,saham_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",41,Sanlam Life Assurance Company Limited,long_term,life,,sanlam_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",48,Takaful Insurance of Africa Ltd,composite,life,,takaful
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",51,The Jubilee Insurance Company of Kenya Limited,composite,life,,jubilee_life
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",52,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",53,The Monarch Insurance Company Limited,composite,life,,monarch
+2018,"IRA annual report 2018, directory of insurance and reinsurance companies",56,UAP Life Assurance Company Limited,long_term,life,,old_mutual_life_kenya
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",2,ABSA Life Assurance Kenya Limited,long_term,life,,absa_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",7,APA Life Assurance Limited,long_term,life,,apa_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",9,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",10,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",12,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",14,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",20,GA Life Assurance Limited,long_term,life,,ga_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",21,Geminia Insurance Co. Ltd,composite,life,,geminia_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",22,Geminia Life Insurance Company Limited,long_term,life,,geminia_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",25,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",30,Jubilee Life Insurance Limited,long_term,life,,jubilee_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",31,Kenindia Assurance Company Limited,composite,life,,kenindia
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",33,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",35,KUSCCO Mutual Assurance Limited,long_term,life,,kuscco_mutual
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",36,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",38,Madison Life Assurance Kenya Limited,long_term,life,,madison_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",41,Metropolitan Cannon Life Assurance Limited,long_term,life,,cannon_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",44,Old Mutual Life Assurance Company Limited,long_term,life,,old_mutual_life_company
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",47,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",48,Prudential Life Assurance Kenya Limited,long_term,life,,prudential_life
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",55,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",56,The Monarch Insurance Company Limited,composite,life,,monarch
+2020,"IRA annual report 2020, directory of insurance and reinsurance companies",59,UAP Life Assurance Company Limited,long_term,life,,old_mutual_life_kenya
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",2,ABSA Life Assurance Kenya Limited,long_term,life,,absa_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",7,APA Life Assurance Company Limited,long_term,life,,apa_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",9,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",10,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",12,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",14,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",17,Equity Life Assurance (Kenya) Limited,long_term,life,,equity_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",21,GA Life Assurance Limited,long_term,life,,ga_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",23,Geminia Life Insurance Company Limited,long_term,life,,geminia_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",26,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",31,Jubilee Life Insurance Limited,long_term,life,,jubilee_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",32,Kenindia Assurance Company Limited,composite,life,,kenindia
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",34,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",36,Kuscco Mutual Assurance Limited,long_term,life,,kuscco_mutual
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",37,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",39,Madison Life Insurance Company Kenya Limited,long_term,life,,madison_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",42,Metropolitan Cannon Assurance,long_term,life,,cannon_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",45,Old Mutual Life Limited,long_term,life,,old_mutual_life_company
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",49,Pioneer Assurance Limited,long_term,life,,pioneer
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",50,Prudential Life Company,long_term,life,,prudential_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",53,Sanlam Life Assurance Company Limited,long_term,life,,sanlam_life
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",57,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2021,"IRA annual report 2021, directory of insurance and reinsurance companies",58,The Monarch Insurance Company Limited,composite,life,,monarch
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",2,ABSA Life Assurance Kenya Limited,long_term,life,,absa_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",6,APA Life Assurance Company Limited,long_term,life,,apa_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",8,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",10,Cannon Life Assurance (K) Ltd,long_term,life,,cannon_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",11,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",13,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",15,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",18,Equity Life Assurance (Kenya) Limited,long_term,life,,equity_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",22,GA Life Assurance Limited,long_term,life,,ga_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",24,Geminia Life Insurance Company Limited,long_term,life,,geminia_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",28,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",33,Jubilee Life Insurance Limited,long_term,life,,jubilee_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",34,Kenindia Assurance Company Limited,composite,life,,kenindia
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",36,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",38,Kuscco Mutual Assurance Limited,long_term,life,,kuscco_mutual
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",39,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",41,Madison Life Insurance Company Kenya Limited,long_term,life,,madison_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",45,Old Mutual Life Assurance Kenya Limited,long_term,life,,old_mutual_life_kenya
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",49,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",50,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",53,Sanlam Life Assurance Company Limited,long_term,life,,sanlam_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",55,Star Discover Life Insurance Limited,long_term,life,,star_discover_life
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",59,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2022,"IRA annual report 2022, directory of insurance and reinsurance companies",60,The Monarch Insurance Company Limited,composite,life,,monarch
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",2,ABSA Life Assurance Kenya Limited,long_term,life,,absa_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",6,APA Life Assurance Limited,long_term,life,,apa_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",8,Britam Life Assurance Company (K) Limited,long_term,life,,britam_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",10,Cannon Life Assurance (K) Ltd,long_term,life,,cannon_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",11,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",13,CIC Life Assurance Company Ltd,long_term,life,,cic_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",15,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",18,Equity Life Assurance (Kenya) Limited,long_term,life,,equity_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",22,GA Life Assurance Limited,long_term,life,,ga_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",24,Geminia Life Insurance Company Limited,long_term,life,,geminia_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",28,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",33,Jubilee Life Insurance Limited,long_term,life,,jubilee_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",34,Kenindia Assurance Company Limited,composite,life,,kenindia
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",36,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",38,Kuscco Mutual Assurance Limited,long_term,life,,kuscco_mutual
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",39,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",41,Madison Life Insurance Company Kenya Limited,long_term,life,,madison_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",45,Old Mutual Life Assurance Kenya Limited,long_term,life,,old_mutual_life_kenya
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",49,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",50,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",52,Sanlam Life Assurance Company Limited,long_term,life,,sanlam_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",54,Star Discover Life Insurance Limited,long_term,life,,star_discover_life
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",58,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2023,"IRA annual report 2023, appendix 47 directory (printed as an image; read by eye)",59,The Monarch Insurance Company Limited,composite,life,,monarch
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",2,ABSA Life Assurance Kenya Limited,long_term,life,,absa_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",6,APA Life Assurance Limited,long_term,life,,apa_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",10,Britam Life Insurance Company Limited,long_term,life,,britam_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",8,Cannon Life Assurance (K) Ltd,long_term,life,,cannon_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",11,Capex Life Assurance Company Limited,long_term,life,,capex_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",13,CIC Life Assurance Limited,long_term,life,,cic_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",15,Corporate Insurance Company Limited,composite,life,,corporate_insurance
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",19,Equity Life Assurance (Kenya) Limited,long_term,life,,equity_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",24,GA Life Assurance Limited,long_term,life,,ga_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",26,Geminia Life Insurance Company Limited,long_term,life,,geminia_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",29,ICEA LION Life Assurance Company Limited,long_term,life,,icea_lion_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",33,Jubilee Life Insurance Limited,long_term,life,,jubilee_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",34,Kenindia Assurance Company Limited,composite,life,,kenindia
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",36,Kenya Orient Life Assurance Limited,long_term,life,,kenya_orient_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",38,Kuscco Mutual Assurance Limited,long_term,life,,kuscco_mutual
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",39,Liberty Life Assurance Kenya Ltd,long_term,life,,liberty_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",41,Madison Life Insurance Company Kenya Limited,long_term,life,,madison_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",45,Old Mutual Life Assurance Kenya Limited,long_term,life,,old_mutual_life_kenya
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",49,Pioneer Assurance Company Limited,long_term,life,,pioneer
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",50,Prudential Life Assurance Company Limited,long_term,life,,prudential_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",52,Sanlam Life Assurance Company Limited,long_term,life,,sanlam_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",54,Star Discover Life Insurance Limited,long_term,life,,star_discover_life
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",58,The Kenyan Alliance Insurance Company Limited,composite,life,,kenyan_alliance
+2024,"IRA annual report 2024, directory of insurance and reinsurance companies",59,The Monarch Insurance Company Limited,composite,life,,monarch

@@ -25,6 +25,9 @@ BASE = "https://www.ira.go.ke/lib.html?f="
 # Slugs IRA has used for its quarterly statistics workbooks, newest style first.
 SLUGS = ["quarter-{q}-{y}-industry-statistics", "quarter-{q}-{y}-statistics", "q{q}-{y}-statistics",
          "quarter{q}-{y}-statistics", "quarter-{q}-{y}-insurance-industry-statistics"]
+# Slugs IRA has used for its claims settlement statistics workbooks.
+CLAIM_SLUGS = ["quarter-{q}-{y}-claims-settlement-statistics", "q{q}{y}-claims-statistics", "quarter{q}-{y}-claims-statistics",
+               "quarter-{q}-{y}-claims-statistics"]
 MAGIC = {"xlsx": b"PK", "xlsm": b"PK", "xls": b"\xd0\xcf", "pdf": b"%PDF"}
 
 
@@ -78,6 +81,36 @@ def next_quarters(sources, horizon=4):
     return out
 
 
+def probe_claims(sources):
+    """The next claims settlement quarters after the last one listed."""
+    have = [(int(s["year"]), int(s["quarter"])) for s in sources if s["kind"] == "claims_statistics"]
+    if not have:
+        return []
+    y, q = max(have)
+    added = []
+    for _ in range(3):
+        q += 1
+        if q == 5:
+            y, q = y + 1, 1
+        if dt.date(y, [3, 6, 9, 12][q - 1], 28) > dt.date.today():
+            break
+        for pat in CLAIM_SLUGS:
+            url = BASE + pat.format(q=q, y=y)
+            content = fetch(url, timeout=60)
+            if looks_like(content, "xlsx"):
+                row = dict(kind="claims_statistics", year=y, quarter=q, ext="xlsx",
+                           save_as=f"claims/{y}/IRA_{y}_Q{q}_Claims_Statistics.xlsx", url=url, note=f"found by probe {dt.date.today()}")
+                path = os.path.join(RAW, row["save_as"])
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "wb") as f:
+                    f.write(content)
+                added.append(row)
+                break
+        else:
+            break
+    return added
+
+
 def probe(sources):
     added = []
     for y, q in next_quarters(sources):
@@ -111,7 +144,7 @@ def write_manifest(sources):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-probe", action="store_true")
-    ap.add_argument("--kinds", default="quarterly_statistics,annual_report,annual_statistics,quarterly_release")
+    ap.add_argument("--kinds", default="quarterly_statistics,annual_report,annual_statistics,quarterly_release,claims_statistics,registry")
     a = ap.parse_args(argv)
     sources = read_csv(SOURCES)
     kinds = set(a.kinds.split(","))
@@ -120,7 +153,7 @@ def main(argv=None):
     for f in failed:
         print("  missing:", f)
     if not a.no_probe:
-        added = probe(sources)
+        added = probe(sources) + probe_claims(sources)
         if added:
             sources += added
             write_csv(SOURCES, sources)

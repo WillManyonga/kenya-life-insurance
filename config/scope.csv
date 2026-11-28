@@ -1,0 +1,4 @@
+dataset,segment,publish,note
+all,life,yes,Long-term and composite insurers (composites write life business)
+all,general,no,General insurers and microinsurers: extracted but not published yet
+all,reinsurer,no,Reinsurers: extracted but not published yet
